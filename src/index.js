@@ -1,17 +1,50 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom";
+import "./assets/css/tailwind.output.css";
+import "./assets/css/global.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import { SidebarProvider } from "./context/SidebarContext.js";
+import { Windmill } from "@windmill/react-ui";
+import * as serviceWorker from "./serviceWorker.js";
+import _theme from "./theme.js";
+import Loadable from "react-loadable";
+import Loading from "./components/Loader/Loader.jsx";
+import Loader from "./components/Loader/Loader.jsx";
+import { APIProvider } from "./context/ApiContext.jsx";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store } from "./store/index.js";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const Application = Loadable.Map({
+  loader: {
+    ui: () => import("./App.js"),
+    data: () =>
+      new Promise((r) => setTimeout(r, 2100)),
+  },
+  loading: Loading,
+  render(loaded, props) {
+    let Dashboard = loaded.ui.default;
+    let data = loaded.data;
+    return <Dashboard {...props} data={data} />;
+  },
+});
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <SidebarProvider>
+    <Provider store={store}>
+      <Router>
+        <Suspense fallback={<Loader />}>
+          <Windmill theme={_theme} dark>
+            <Application />
+          </Windmill>
+        </Suspense>
+      </Router>
+    </Provider>
+  </SidebarProvider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.register();

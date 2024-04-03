@@ -3,25 +3,70 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@windmill/react-ui": "^0.6.0",
+    "axios": "^1.6.8",
+    "flowbite": "^2.3.0",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-loadable": "^5.5.0",
+    "react-redux": "^9.1.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.1",
+    "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-class-properties": "^7.23.3",
+    "@svgr/webpack": "5.4.0",
+    "@tailwindcss/forms": "^0.4.0",
+    "@types/webpack-env": "^1.18.4",
+    "autoprefixer": "^9.8.0",
+    "browserify-zlib": "^0.2.0",
+    "commitizen": "4.1.2",
+    "cross-env": "^7.0.2",
+    "cssnano": "4.1.10",
+    "https-browserify": "^1.0.0",
+    "path-browserify": "^1.0.1",
+    "postcss": "^8.4.31",
+    "postcss-cli": "7.1.1",
+    "react-app-rewired": "^2.2.1",
+    "react-axe": "3.5.2",
+    "release-it": "13.6.4",
+    "resolve-url-loader": "5.0.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.4.3"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "tailwind:dev": "tailwindcss build src/assets/css/tailwind.css -o src/assets/css/tailwind.output.css",
+    "tailwind:watch": "tailwindcss -i src/assets/css/tailwind.css -o src/assets/css/tailwind.output.css --watch",
+    "tailwind:build": "cross-env NODE_ENV=production postcss src/assets/css/tailwind.css -o src/assets/css/tailwind.output.css",
+    "start": "concurrently \"npm run tailwind:watch\" \"react-scripts start\"",
+    "prebuild": "npm run tailwind:dev",
+    "build": "react-app-rewired build",
+    "cz": "git-cz",
+    "release": "release-it",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": false
+    }
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
