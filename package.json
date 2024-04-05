@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@windmill/react-ui": "^0.6.0",
     "axios": "^1.6.8",
+    "concurrently": "^8.2.2",
     "flowbite": "^2.3.0",
     "moment": "^2.30.1",
     "react": "^18.2.0",
@@ -43,7 +45,8 @@
     "resolve-url-loader": "5.0.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "tailwind:dev": "tailwindcss build src/assets/css/tailwind.css -o src/assets/css/tailwind.output.css",

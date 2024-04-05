@@ -8,8 +8,6 @@ export default function Loader() {
   useEffect(() => {
     let interval;
 
-    console.log("dddfdf");
-
     interval = setInterval(() => {
       if (progress < 100) {
         setProgress(prevProgress => prevProgress + 1);
@@ -29,7 +27,7 @@ export default function Loader() {
         <CircularSpinner/>
         <div className="absolute items-center flex justify-center flex-col">
           <img src="/logo.png" style={{width: '48px', height: '54px'}}></img>
-          <span style={{fontFamily: "Plus Jakarta Sans", fontWeight:700, fontSize:"16px", lineHeight: "20px", color:"white"}} className="mt-2 text-blue-100">{progress}%</span>
+          <span style={{fontFamily: "Plus Jakarta Sans", fontWeight:700, fontSize:"16px", lineHeight: "20px"}} className="mt-2 text-white">{progress}%</span>
         </div>
       </div>
     </div>

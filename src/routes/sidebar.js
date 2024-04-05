@@ -5,22 +5,30 @@
  * If you're looking to actual Router routes, go to
  * `routes/index.js`
  */
+import { lazy } from "react";
+
+const Home = lazy(() => import("../pages/Home/Home"));
+const Page404 = lazy(() => import("../pages/404"));
+const Blank = lazy(() => import("../pages/Blank"));
 
 const routes = [
   {
-    path: "/app/home",
+    path: "/home",
     icon: "./home.svg",
     name: "Home",
+    component: Home,
   },
   {
-    path: "/app/Geners",
+    path: "/Geners",
     icon: "GenersIcon",
     name: "Geners",
+    component: Home,
   },
   {
-    path: "/app/Favorites",
+    path: "/Favorites",
     icon: "FavoritesIcon",
     name: "Favorites",
+    component: Home,
   }
 ];
 

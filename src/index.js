@@ -10,6 +10,7 @@ import _theme from "./theme.js";
 import Loadable from "react-loadable";
 import Loading from "./components/Loader/Loader.jsx";
 import Loader from "./components/Loader/Loader.jsx";
+import "./assets/css/css/Plus.css";
 import { APIProvider } from "./context/ApiContext.jsx";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";

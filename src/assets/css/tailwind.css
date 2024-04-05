@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 .line-clamp-1 {
-  overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
@@ -126,4 +125,7 @@
 
 .capitalize {
   text-transform: capitalize;
+}
+.gap-10 {
+  gap: 2.5rem;
 }

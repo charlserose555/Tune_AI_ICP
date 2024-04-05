@@ -1,7 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 const defaultTheme = require("tailwindcss/defaultTheme");
+const windmill = require("./src/tailwind/config");
 
-module.exports = {
+module.exports = windmill({
   darkMode: "class",
   purge: ["src/**/*.{js, jsx}"],
   theme: {
@@ -12,6 +13,8 @@ module.exports = {
       boxShadow: {
         bottom:
           "0 5px 6px -7px rgba(0, 0, 0, 0.6), 0 2px 4px -5px rgba(0, 0, 0, 0.06)",
+          "bottom_1": "0px 0px 30px rgba(6, 116, 252, 0.35)",
+          "drop_1" : "0 0 15px rgba(6, 116, 252, 0.2)"
       },
       width: {
         '65': '16.625rem',
@@ -29,21 +32,28 @@ module.exports = {
         '3': '0.75rem',
         '4': '1rem',
         '45' : '0.625rem',
-        '8': '1.25rem'
+        '8': '1.25rem',
+        '10': '2.25rem'
       },
       padding: {
         '5': '1.25rem',
-        '6': '1.5rem', // Your custom padding value
+        '6': '1.5rem',
+        '7': '1.75rem',
         '45': '0.625rem',
+        '8': '2rem',
         '9': '2.5rem',
         '12': '3rem',
+        "16": "4rem",
+        "96": "6rem"
       },
       borderRadius: {
         '2': '0.25rem', // Your custom border radius value
+        '3' : '0.625rem',
         '4': '1rem',
         '5': '1.25rem',
         '8': '3rem'
       },
+      
       fontWeight: {
         thin: '100',
         hairline: '100',
@@ -65,14 +75,22 @@ module.exports = {
         '30': '30px'
       },
       fontSize: {
-        '15': '24px',
+        '24': '24px',
         '22': '22px',
-        '20': '20px', 
+        '20': '24px', 
         '14': '14px',
         '16': '1rem',
         '18': '18px',
         '28': '28px'
       }
+    },
+    screens: {
+      'xs': '450px', // Define the xs breakpoint to start from 0px
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
     },
     colors: {
       bcb_sidebar: "#1E1D1C",
@@ -140,7 +158,7 @@ module.exports = {
         800: "#525252",
         900: "#292929",
       },
-      blue: {
+      darkblue: {
         100: "#E6F0FF",
         200: "#ACCFFF",
         300: "#79A8FF",
@@ -150,10 +168,21 @@ module.exports = {
         700: "#003FB3",
         800: "#00308C",
         900: "#002166",
+      },
+      coral: {
+        100: "#FFF5F5",
+        200: "#FFB8B8",
+        300: "#FF7D81",
+        400: "#FF5358",
+        500: "#FD363B",
+        600: "#DF2C31",
+        700: "#BF2327",
+        800: "#9F1B1F",
+        900: "#801417",
       }
     },
   },
   plugins: [require('tailwindcss')({ watch: true })],
-  content: ["./node_modules/flowbite/**/*{.js, jsx}", "src/**/*.{js, jsx}"],
-}
+  // content: ["./node_modules/flowbite/**/*{.js, jsx}", "src/**/*.{js, jsx}"],
+});
 

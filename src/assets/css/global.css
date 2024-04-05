@@ -2,15 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-.notification-section {
-
+@layer utilities {
+.font-condensed {
+    font-stretch: condensed;
+}
 }
 
 .user-profile-section {
     padding: 5px 10px;
     margin-left: 30px;
+    border-radius: 0.25rem;
     gap: 6px;
+    transition: .5s all ease;
+    cursor: pointer;
 }
+
+.notification-icon {
+    padding: 0.25rem;
+    transition: .5s all ease;
+    cursor: pointer;
+}
+
+.notification-icon:hover .svg-icon path{
+    fill:  #0060D9; 
+}
+
+.notification-icon:hover {
+    background-color: #282733;
+}
+
+.user-profile-section:hover {
+    background-color: #282733;
+}
+
 .profile-user-name {
     font-weight: 400;
     font-size: 16px;
@@ -43,9 +67,85 @@
     font-size: 14px;
     line-height: 17.5px;
 }
+.navli {
+    transition: .5s all ease;
+}
+.parent-navlink {
+    transition: .5s all ease;
+}
 .parent-navlink:hover .nav-border {
     background-color:  #0060D9; 
 }
 .parent-navlink-active .nav-border {
     background-color:  #0060D9; 
+}
+.parent-navlink:hover .svg-icon path {
+    fill:  #0060D9; 
+}
+.parent-navlink-active .svg-icon path {
+    fill:  #0060D9; 
+}
+.banner-item {
+    transition: .4s all ease;
+}  
+.banner-item:hover {
+    translate: -0.02rem;
+    filter: drop-shadow(0px 0px 15px rgba(6, 116, 252, 0.2));
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 9px;
+}
+.banner-img:hover .extend-play {
+    opacity: 100;
+    filter: drop-shadow(0px 0px 10px rgba(6, 116, 252, 0.65));
+    transition: .2s all ease-out;
+}
+.banner-img:hover .banner-play{
+    opacity: 0;
+    transition: .2s all ease-out;
+}
+.fill-btn {
+    transition: .5s all ease;
+}
+.fill-btn:hover {
+    box-shadow: 0px 5px 10px 0px rgba(6, 116, 252, 0.45) !important;
+    background-color: rgb(6, 96, 217);
+}
+.outline-btn {
+    transition: .5s all ease;
+}
+.outline-btn:hover{
+    transition: .5s all ease;
+    background-color: rgb(33, 32, 42, 0.85);
+    color:rgb(6, 96, 217);
+}
+input[type="checkbox"].form-checkbox:checked + svg {
+    fill: #0060D9; /* Change the color of the check mark when checked */
+}
+.slideshow {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 300px; /* Adjust height as needed */
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.group:hover .svg-icon path{
+    stroke: #0060D9;
+}
+
+.menu-item:hover .svg-icon path {
+    fill: #0060D9;
 }

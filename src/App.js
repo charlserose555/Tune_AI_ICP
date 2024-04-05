@@ -9,17 +9,17 @@ import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnno
 import { store, persister, useSelector, dispatch } from "./store";
 
 import { APIProvider } from "./context/ApiContext";
-import AuthLayout from "./layout/authoLayout";
 import { Toaster } from "react-hot-toast";
-import { initFlowbite } from "flowbite";
+// import { initFlowbite } from "flowbite";
 
 const Layout = lazy(() => import("./containers/Layout/Layout"));
-require("flowbite/dist/flowbite.js");
+const AuthLayout = lazy(() => import("./containers/Layout/AuthLayout"));
+// require("flowbite/dist/flowbite.js");
 
 function App() {
   useEffect(() => {
     setTimeout(() => {
-      initFlowbite();
+      // initFlowbite();
     }, 2000);
   }, []);
 
@@ -28,11 +28,11 @@ function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persister}>
           <APIProvider>
-            <AuthLayout />
             <AccessibleNavigationAnnouncer />
             <Switch>
               {/* Place new routes over this */}
               <Route index path="/app" component={Layout} />
+              <Route index path="/auth" component={AuthLayout} />
               {/* If you have an index page, you can remothis Redirect */}
               <Redirect exact from="/" to="/app/home" />
             </Switch>
