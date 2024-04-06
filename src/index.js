@@ -8,13 +8,12 @@ import { Windmill } from "@windmill/react-ui";
 import * as serviceWorker from "./serviceWorker.js";
 import _theme from "./theme.js";
 import Loadable from "react-loadable";
-import Loading from "./components/Loader/Loader.jsx";
-import Loader from "./components/Loader/Loader.jsx";
 import "./assets/css/css/Plus.css";
 import { APIProvider } from "./context/ApiContext.jsx";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store } from "./store/index.js";
+import AppLoader from "./components/Loader/AppLoader.js";
 
 const Application = Loadable.Map({
   loader: {
@@ -22,7 +21,7 @@ const Application = Loadable.Map({
     data: () =>
       new Promise((r) => setTimeout(r, 2100)),
   },
-  loading: Loading,
+  loading: AppLoader,
   render(loaded, props) {
     let Dashboard = loaded.ui.default;
     let data = loaded.data;
@@ -35,7 +34,7 @@ root.render(
   <SidebarProvider>
     <Provider store={store}>
       <Router>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<AppLoader isPercentage={false}/>}>
           <Windmill theme={_theme} dark>
             <Application />
           </Windmill>

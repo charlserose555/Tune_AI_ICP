@@ -6,18 +6,25 @@ import Sidebar from "../Sidebar";
 import Historybar from "../History/Historybar";
 import Main from "../Main/Main";
 import { SidebarContext } from "../../context/SidebarContext";
-import Loader from "../../components/Loader/Loader";
 import PlayerControlPanel from "../Player/PlayerControlPanel";
+import { useState } from "react";
+import PageLoader from "../../components/Loader/pageLoader";
 
 const Page404 = lazy(() => import("../404"));
 
 function Layout() {
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
+  const [delayed, setDelayed] = useState(true);
 
   let location = useLocation();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Simulating a delay of 2 seconds
+    const timer = setTimeout(() => {
+      setDelayed(false);
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
   }, []);
 
   useEffect(() => {
@@ -31,7 +38,7 @@ function Layout() {
       <Sidebar />
       <div className="flex flex-col flex-1 w-full overflow-y-auto y-scrollable-tag">
         <Main>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<PageLoader />}>
             <Switch>
               {sidebar.map((route, i) => {
                 return route.component ? (

@@ -5,3 +5,11 @@
   height: 100vh; /* Adjust height as needed */
   background-color: #1A1A21;
 }
+
+.page-spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Adjust height as needed */
+  background-color: transparent;
+}

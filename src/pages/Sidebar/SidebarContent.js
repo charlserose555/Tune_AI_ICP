@@ -53,7 +53,7 @@ function SidebarContent() {
             <div className="flex flex-col p-4 bg-primary-900 rounded-4 gap-4">
               <p className="text-16 font-semibold leading-20">You can receive part of the royalties of a song, just by listening it</p>
               <p className="text-14 font-light leading-18">All the royalties will be distributed using our own TunedCoin token</p>
-              <a className="text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" style={{textAlign: 'center', cursor: 'pointer'}}>Connect Wallet
+              <a className="fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" style={{textAlign: 'center', cursor: 'pointer'}}>Connect Wallet
                 <img className="" src="/demo/assets/arrow-right.svg"/>
               </a>
             </div>

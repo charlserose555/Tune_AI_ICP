@@ -40,12 +40,12 @@ function LoginComponent({width, height}) {
         </div>
         <div className="flex flex-col justify-between items-center gap-8 w-full px-4 pb-2 z-30">
             <a className="outline-btn text-12 px-4 py-2 font-medium rounded-8 w-full" 
-            style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}
-            onClick={() => history.push("/auth/login")}>Login</a>
+                style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}
+                onClick={() => history.push("/auth/login")}>Login</a>
             <a className="fill-btn text-12 px-4 py-2 font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" 
-            style={{textAlign: 'center', cursor: 'pointer'}}
-            onClick={() => history.push("/auth/register")}>Register
-            <img className="" src="/demo/assets/arrow-right.svg"/>
+                style={{textAlign: 'center', cursor: 'pointer'}}
+                onClick={() => history.push("/auth/register")}>Register
+                <img className="" src="/demo/assets/arrow-right.svg"/>
             </a>
         </div>
         <div className="absolute top-0 left-0 w-full rounded-4" style={{ height:height, background: "linear-gradient(360deg, rgba(5, 5, 5, 0.78) 26.1%, rgba(5, 5, 5, 0) 99.98%)"}}>

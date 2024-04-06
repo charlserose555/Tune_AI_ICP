@@ -755,6 +755,10 @@ select {
   bottom: 0px;
 }
 
+.bottom-7 {
+  bottom: 1.75rem;
+}
+
 .bottom-\[60px\] {
   bottom: 60px;
 }
@@ -781,6 +785,10 @@ select {
 
 .right-0 {
   right: 0px;
+}
+
+.right-1 {
+  right: 0.25rem;
 }
 
 .right-4 {
@@ -839,6 +847,14 @@ select {
   z-index: 50;
 }
 
+.order-1 {
+  order: 1;
+}
+
+.order-2 {
+  order: 2;
+}
+
 .col-span-1 {
   grid-column: span 1 / span 1;
 }
@@ -890,6 +906,10 @@ select {
   margin-bottom: 1.5rem;
 }
 
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
 .mb-\[10px\] {
   margin-bottom: 10px;
 }
@@ -928,10 +948,6 @@ select {
 
 .mt-4 {
   margin-top: 1rem;
-}
-
-.mb-8 {
-  margin-bottom: 2rem;
 }
 
 .block {
@@ -1042,12 +1058,8 @@ select {
   height: 54px;
 }
 
-.h-\[57px\] {
-  height: 57px;
-}
-
-.h-\[96px\] {
-  height: 96px;
+.h-\[70px\] {
+  height: 70px;
 }
 
 .h-full {
@@ -1056,18 +1068,6 @@ select {
 
 .h-screen {
   height: 100vh;
-}
-
-.max-h-0 {
-  max-height: 0px;
-}
-
-.max-h-\[900px\] {
-  max-height: 900px;
-}
-
-.max-h-xl {
-  max-height: 36rem;
 }
 
 .w-1 {
@@ -1142,10 +1142,6 @@ select {
   width: 231px;
 }
 
-.w-\[240px\] {
-  width: 240px;
-}
-
 .w-\[24px\] {
   width: 24px;
 }
@@ -1170,8 +1166,12 @@ select {
   width: 54px;
 }
 
-.w-\[57px\] {
-  width: 57px;
+.w-\[56px\] {
+  width: 56px;
+}
+
+.w-\[70px\] {
+  width: 70px;
 }
 
 .w-full {
@@ -1180,6 +1180,10 @@ select {
 
 .min-w-0 {
   min-width: 0px;
+}
+
+.min-w-\[385px\] {
+  min-width: 385px;
 }
 
 .min-w-\[585px\] {
@@ -1330,6 +1334,10 @@ select {
   gap: 0.25rem;
 }
 
+.gap-2 {
+  gap: 0.5rem;
+}
+
 .gap-3 {
   gap: 0.75rem;
 }
@@ -1390,10 +1398,6 @@ select {
   gap: 70px;
 }
 
-.gap-2 {
-  gap: 0.5rem;
-}
-
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1404,12 +1408,6 @@ select {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
-}
-
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
 
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -1506,16 +1504,8 @@ select {
   border-bottom-left-radius: 0.25rem;
 }
 
-.rounded-br-lg {
-  border-bottom-right-radius: 0.5rem;
-}
-
 .rounded-tl-2 {
   border-top-left-radius: 0.25rem;
-}
-
-.rounded-tr-lg {
-  border-top-right-radius: 0.5rem;
 }
 
 .border {
@@ -1585,11 +1575,6 @@ select {
 .bg-background {
   --tw-bg-opacity: 1;
   background-color: rgb(22 22 22 / var(--tw-bg-opacity));
-}
-
-.bg-bcb_sidebar {
-  --tw-bg-opacity: 1;
-  background-color: rgb(30 29 28 / var(--tw-bg-opacity));
 }
 
 .bg-black {
@@ -1834,6 +1819,11 @@ select {
   padding-right: 1.5rem;
 }
 
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 .px-\[30px\] {
   padding-left: 30px;
   padding-right: 30px;
@@ -1882,16 +1872,20 @@ select {
   padding-bottom: 1.25rem;
 }
 
+.pb-\[10px\] {
+  padding-bottom: 10px;
+}
+
+.pb-\[120px\] {
+  padding-bottom: 120px;
+}
+
 .pl-12 {
   padding-left: 3rem;
 }
 
 .pl-2 {
   padding-left: 0.5rem;
-}
-
-.pl-4 {
-  padding-left: 1rem;
 }
 
 .pl-6 {
@@ -1948,6 +1942,10 @@ select {
 
 .pt-\[20px\] {
   padding-top: 20px;
+}
+
+.pt-\[58px\] {
+  padding-top: 58px;
 }
 
 .pt-\[6px\] {
@@ -2007,8 +2005,8 @@ select {
   line-height: 1;
 }
 
-.text-\[40px\] {
-  font-size: 40px;
+.text-\[24px\] {
+  font-size: 24px;
 }
 
 .text-lg {
@@ -2276,10 +2274,6 @@ select {
   opacity: 1;
 }
 
-.opacity-25 {
-  opacity: 0.25;
-}
-
 .opacity-50 {
   opacity: 0.5;
 }
@@ -2403,10 +2397,6 @@ select {
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-}
-
-.duration-100 {
-  transition-duration: 100ms;
 }
 
 .duration-150 {
@@ -2659,11 +2649,6 @@ select {
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(26 28 35 / var(--tw-text-opacity));
-}
-
-.hover\:text-yellow-800:hover {
-  --tw-text-opacity: 1;
-  color: rgb(114 59 19 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {
@@ -2975,11 +2960,6 @@ select {
   color: rgb(253 246 178 / var(--tw-text-opacity));
 }
 
-.dark\:text-yellow-300:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(250 202 21 / var(--tw-text-opacity));
-}
-
 .dark\:hover\:bg-gray-500:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(112 114 117 / var(--tw-bg-opacity));
@@ -3007,11 +2987,6 @@ select {
 .dark\:hover\:text-gray-300:hover:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(213 214 215 / var(--tw-text-opacity));
-}
-
-.dark\:hover\:text-yellow-200:hover:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(252 233 106 / var(--tw-text-opacity));
 }
 
 .dark\:focus\:border-gray-600:focus:is(.dark *) {
@@ -3045,6 +3020,10 @@ select {
 }
 
 @media (min-width: 640px) {
+  .sm\:right-5 {
+    right: 1.25rem;
+  }
+
   .sm\:m-4 {
     margin: 1rem;
   }
@@ -3099,6 +3078,14 @@ select {
 }
 
 @media (min-width: 768px) {
+  .md\:order-1 {
+    order: 1;
+  }
+
+  .md\:order-2 {
+    order: 2;
+  }
+
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -3111,12 +3098,24 @@ select {
     display: none;
   }
 
+  .md\:h-\[80px\] {
+    height: 80px;
+  }
+
+  .md\:w-\[80px\] {
+    width: 80px;
+  }
+
   .md\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:flex-row {
+    flex-direction: row;
   }
 
   .md\:gap-4 {
@@ -3127,13 +3126,26 @@ select {
     padding: 2rem;
   }
 
+  .md\:px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
   .md\:px-\[10px\] {
     padding-left: 10px;
     padding-right: 10px;
   }
 
+  .md\:pl-4 {
+    padding-left: 1rem;
+  }
+
   .md\:pt-\[10px\] {
     padding-top: 10px;
+  }
+
+  .md\:text-\[40px\] {
+    font-size: 40px;
   }
 }
 
@@ -3148,6 +3160,14 @@ select {
 
   .lg\:hidden {
     display: none;
+  }
+
+  .lg\:h-\[142px\] {
+    height: 142px;
+  }
+
+  .lg\:w-\[142px\] {
+    width: 142px;
   }
 
   .lg\:grid-cols-2 {
