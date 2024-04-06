@@ -4,6 +4,7 @@ import { NavLink, Route, Link } from "react-router-dom";
 import * as Icon from "../../icons";
 import { useDispatch, useSelector } from "../../store";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import LoginComponent from "../Auth/LoginComponent";
 
 function SidebarContent() {
   const dispatch = useDispatch();
@@ -43,33 +44,7 @@ function SidebarContent() {
         </div>
         
         <div className="pt-6 text-white flex flex-row justify-center px-3 w-full gap-1 block md:hidden">
-          <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2" style={{
-            width: '247px',
-            height: '284px',
-            backgroundImage: 'url("/demo/assets/portrait.png")',
-            backgroundRepeat: "no-repat",
-            backgroundSize: "cover",
-            backgroundBlendMode: "multiply",
-          }}>
-            <div className="items-center flex justify-center flex-col">
-              <p className="text-18 font-normal leading-22 tracking-wide">Access now and</p>
-              <p className="text-18 font-normal leading-22 tracking-wide">start to win</p>              
-            </div>
-            <div className="flex flex-row justify-center items-center">
-              <img className="" src="/demo/assets/ethereum.svg"/>
-              <img className="" src="/demo/assets/bitcoin.svg"/>
-            </div>
-            <div className="flex flex-col justify-between items-center gap-8 w-full px-4 pb-2">
-              <a className="outline-btn text-12 px-4 py-2 font-medium rounded-8 w-full" 
-                style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}
-                onClick={() => history.push("/auth/login")}>Login</a>
-              <a className="fill-btn text-12 px-4 py-2 font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" 
-                style={{textAlign: 'center', cursor: 'pointer'}}
-                onClick={() => history.push("/auth/register")}>Register
-                <img className="" src="/demo/assets/arrow-right.svg"/>
-              </a>
-            </div>
-          </div>
+          <LoginComponent width={'247px'} height={'284px'}/>
         </div>
 
         <div className="flex flex-col justify-end items-center text-white font-plus h-full px-3 pt-4" style={{paddingBottom: "120px"}}>          

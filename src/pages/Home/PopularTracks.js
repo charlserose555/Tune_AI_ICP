@@ -80,7 +80,7 @@ function PopularTracks() {
                   <td className="px-4 py-3 text-center group-hover:text-darkblue-500">100k</td>
                   <td className="px-4 py-3 text-center group-hover:text-darkblue-500">3:03</td>
                   <td className="px-4 py-3 text-center" onClick={() => changeFavourite(index)}> {item?.isFavourite? (<Icon.FullStarIcon/>) : (<Icon.StarIcon/>)} </td>
-                  <td className="px-4 py-3 text-center"><img className="rounded-2" src="/demo/assets/option.svg"/></td>
+                  <td className="px-4 py-3 text-center"><Icon.OptionIcon/></td>
                 </tr>
               )) } )}
             </tbody>

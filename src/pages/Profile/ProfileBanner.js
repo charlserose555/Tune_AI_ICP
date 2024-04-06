@@ -30,6 +30,9 @@ export default function ProfileBanner() {
               backgroundColor: "rgba(0, 0, 0, 0.7)",
               opacity: "95%",
               backgroundBlendMode: "multiply"}}>
+          <div className="flex flex-row hidden lg:block justify-start absolute top-6 left-9">
+              <img src="/demo/assets/back.svg" className="cursor-pointer" onClick={() => history.goBack()}></img>
+          </div>
           <div className="flex flex-row justify-start gap-[33px] items-center absolute top-16 left-9">
             <Avatar
                 className="cursor-pointer"
@@ -38,8 +41,8 @@ export default function ProfileBanner() {
                 alt=""
                 aria-hidden="true"
               />
-            <div className="flex flex-col gap-[10px] cursor-pointer">
-              <h1 className="font-plus-bold font-normal text-[40px] text-white leading-[50px] cursor-pointer">Jenny Wilson</h1>
+            <div className="flex flex-col gap-[10px]">
+              <h1 className="font-plus-bold font-normal text-[40px] text-white leading-[50px]">Jenny Wilson</h1>
               <h5 className="font-plus font-light text-sm text-white leading-[17px]">Joined 05 March22</h5>
             </div>
           </div>

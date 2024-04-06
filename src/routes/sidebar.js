@@ -8,6 +8,7 @@
 import { lazy } from "react";
 
 const Home = lazy(() => import("../pages/Home/Home"));
+const Genres = lazy(() => import("../pages/Genres/Genres"));
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
@@ -24,7 +25,7 @@ const routes = [
     path: "/genres",
     icon: "GenersIcon",
     name: "Geners",
-    component: Home,
+    component: Genres,
   },
   {
     path: "/favorites",
