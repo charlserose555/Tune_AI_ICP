@@ -8,9 +8,31 @@
 }
 }
 
+.y-scrollable-tag::-webkit-scrollbar {
+    width: 8px; /* Adjust scrollbar width */
+}
+
+.y-scrollable-tag::-webkit-scrollbar-thumb {
+    background: #282733; /* Set scrollbar thumb color */
+    border-radius: 2px; /* Apply rounded corners */
+}
+
+.y-scrollable-tag::-webkit-scrollbar-track {
+    background: transparent; /* Set scrollbar track color */
+}
+
+.x-scrollable-tag::-webkit-scrollbar {
+    width: 6px; /* Adjust scrollbar width */
+    height: 6px;
+}
+
+.x-scrollable-tag::-webkit-scrollbar-thumb {
+    background: #282733; /* Set scrollbar thumb color */
+    border-radius: 2px; /* Apply rounded corners */
+}
+
 .user-profile-section {
     padding: 5px 10px;
-    margin-left: 30px;
     border-radius: 0.25rem;
     gap: 6px;
     transition: .5s all ease;

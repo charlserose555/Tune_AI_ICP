@@ -26,7 +26,7 @@ function Register() {
                 </div>
             </div>
             <div className="flex w-full flex-row justify-center items-center px-4">
-                <div style={{maxWidth: "468px", maxHeight: '627px', margin: '0 auto', backdropFilter: 'blur(10px)'}} className="w-full bg-secondary-700 p-4 sm:p-6 md:p-8 gap-[20px] bg-opacity-85 rounded-5 shadow-bottom_1 flex justify-start flex-col items-center">                    
+                <div style={{maxWidth: "468px", maxHeight: '627px', margin: '0 auto', backgroundColor: "rgba(22, 28, 42, 0.9)", backdropFilter: 'blur(10px)'}} className="w-full p-4 sm:p-6 md:p-8 gap-[20px] bg-opacity-85 rounded-5 shadow-bottom_1 flex justify-start flex-col items-center">                    
                     <p className="text-white font-plus font-bold text-18 leading-22">Sign up</p>
                     <div className="relative z-20 flex flex-col justify-start w-full gap-[5px]">
                         <div className="flex flex-row justify-start items-center">

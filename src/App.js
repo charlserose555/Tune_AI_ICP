@@ -10,16 +10,16 @@ import { store, persister, useSelector, dispatch } from "./store";
 
 import { APIProvider } from "./context/ApiContext";
 import { Toaster } from "react-hot-toast";
-// import { initFlowbite } from "flowbite";
+import { initFlowbite } from "flowbite";
 
-const Layout = lazy(() => import("./containers/Layout/Layout"));
-const AuthLayout = lazy(() => import("./containers/Layout/AuthLayout"));
-// require("flowbite/dist/flowbite.js");
+const Layout = lazy(() => import("./pages/Layout/Layout"));
+const AuthLayout = lazy(() => import("./pages/Layout/AuthLayout"));
+require("flowbite/dist/flowbite.js");
 
 function App() {
   useEffect(() => {
     setTimeout(() => {
-      // initFlowbite();
+      initFlowbite();
     }, 2000);
   }, []);
 

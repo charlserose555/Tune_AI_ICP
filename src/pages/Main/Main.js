@@ -5,10 +5,10 @@ import Header from "../Header/Header";
 function Main({ children }) {
   const { isSports, isTable } = useSelector((state) => state.menu);
   return (
-    <main className="h-full overflow-y-auto relative">
+    <div className="h-full relative">
       <Header />
       <div>{children}</div>
-    </main>
+    </div>
   );
 }
 

@@ -20,7 +20,7 @@ function Historybar() {
   }
 
   return (
-    <div className="z-30 flex flex-col flex-shrink-0 overflow-y-auto w-69 block font-plus text-white" style={{borderLeft: "1px solid #2F2D3B"}}>
+    <div className="z-30 flex flex-col flex-shrink-0 overflow-y-auto w-69 block font-plus text-white hidden md:block lg:block" style={{borderLeft: "1px solid #2F2D3B"}}>
         <div className="flex flex-row justify-start items-center gap-3 pt-6 pl-2">
           <img src="/demo/assets/history.svg" className="w-6 h-6" alt="History"/>
           <p className="font-normal text-20 leading-25 ">History</p>

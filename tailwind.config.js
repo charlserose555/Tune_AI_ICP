@@ -9,6 +9,7 @@ module.exports = windmill({
     extend: {
       fontFamily: {
         'plus': ['Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
+        'plus-bold': ['Plus Jakarta Sans Bold', ...defaultTheme.fontFamily.sans],
       },
       boxShadow: {
         bottom:
@@ -179,6 +180,17 @@ module.exports = windmill({
         700: "#BF2327",
         800: "#9F1B1F",
         900: "#801417",
+      },
+      violet: {
+        100: "#F3F3FF",
+        200: "#C0C2FF",
+        300: "#9599FF",
+        400: "#7478FF",
+        500: "#5C60F5",
+        600: "#393DC9",
+        700: "#1F2293",
+        800: "#0D0F5C",
+        900: "#020426",
       }
     },
   },

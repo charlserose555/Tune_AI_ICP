@@ -4,11 +4,12 @@ import { Avatar } from "@windmill/react-ui";
 import { EditProfileIcon, SubscriptionIcon } from "../../icons";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import ProfileEditModal from "./ProfileDetailModal";
+import { useParams } from "react-router-dom";
 
-export default function ProfileBanner() {
+export default function GenresDetailBanner() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { id, demo } = useParams();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -85,8 +86,6 @@ export default function ProfileBanner() {
           <div className="absolute bottom-0 left-0 w-full" style={{ height:"157px", background: "linear-gradient(180deg, rgba(26, 26, 33, 0) 25.67%, #1A1A21 99.15%)"}}>
           </div>
       </div>
-
-      <ProfileEditModal isOpen={isModalOpen} onClose={closeModal}/>
     </div>
   );
 }

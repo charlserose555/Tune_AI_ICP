@@ -1,24 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import GenresSlide from "./GenresSlide";
-import PopularTracks from "./PopularTracks";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import useApi from "../../hooks/useApi";
 import { useDispatch, useSelector } from "../../store";
+import StarredList from "../Song/StarredList";
+import { useParams } from "react-router-dom";
+import GenresDetailBanner from "./GenresDetailBanner";
 
-function Home() {
+function GenresDetail() {
   const history = useHistory();
   const Api = useApi();
   const dispatch = useDispatch();
+  const { id, demo } = useParams();
 
   return (
     <>
-      <div className="flex flex-col pt-16 font-plus pl-6 pr-6 text-white relative overflow-x-auto">
-          <GenresSlide/>
-          <PopularTracks/>
-      </div>
+      <GenresDetailBanner/>
+
+      <StarredList/>
     </>
   );
 }
 
-export default Home;
+export default GenresDetail;

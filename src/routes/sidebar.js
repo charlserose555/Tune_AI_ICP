@@ -8,8 +8,10 @@
 import { lazy } from "react";
 
 const Home = lazy(() => import("../pages/Home/Home"));
+const Profile = lazy(() => import("../pages/Profile/Profile"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
+const GenresDetail = lazy(()=> import("../pages/Home/GenresDetail"));
 
 const routes = [
   {
@@ -19,16 +21,24 @@ const routes = [
     component: Home,
   },
   {
-    path: "/Geners",
+    path: "/genres",
     icon: "GenersIcon",
     name: "Geners",
     component: Home,
   },
   {
-    path: "/Favorites",
+    path: "/favorites",
     icon: "FavoritesIcon",
     name: "Favorites",
     component: Home,
+  },
+  {
+    path: "/profile",
+    component: Profile,
+  },
+  {
+    path: "/genres/:id",
+    component: GenresDetail,
   }
 ];
 
