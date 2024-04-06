@@ -94,8 +94,6 @@ module.exports = windmill({
       '2xl': '1536px',
     },
     colors: {
-      bcb_sidebar: "#1E1D1C",
-      bcb_transparent: "#000000d6",
       primary: "#1C1B1B",
       secondary: "#50462A",
       background: "#161616",      

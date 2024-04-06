@@ -35,14 +35,13 @@ export default function ProfileBanner() {
           </div>
           <div className="flex flex-row justify-start gap-[33px] items-center absolute top-16 left-9">
             <Avatar
-                className="cursor-pointer"
-                style={{width:"142px", height:"142px"}}                
+                className="cursor-pointer w-[70px] h-[70px] md:w-[80px] md:h-[80px] lg:w-[142px] lg:h-[142px]"
                 src={'/demo/assets/banner_profile_icon.png'}
                 alt=""
                 aria-hidden="true"
               />
             <div className="flex flex-col gap-[10px]">
-              <h1 className="font-plus-bold font-normal text-[40px] text-white leading-[50px]">Jenny Wilson</h1>
+              <h1 className="font-plus-bold font-normal text-[24px] md:text-[40px] text-white leading-[50px]">Jenny Wilson</h1>
               <h5 className="font-plus font-light text-sm text-white leading-[17px]">Joined 05 March22</h5>
             </div>
           </div>

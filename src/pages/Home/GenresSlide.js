@@ -27,7 +27,7 @@ export default function GenresSlide() {
         <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
       </div>
       <div ref={containerRef}  className="flex flex-row relative overflow-x-auto z-index-100 mx-[10px]">
-        <ul className="flex w-full justify-start items-start space-x-4 stories py-[58px]"
+        <ul className="flex w-full justify-start items-start space-x-4 stories pt-[58px] pb-[10px]"
         >
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
