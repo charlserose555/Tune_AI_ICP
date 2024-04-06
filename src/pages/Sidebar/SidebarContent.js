@@ -21,7 +21,9 @@ function SidebarContent() {
     <div className="text-gray-500 dark:text-gray-400 font-normal font-plus text-16 h-full" style={{padding: "20px 10px"}}>
       <div className="flex flex-col 
       h-full">
-        <img src="/demo/assets/header.svg" alt="Tuned AI" />
+        <div className="py-2 px-8">
+          <img src="/demo/assets/logo.png" alt="Tuned AI"/>
+        </div>
         <div className="flex flex-row justify-start items-center pt-5 px-3 gap-45">
           <ul className="w-full gap-45 flex flex-col">
             {routes.map((route) =>
