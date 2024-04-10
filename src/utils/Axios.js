@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '../config';
 import { store } from '../store';
 import { Logout } from '../store/reducers/auth';
-import snackbar from '../store/reducers/snackbar';
+import alert from '../store/reducers/alert';
 import toast from 'react-hot-toast';
 
 const axiosServices = axios.create();
