@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useLocation } from "react-router-dom";
+import { Alert } from "@material-tailwind/react";
 
 import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnnouncer";
 
@@ -35,11 +36,8 @@ function App() {
               <Route index path="/auth" component={AuthLayout} />
               {/* If you have an index page, you can remothis Redirect */}
               <Redirect exact from="/" to="/app/home" />
+              <Alert color="blue">An info alert for showing message.</Alert>
             </Switch>
-            <Toaster
-              position="top-right"
-              reverseOrder={false}
-            />
           </APIProvider>
         </PersistGate>
       </Provider>

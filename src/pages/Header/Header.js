@@ -34,7 +34,7 @@ function Header() {
 
   useEffect(() => {
     if (auth.isLoggedIn) {
-      getBalances();
+      // getBalances();
     }
   }, [auth.isLoggedIn]);
 

@@ -4,7 +4,7 @@ import { NavLink, Route, Link } from "react-router-dom";
 import * as Icon from "../../icons";
 import { useDispatch, useSelector } from "../../store";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import LoginComponent from "../Auth/LoginComponent";
+import AuthComponent from "../Auth/AuthComponent";
 
 function SidebarContent() {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ function SidebarContent() {
         </div>
         
         <div className="pt-6 text-white flex flex-row justify-center px-3 w-full gap-1 block md:hidden">
-          <LoginComponent width={'247px'} height={'284px'}/>
+          <AuthComponent width={'247px'} height={'284px'}/>
         </div>
 
         <div className="flex flex-col justify-end items-center text-white font-plus h-full px-3 pt-4" style={{paddingBottom: "120px"}}>          

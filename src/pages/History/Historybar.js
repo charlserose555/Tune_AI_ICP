@@ -9,7 +9,7 @@ import { ChangePage } from "../../store/reducers/menu";
 import { white } from "tailwindcss/colors";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from 'react-router-dom';
-import LoginComponent from "../Auth/LoginComponent";
+import AuthComponent from "../Auth/AuthComponent";
 
 function Historybar() {
   const dispatch = useDispatch();
@@ -105,7 +105,7 @@ function Historybar() {
           </div>
         </div>
         <div className="pt-12 px-6">
-          <LoginComponent width={'247px'} height={'334px'}/>
+          <AuthComponent width={'247px'} height={'334px'}/>
         </div>
     </div>
   );

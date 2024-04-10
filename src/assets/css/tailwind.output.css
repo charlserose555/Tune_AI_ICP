@@ -1398,6 +1398,10 @@ select {
   gap: 70px;
 }
 
+.gap-\[8px\] {
+  gap: 8px;
+}
+
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1864,10 +1868,6 @@ select {
   padding-bottom: 58px;
 }
 
-.pb-2 {
-  padding-bottom: 0.5rem;
-}
-
 .pb-5 {
   padding-bottom: 1.25rem;
 }
@@ -2119,11 +2119,6 @@ select {
 .text-coral-500 {
   --tw-text-opacity: 1;
   color: rgb(253 54 59 / var(--tw-text-opacity));
-}
-
-.text-darkblue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(61 131 247 / var(--tw-text-opacity));
 }
 
 .text-darkblue-600 {

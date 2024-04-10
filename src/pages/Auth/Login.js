@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Slide from "./Slide";
 
-function Register() {
+function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const history = useHistory();
 
@@ -77,13 +77,10 @@ function Register() {
                     <div className="flex flex-col justify-center items-center w-full gap-[5px]">
                         <p className="font-plus text-white font-normal text-16 leading-20">Do not you have an account yet?</p>
                     </div>
-                    <div className="flex flex-col justify-center items-center w-full">
-                        <p className="font-plus cursor-pointer text-darkblue-400 font-bold text-14 leading-20" onClick={() => history.push("/auth/register")}>Sign up here</p>
-                    </div>
                 </div>
             </div>
         </div>
     </>)
 }
 
-export default Register;
+export default Login;
