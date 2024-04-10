@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useLocation } from "react-router-dom";
-import { Alert } from "@material-tailwind/react";
 
 import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnnouncer";
 
@@ -12,6 +11,7 @@ import { store, persister, useSelector, dispatch } from "./store";
 import { APIProvider } from "./context/ApiContext";
 import { Toaster } from "react-hot-toast";
 import { initFlowbite } from "flowbite";
+import Alert from "./components/Alert/Alert";
 
 const Layout = lazy(() => import("./pages/Layout/Layout"));
 const AuthLayout = lazy(() => import("./pages/Layout/AuthLayout"));
@@ -35,9 +35,13 @@ function App() {
               <Route index path="/app" component={Layout} />
               <Route index path="/auth" component={AuthLayout} />
               {/* If you have an index page, you can remothis Redirect */}
-              <Redirect exact from="/" to="/app/home" />
-              <Alert color="blue">An info alert for showing message.</Alert>
+              <Redirect exact from="/" to="/app/home" />              
             </Switch>
+            <Alert/>
+            <Toaster
+              position="top-right"
+              reverseOrder={false}
+            />
           </APIProvider>
         </PersistGate>
       </Provider>

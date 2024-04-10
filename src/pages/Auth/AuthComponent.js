@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
+import alert from "../../utils/Alert";
 
 function AuthComponent({width, height}) {
     const history = useHistory();
@@ -23,15 +24,13 @@ function AuthComponent({width, height}) {
     });
     
     const handleSuccess = () => {
-        const principalId = authClient.getIdentity().getPrincipal().toText();
-        console.log(principalId);
-        console.log("NFID identity", authClient.getIdentity());
+        // const principalId = authClient.getIdentity().getPrincipal().toText();
+        // console.log(principalId);
+
+        alert("success", "The login successful!");
     }
     
     const loginNFID = async() => {
-        console.log("DFdfdf")
-        console.log("env", process.env.REACT_APP_SIGNIN_MESSAGE);
-
         authClient = await AuthClient.create();
 
         if (!authClient) throw new Error("AuthClient not initialized");
@@ -106,7 +105,7 @@ function AuthComponent({width, height}) {
             </a>
             <a className="outline-btn text-14 px-4 py-2 font-medium rounded-8 w-full" 
                 style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}
-                onClick={(() => loginNFID())}>
+                onClick={(() => handleSuccess())}>
                 
                 <div className="flex justify-center items-center gap-[8px]">
                     <p>NFID</p>     
