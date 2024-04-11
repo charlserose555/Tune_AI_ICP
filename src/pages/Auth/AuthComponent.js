@@ -2,8 +2,12 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { AuthClient } from "@dfinity/auth-client";
-import { HttpAgent } from "@dfinity/agent";
+import { HttpAgent, Actor } from "@dfinity/agent";
 import alert from "../../utils/Alert";
+import loading from "../../utils/Loading.js";
+import {idlFactory} from '../../smart-contracts/declarations/manager/manager.did.js';
+import { Principal } from '@dfinity/principal'; 
+import 'webcrypto-shim';
 
 function AuthComponent({width, height}) {
     const history = useHistory();
@@ -24,10 +28,52 @@ function AuthComponent({width, height}) {
     });
     
     const handleSuccess = () => {
-        // const principalId = authClient.getIdentity().getPrincipal().toText();
-        // console.log(principalId);
+        loading();
+
+        const principalId = authClient.getIdentity().getPrincipal().toText();
+        console.log(principalId);
 
         alert("success", "The login successful!");
+
+        handleLogin(authClient.getIdentity());
+    }
+
+    const handleLogin = async (identity) => {
+        try {
+            console.log('identity', identity.getPrincipal().toText())
+            
+            const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+
+            if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+                agent.fetchRootKey();
+            }
+
+            let artistAccountData = {
+                createdAt: Number(Date.now() * 1000),
+                userPrincipal: Principal.fromText(identity.getPrincipal().toText()),            
+            }
+
+            let managerActor = Actor.createActor(idlFactory, {
+                agent,
+                canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
+            });
+        
+            let bucket = await managerActor.createProfileArtist(artistAccountData);
+
+            loading(false);
+
+            console.log('New bucket', bucket);
+
+            let accountActor = Actor.createActor(idlFactory, {
+                agent,
+                canisterId: bucket
+            });
+
+            let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
+            console.log('profileInfo', profileInfo.toText()); 
+        } catch (err) {
+            console.log(err)
+        }
     }
     
     const loginNFID = async() => {
@@ -55,8 +101,9 @@ function AuthComponent({width, height}) {
     const loginICP = async() => {
         authClient = await AuthClient.create();
 
-        if (!authClient) throw new Error("AuthClient not initialized");
-        
+        if (!authClient) throw new Error("AuthClient not initialized");        
+
+        console.log("Dfdsf");
 
         await new Promise((resolve) => {
             authClient.login({
@@ -65,14 +112,13 @@ function AuthComponent({width, height}) {
             });
         });
 
+        console.log("sdfsdfddddd");
+
         const identity = authClient.getIdentity();
 
         console.log("ICP", identity.getPrincipal().toText())
 
-        const agent = new HttpAgent({ identity });
-        // actor = createActor(process.env.CANISTER_ID_II_INTEGRATION_BACKEND, {
-        //     agent,
-        // });
+        handleLogin(identity);
     }
 
  return (
@@ -105,7 +151,7 @@ function AuthComponent({width, height}) {
             </a>
             <a className="outline-btn text-14 px-4 py-2 font-medium rounded-8 w-full" 
                 style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}
-                onClick={(() => handleSuccess())}>
+                onClick={(() => loginNFID())}>
                 
                 <div className="flex justify-center items-center gap-[8px]">
                     <p>NFID</p>     
