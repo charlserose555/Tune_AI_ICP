@@ -8,7 +8,8 @@ import Main from "../Main/Main";
 import { SidebarContext } from "../../context/SidebarContext";
 import PlayerControlPanel from "../Player/PlayerControlPanel";
 import { useState } from "react";
-import PageLoader from "../../components/Loader/pageLoader";
+import PageLoader from "../../components/Loader/PageLoader";
+import LoadingOverlay from "../../components/Loader/LoadingOverlay";
 
 const Page404 = lazy(() => import("../404"));
 
@@ -38,6 +39,7 @@ function Layout() {
       <Sidebar />
       <div className="flex flex-col flex-1 w-full overflow-y-auto y-scrollable-tag">
         <Main>
+          <LoadingOverlay/>
           <Suspense fallback={<PageLoader />}>
             <Switch>
               {sidebar.map((route, i) => {

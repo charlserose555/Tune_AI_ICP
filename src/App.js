@@ -12,6 +12,7 @@ import { APIProvider } from "./context/ApiContext";
 import { Toaster } from "react-hot-toast";
 import { initFlowbite } from "flowbite";
 import Alert from "./components/Alert/Alert";
+import AppLoader from "./components/Loader/AppLoader";
 
 const Layout = lazy(() => import("./pages/Layout/Layout"));
 const AuthLayout = lazy(() => import("./pages/Layout/AuthLayout"));
