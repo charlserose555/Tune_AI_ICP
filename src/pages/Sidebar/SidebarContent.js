@@ -38,7 +38,7 @@ function SidebarContent() {
                   <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
                   {route.name == "Home" && <Icon.HomeIcon/>}
                   {route.name == "Geners" && <Icon.GenersIcon/>}
-                  {route.name == "Favorites" && <Icon.FavoritesIcon/>}
+                  {route.name == "My Library" && <Icon.LibraryIcon/>}
                 <span className="leading-20">{route.name}</span>
               </NavLink>
             </li>) : ("")))}
@@ -49,7 +49,7 @@ function SidebarContent() {
           <AuthComponent width={'247px'} height={'284px'}/>
         </div>
 
-        <div className="flex flex-col justify-end items-center text-white font-plus h-full px-3 pt-4" style={{paddingBottom: "120px"}}>          
+        {/* <div className="flex flex-col justify-end items-center text-white font-plus h-full px-3 pt-4" style={{paddingBottom: "120px"}}>          
             <div className="flex flex-col p-4 bg-primary-900 rounded-4 gap-4">
               <p className="text-16 font-semibold leading-20">You can receive part of the royalties of a song, just by listening it</p>
               <p className="text-14 font-light leading-18">All the royalties will be distributed using our own TunedCoin token</p>
@@ -59,7 +59,7 @@ function SidebarContent() {
             </div>
 
             <p className="text-14 font-light leading-18 pt-2">Loremipsu © 2022 Versión 1.1</p>            
-        </div>
+        </div> */}
         
       </div>
     </div>

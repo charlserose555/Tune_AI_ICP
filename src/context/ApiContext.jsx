@@ -1,7 +1,6 @@
 import React, { createContext } from "react";
 import { Logout } from "../store/reducers/auth";
 import { useDispatch, useSelector } from "../store";
-import { getDate } from "../utils/filter";
 import axios from "../utils/Axios"
 import { saveBets, savePools } from "../store/reducers/p2p";
 const APIContext = createContext(null);
@@ -170,162 +169,6 @@ export const APIProvider = ({ children }) => {
         return res.data;
     }
 
-    // Dashboard Api
-    const getAllSportsProfitByCurrency = async (currency) => {
-        let date = getDate()
-        // if (currency === 'BCB') {
-        //   date = getDate('wed');
-        // }
-        const res = await axios.post('api/v2/sports/getAllSportsProfitByCurrency', { date, currency })
-        return res;
-    }
-
-    const getSportsProfit = async (type) => {
-        const date = getDate(type);
-        const res = await axios.post("api/v2/sports/getprofit", { date });
-        return res;
-    };
-
-    const getAllSportsProfit = async () => {
-        const res = await axios.get('api/v2/sports/getAllSportsProfit')
-        return res;
-    }
-
-    const getV2SportsProfit = async (type) => {
-        const date = getDate(type);
-        const res = await axios.post("api/v2/sports/getv2profit", { date });
-        return res;
-    };
-
-    const getAllV2SportsProfit = async () => {
-        const res = await axios.get("api/v2/sports/getAllV2SportsProfit");
-        return res;
-    };
-
-
-    const getAllV2SportsProfitByCurrency = async (currency) => {
-        let date = getDate()
-        // if (currency === 'BCB') {
-        //   date = getDate('wed');
-        // }
-        const res = await axios.post('api/v2/sports/getAllV2SportsProfitByCurrency', { date, currency })
-        return res;
-    }
-
-    const getSportStatistics = async (year) => {
-        const res = await axios.post('api/v2/sports/getAllV2SportsStatisticByYear', { year })
-        return res;
-    }
-    
-    const getUserSportsProfit = async (type) => {
-        const date = getDate(type);
-        const res = await axios.post("api/v2/sports/getuserprofit", {
-            date,
-            userId,
-        });
-        return res;
-    };
-    
-    const getAllCasinosProfit = async () => {
-        let date = getDate('July')
-        const res = await axios.post('api/v2/casinos/getAllCasinosProfit', { date })
-        return res;
-    }
-    
-    const getCasinoStatistics = async (year) => {
-        const res = await axios.post('api/v2/casinos/getAllV2CasinoStatisticByYear', { year })
-        return res;
-    }
-
-    const getCasinosProfit = async (type) => {
-        const date = getDate(type);
-        const res = await axios.post("api/v2/casinos/getprofit", { date });
-        return res;
-    };
-
-    const getAllCasinoProfitByCurrency = async (currency) => {
-        let date = getDate()
-        // if (currency === 'BCB') {
-        //   date = getDate('wed');
-        // }
-        const res = await axios.post("api/v2/casinos/getAllCasinoProfitByCurrency", { date, currency });
-        return res;
-    };
-
-    const getUserCasinosProfit = async (type) => {
-        const date = getDate(type);
-        const res = await axios.post("api/v2/casinos/getuserprofit", {
-            date,
-            userId,
-        });
-        return res;
-    };
-
-    const getCasinoCategory = async () => {
-        const res = await axios.get("api/v2/casinos/bo-categorylist");
-        return res;
-    }
-    
-    const getProviderList = async (type) => {
-        const res = await axios.post("api/v2/casinos/bo-providerlist", { type });
-        return res;
-    }
-
-    const uploadFile = async (data) => {
-        const res = await axios.post("api/v2/files/", data, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-        return res;
-    };
-
-    const getLeaderboard = async (
-        page, 
-        pageSize,
-        userid,
-        date
-    ) => {
-        const res = await axios.post("api/v2/users/ranking", {
-            userId,
-            userName,
-            pageSize,
-            page: page + 1,
-            filter: userid,
-            date,
-        });
-        return res;
-    };
-
-    const getReferral = async (usreId) => {
-        const res = await axios.post("api/v2/users/referral", { userId });
-        return res;
-    };
-
-    const getTransactions = async (pageIndex) => {
-        const res = await axios.post("api/v3/payments/get-transaction", {
-          userId,
-          pageIndex
-        });
-        return res;
-      };
-    
-
-    const getGames = async ({
-        gameType,
-        page,
-        perPage,
-        provider,
-        gameName }) => {
-        const res = await axios.post("api/v2/casinos/bo-gamelist", { gameType, page, perPage, provider, gameName });
-        return res;
-    }
-
-
-    const getTopRatedGames = async() => {
-        const res = await axios.post("api/v2/casinos/top-gamelist", {});
-        return res;
-    }
 
     const cancelWithdrawal = async (_id) => {
         const res = await axios.post("api/v2/payments/c-withdrawal", {
@@ -352,29 +195,8 @@ export const APIProvider = ({ children }) => {
                 createPool,
                 getPools,
                 joinPool,
-                getAllSportsProfitByCurrency,
-                getSportsProfit,
-                getAllSportsProfit,
-                getV2SportsProfit,
-                getAllV2SportsProfit,
-                getAllV2SportsProfitByCurrency,
-                getUserSportsProfit,
-                getAllCasinosProfit,
-                getSportStatistics,
-                getCasinosProfit,
-                getAllCasinoProfitByCurrency,
-                getUserCasinosProfit,
-                getCasinoStatistics,
                 openGame,
                 openDemoGame,
-                getCasinoCategory,
-                getProviderList,
-                getGames,
-                getTopRatedGames,
-                uploadFile,
-                getLeaderboard,
-                getReferral,
-                getTransactions,
                 cancelWithdrawal,
                 depositMetamask,
                 depositSolana

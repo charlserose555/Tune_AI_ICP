@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as Icon from "../../icons";
 
-function PopularTracks() {
+function FavouriteTrack() {
     const [favouriteList, setFavouriteList] = useState([]); 
 
     function changeFavourite(index) {
@@ -25,10 +25,6 @@ function PopularTracks() {
     }, [])
 
     return (<>
-    <div className="flex flex-row justify-start items-end">
-        <p className="text-24 font-normal leading-30 font-plus">Popular Tracks</p>
-        <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
-    </div>
     <div className="flex flex-row justify-start items-end pt-[20px] mb-[120px]">
       <div className="w-full">
         <div className="overflow-x-auto  x-scrollable-tag mt-4">
@@ -91,4 +87,4 @@ function PopularTracks() {
     </>)
 }
 
-export default PopularTracks;
+export default FavouriteTrack;
