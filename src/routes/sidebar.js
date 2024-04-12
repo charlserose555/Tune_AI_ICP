@@ -12,7 +12,8 @@ const Genres = lazy(() => import("../pages/Genres/Genres"));
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
-const GenresDetail = lazy(()=> import("../pages/Home/GenresDetail"));
+const GenresDetail = lazy(() => import("../pages/Home/GenresDetail"));
+const Library = lazy(() => import("../pages/Library/Library"));
 
 const routes = [
   {
@@ -28,10 +29,10 @@ const routes = [
     component: Genres,
   },
   {
-    path: "/favorites",
-    icon: "FavoritesIcon",
-    name: "Favorites",
-    component: Home,
+    path: "/library",
+    icon: "LibarayIcon",
+    name: "My Library",
+    component: Library,
   },
   {
     path: "/profile",

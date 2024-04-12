@@ -4,7 +4,7 @@ import { Avatar } from "@windmill/react-ui";
 import { EditProfileIcon, SubscriptionIcon } from "../../icons";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import ProfileEditModal from "./ProfileDetailModal";
+import ProfileEditModal from "./ProfileEditModal";
 
 export default function ProfileBanner() {
   const dispatch = useDispatch();
