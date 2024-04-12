@@ -22,6 +22,7 @@ type StatusRequest =
    memory_size: bool;
    version: bool;
  };
+type ProfilePhoto = blob;
 type FileExtension = 
  variant {
    aac;
@@ -69,6 +70,7 @@ type ArtistBucket =
                                           ContentId;
                                           principal;
                                         });
+   createProfileInfo: (opt ArtistAccountData) -> (bool);
    deleteAccount: (principal) -> ();
    deleteContentCanister: (UserId, principal) -> (bool);
    getAllContentCanisters: () -> (vec CanisterId) query;
@@ -83,7 +85,6 @@ type ArtistBucket =
    getPrincipalThis: () -> (principal) query;
    getProfileInfo: (UserId) -> (opt ArtistAccountData__1) query;
    getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
-   initCanister: () -> (bool);
    removeContent: (ContentId, nat) -> ();
    transferFreezingThresholdCycles: () -> ();
    updateProfileInfo: (ArtistAccountData__1) -> (bool);
@@ -91,11 +92,17 @@ type ArtistBucket =
 type ArtistAccountData__1 = 
  record {
    createdAt: Timestamp;
+   displayName: opt text;
+   profilePhoto: opt ProfilePhoto;
+   userName: opt text;
    userPrincipal: principal;
  };
 type ArtistAccountData = 
  record {
    createdAt: Timestamp;
+   displayName: opt text;
+   profilePhoto: opt ProfilePhoto;
+   userName: opt text;
    userPrincipal: principal;
  };
 service : (opt ArtistAccountData, principal, principal) -> ArtistBucket
