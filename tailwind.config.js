@@ -194,6 +194,6 @@ module.exports = windmill({
     },
   },
   plugins: [require('tailwindcss')({ watch: true })],
-  // content: ["./node_modules/flowbite/**/*{.js, jsx}", "src/**/*.{js, jsx}"],
+  content: ["./node_modules/flowbite/**/*{.js, jsx}", "src/**/*.{js, jsx}"],
 });
 

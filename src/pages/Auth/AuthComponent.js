@@ -8,6 +8,7 @@ import loading from "../../utils/Loading.js";
 import {idlFactory} from '../../smart-contracts/declarations/manager/manager.did.js';
 import { Principal } from '@dfinity/principal'; 
 import 'webcrypto-shim';
+import { Crypto as SubtleCrypto } from "@peculiar/webcrypto";
 
 function AuthComponent({width, height}) {
     const history = useHistory();
@@ -73,6 +74,7 @@ function AuthComponent({width, height}) {
             console.log('profileInfo', profileInfo.toText()); 
         } catch (err) {
             console.log(err)
+            loading(false);
         }
     }
     
@@ -111,8 +113,6 @@ function AuthComponent({width, height}) {
                 onSuccess: resolve,
             });
         });
-
-        console.log("sdfsdfddddd");
 
         const identity = authClient.getIdentity();
 

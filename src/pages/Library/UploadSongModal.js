@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FileInput, Label } from "flowbite-react";
 import { DragFileInput } from '../../components/DragDrop/DragFileInput';
 import { ThumbnailInput } from '../../components/DragDrop/ThumbnailInput';
 import { formatDuration } from '../../utils/format';
