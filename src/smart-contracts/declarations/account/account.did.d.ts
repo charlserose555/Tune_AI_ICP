@@ -3,17 +3,24 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface ArtistAccountData {
+  'userName' : [] | [string],
+  'displayName' : [] | [string],
   'createdAt' : Timestamp,
+  'profilePhoto' : [] | [ProfilePhoto],
   'userPrincipal' : Principal,
 }
 export interface ArtistAccountData__1 {
+  'userName' : [] | [string],
+  'displayName' : [] | [string],
   'createdAt' : Timestamp,
+  'profilePhoto' : [] | [ProfilePhoto],
   'userPrincipal' : Principal,
 }
 export interface ArtistBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
   'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
+  'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData]], boolean>,
   'deleteAccount' : ActorMethod<[Principal], undefined>,
   'deleteContentCanister' : ActorMethod<[UserId, Principal], boolean>,
   'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,
@@ -27,7 +34,6 @@ export interface ArtistBucket {
   'getPrincipalThis' : ActorMethod<[], Principal>,
   'getProfileInfo' : ActorMethod<[UserId], [] | [ArtistAccountData__1]>,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
-  'initCanister' : ActorMethod<[], boolean>,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferFreezingThresholdCycles' : ActorMethod<[], undefined>,
   'updateProfileInfo' : ActorMethod<[ArtistAccountData__1], boolean>,
@@ -64,6 +70,7 @@ export type FileExtension = { 'aac' : null } |
   { 'svg' : null } |
   { 'wav' : null } |
   { 'jpeg' : null };
+export type ProfilePhoto = Uint8Array | number[];
 export interface StatusRequest {
   'memory_size' : boolean,
   'version' : boolean,

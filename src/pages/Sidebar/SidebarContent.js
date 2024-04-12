@@ -28,7 +28,7 @@ function SidebarContent() {
           <ul className="w-full gap-45 flex flex-col" key={isLoggedIn}>
             {routes.map((route) =>
               (route.icon? 
-              (<li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
+              ((route.name != "My Library" || isLoggedIn) && <li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
                 <NavLink
                   exact
                   to={`/app${route.path}`}

@@ -3,7 +3,10 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface ArtistAccountData {
+  'userName' : [] | [string],
+  'displayName' : [] | [string],
   'createdAt' : Timestamp,
+  'profilePhoto' : [] | [ProfilePhoto],
   'userPrincipal' : Principal,
 }
 export type CanisterId = Principal;
@@ -16,6 +19,7 @@ export interface CanisterStatus {
   'settings' : definite_canister_settings,
   'module_hash' : [] | [Uint8Array | number[]],
 }
+export type ProfilePhoto = Uint8Array | number[];
 export interface StatusRequest {
   'memory_size' : boolean,
   'version' : boolean,
@@ -47,14 +51,10 @@ export interface _SERVICE {
   'getArtistAccountEntries' : ActorMethod<[], Array<[UserId, CanisterId]>>,
   'getAvailableMemoryCanister' : ActorMethod<[Principal], [] | [bigint]>,
   'getCanisterArtist' : ActorMethod<[Principal], [] | [Principal]>,
-  'getCanisterFan' : ActorMethod<[Principal], [] | [Principal]>,
   'getCanisterStatus' : ActorMethod<[], CanisterStatus>,
-  'getFanAccountEntries' : ActorMethod<[], Array<[Principal, Principal]>>,
   'getOwnerOfArtistCanister' : ActorMethod<[Principal], [] | [UserId]>,
-  'getOwnerOfFanCanister' : ActorMethod<[Principal], [] | [UserId]>,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
   'getTotalArtistAccounts' : ActorMethod<[], bigint>,
-  'getTotalFanAccounts' : ActorMethod<[], bigint>,
   'installCode' : ActorMethod<
     [Principal, Uint8Array | number[], Uint8Array | number[]],
     undefined
@@ -69,7 +69,6 @@ export interface _SERVICE {
     undefined
   >,
   'transferOwnershipArtist' : ActorMethod<[Principal, Principal], undefined>,
-  'transferOwnershipFan' : ActorMethod<[Principal, Principal], undefined>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

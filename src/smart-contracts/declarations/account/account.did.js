@@ -1,7 +1,11 @@
 export const idlFactory = ({ IDL }) => {
   const Timestamp = IDL.Int;
+  const ProfilePhoto = IDL.Vec(IDL.Nat8);
   const ArtistAccountData = IDL.Record({
+    'userName' : IDL.Opt(IDL.Text),
+    'displayName' : IDL.Opt(IDL.Text),
     'createdAt' : Timestamp,
+    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
   const UserId__1 = IDL.Principal;
@@ -49,7 +53,10 @@ export const idlFactory = ({ IDL }) => {
     'module_hash' : IDL.Opt(IDL.Vec(IDL.Nat8)),
   });
   const ArtistAccountData__1 = IDL.Record({
+    'userName' : IDL.Opt(IDL.Text),
+    'displayName' : IDL.Opt(IDL.Text),
     'createdAt' : Timestamp,
+    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
   const StatusRequest = IDL.Record({
@@ -70,6 +77,11 @@ export const idlFactory = ({ IDL }) => {
     'createContent' : IDL.Func(
         [ContentInit],
         [IDL.Opt(IDL.Tuple(ContentId, IDL.Principal))],
+        [],
+      ),
+    'createProfileInfo' : IDL.Func(
+        [IDL.Opt(ArtistAccountData)],
+        [IDL.Bool],
         [],
       ),
     'deleteAccount' : IDL.Func([IDL.Principal], [], []),
@@ -98,7 +110,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(StatusResponse)],
         ['query'],
       ),
-    'initCanister' : IDL.Func([], [IDL.Bool], []),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
     'transferFreezingThresholdCycles' : IDL.Func([], [], []),
     'updateProfileInfo' : IDL.Func([ArtistAccountData__1], [IDL.Bool], []),
@@ -107,8 +118,12 @@ export const idlFactory = ({ IDL }) => {
 };
 export const init = ({ IDL }) => {
   const Timestamp = IDL.Int;
+  const ProfilePhoto = IDL.Vec(IDL.Nat8);
   const ArtistAccountData = IDL.Record({
+    'userName' : IDL.Opt(IDL.Text),
+    'displayName' : IDL.Opt(IDL.Text),
     'createdAt' : Timestamp,
+    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
   return [IDL.Opt(ArtistAccountData), IDL.Principal, IDL.Principal];
