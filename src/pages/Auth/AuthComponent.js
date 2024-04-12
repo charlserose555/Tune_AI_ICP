@@ -7,14 +7,15 @@ import alert from "../../utils/Alert";
 import loading from "../../utils/Loading.js";
 import {idlFactory} from '../../smart-contracts/declarations/manager/manager.did.js';
 import { Principal } from '@dfinity/principal'; 
-import 'webcrypto-shim';
-import { Crypto as SubtleCrypto } from "@peculiar/webcrypto";
+import { useSelector } from "../../store/index.js";
 
 function AuthComponent({width, height}) {
     const history = useHistory();
     const location = useLocation();
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
+
+    const {isLoggedIn} = useSelector((state) => state.auth);
 
     useEffect(() => {      
         if(location.pathname.includes('genres/')) {
@@ -60,18 +61,17 @@ function AuthComponent({width, height}) {
             });
         
             let bucket = await managerActor.createProfileArtist(artistAccountData);
-
-            loading(false);
-
-            console.log('New bucket', bucket);
-
+            
+            console.log('New bucket', bucket.toText());
+            
             let accountActor = Actor.createActor(idlFactory, {
                 agent,
                 canisterId: bucket
             });
-
             let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
             console.log('profileInfo', profileInfo.toText()); 
+            
+            loading(false);
         } catch (err) {
             console.log(err)
             loading(false);
@@ -123,7 +123,7 @@ function AuthComponent({width, height}) {
 
  return (
     <>
-    <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2 relative font-plus text-white" style={{
+    {!isLoggedIn && <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2 relative font-plus text-white" style={{
             width: width,
             height: height,
             backgroundImage: portraitUrl,
@@ -161,7 +161,7 @@ function AuthComponent({width, height}) {
         </div>
         <div className="absolute top-0 left-0 w-full rounded-4" style={{ height:height, background: "linear-gradient(360deg, rgba(5, 5, 5, 0.78) 26.1%, rgba(5, 5, 5, 0) 99.98%)"}}>
         </div>
-    </div>
+    </div>}    
     </>
  )
 }

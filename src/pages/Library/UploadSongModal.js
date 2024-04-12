@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { DragFileInput } from '../../components/DragDrop/DragFileInput';
 import { ThumbnailInput } from '../../components/DragDrop/ThumbnailInput';
 import { formatDuration } from '../../utils/format';
+import { useDispatch } from '../../store';
+import { ShowModal } from '../../store/reducers/menu';
 
-function UploadSongModal({ isOpen, onClose }) {
+function UploadSongModal() {
     const [audioInfo, setAudioInfo] = useState({
         duration: 0,
         size: 0,
         type: '',
         name: ''
     });
+
+    const dispatch = useDispatch();
 
     const close = () => {
         setAudioInfo({
@@ -18,11 +22,8 @@ function UploadSongModal({ isOpen, onClose }) {
             type: '',
             name: ''
         })
-        onClose();
-    }
 
-    if (!isOpen) {
-        return null;
+        dispatch(ShowModal(""));
     }
 
     const uploadFiles = (file) => {
@@ -53,7 +54,7 @@ function UploadSongModal({ isOpen, onClose }) {
     }
 
     return (
-        <div className="modal-overlay fixed inset-0 flex items-center justify-center">
+        <div className="modal-overlay fixed inset-0 flex items-center justify-center text-white">
             <div className="fixed inset-0 flex items-center justify-center">
                 <div className="flex w-full flex-row justify-center items-center px-4">
                     <div style={{maxWidth: "569px", maxHeight: '866px', margin: '0 auto', backgroundColor: "rgba(22, 28, 42, 0.95)"}} className="w-full p-4 sm:p-6 md:p-8 gap-[20px] bg-opacity-40 rounded-5 shadow-bottom_1 flex justify-start flex-col items-center">                    

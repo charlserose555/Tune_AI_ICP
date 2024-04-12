@@ -25,23 +25,24 @@ function SidebarContent() {
           <img src="/demo/assets/logo.png" alt="Tuned AI"/>
         </div>
         <div className="flex flex-row justify-start items-center pt-5 px-3 gap-45">
-          <ul className="w-full gap-45 flex flex-col">
+          <ul className="w-full gap-45 flex flex-col" key={isLoggedIn}>
             {routes.map((route) =>
-              (route.icon? (<li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
-              <NavLink
-                exact
-                to={`/app${route.path}`}
-                className="parent-navlink inline-flex gap-45 rounded-2 py-45 px-4 items-center w-full"
-                activeClassName="parent-navlink-active bg-primary-700">
-                <Route path={`/app${route.path}`} exact={route.exact}>
-                </Route>
-                  <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
-                  {route.name == "Home" && <Icon.HomeIcon/>}
-                  {route.name == "Geners" && <Icon.GenersIcon/>}
-                  {route.name == "My Library" && <Icon.LibraryIcon/>}
-                <span className="leading-20">{route.name}</span>
-              </NavLink>
-            </li>) : ("")))}
+              (route.icon? 
+              (<li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
+                <NavLink
+                  exact
+                  to={`/app${route.path}`}
+                  className="parent-navlink inline-flex gap-45 rounded-2 py-45 px-4 items-center w-full"
+                  activeClassName="parent-navlink-active bg-primary-700">
+                  <Route path={`/app${route.path}`} exact={route.exact}>
+                  </Route>
+                    <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
+                    {route.name == "Home" && <Icon.HomeIcon/>}
+                    {route.name == "Geners" && <Icon.GenersIcon/>}
+                    {route.name == "My Library" && <Icon.LibraryIcon/>}
+                  <span className="leading-20">{route.name}</span>
+                </NavLink>
+              </li>) : ("")))}
           </ul>
         </div>
         

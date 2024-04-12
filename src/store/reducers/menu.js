@@ -5,6 +5,7 @@ const initialState = {
   drawerOpen: true,
   sidebarOpen: false,
   page: "",
+  modal: "",
   sportsmenu: true,
   chatOpen: false,
   isPlaying: false,
@@ -26,6 +27,10 @@ const menu = createSlice({
 
     ChangePage(state, action) {
       state.page = action.payload;
+    },
+
+    ShowModal(state, action) {
+      state.modal = action.payload;
     },
 
     openSidebar(state, action) {
@@ -60,6 +65,7 @@ export const {
   activeItem,
   openDrawer,
   ChangePage,
+  ShowModal,
   openSidebar,
   changeSportsMenu,
   changeChatOpen,
