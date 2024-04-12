@@ -1,7 +1,11 @@
 export const idlFactory = ({ IDL }) => {
   const Timestamp = IDL.Int;
+  const ProfilePhoto = IDL.Vec(IDL.Nat8);
   const ArtistAccountData = IDL.Record({
+    'userName' : IDL.Opt(IDL.Text),
+    'displayName' : IDL.Opt(IDL.Text),
     'createdAt' : Timestamp,
+    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
   const UserId = IDL.Principal;
@@ -65,23 +69,8 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(IDL.Principal)],
         ['query'],
       ),
-    'getCanisterFan' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Opt(IDL.Principal)],
-        ['query'],
-      ),
     'getCanisterStatus' : IDL.Func([], [CanisterStatus], []),
-    'getFanAccountEntries' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Principal))],
-        ['query'],
-      ),
     'getOwnerOfArtistCanister' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Opt(UserId)],
-        ['query'],
-      ),
-    'getOwnerOfFanCanister' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserId)],
         ['query'],
@@ -92,7 +81,6 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getTotalArtistAccounts' : IDL.Func([], [IDL.Nat], ['query']),
-    'getTotalFanAccounts' : IDL.Func([], [IDL.Nat], ['query']),
     'installCode' : IDL.Func(
         [IDL.Principal, IDL.Vec(IDL.Nat8), IDL.Vec(IDL.Nat8)],
         [],
@@ -114,7 +102,6 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
-    'transferOwnershipFan' : IDL.Func([IDL.Principal, IDL.Principal], [], []),
   });
 };
 export const init = ({ IDL }) => { return []; };

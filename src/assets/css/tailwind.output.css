@@ -1007,10 +1007,6 @@ select {
   height: 5rem;
 }
 
-.h-24 {
-  height: 6rem;
-}
-
 .h-26 {
   height: 2.25rem;
 }
@@ -1109,10 +1105,6 @@ select {
 
 .w-10 {
   width: 2.5rem;
-}
-
-.w-24 {
-  width: 6rem;
 }
 
 .w-26 {
