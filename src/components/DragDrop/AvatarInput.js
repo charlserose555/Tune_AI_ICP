@@ -65,11 +65,11 @@ export function AvatarInput({setThumbnail}) {
             {({ onImageUpload, onImageUpdate }) => (
                 <div className="flex px-4 py-4">
                     <div className="relative cursor-pointer flex justify-center items-center z-20">
-                        <Avatar className="w-24 h-24 absolute rounded-md cursor-pointer" src={croppedImage? croppedImage : "/demo/assets/avatar.png"} 
+                        <Avatar className="w-[100px] h-[100px] absolute rounded-md cursor-pointer" src={croppedImage? croppedImage : "/demo/assets/avatar.png"} 
                             {...props}
                             alt="blab"/>
 
-                        <div className='absolute top-0 left-0 w-24 h-24' style={{borderRadius:"50%", backgroundColor: "rgba(0, 0, 0, 0.45)"}} onClick={value ? onImageUpload : () => onImageUpdate(0)}></div>
+                        <div className='absolute top-0 left-0 w-[100px] h-[100px]' style={{borderRadius:"50%", backgroundColor: "rgba(0, 0, 0, 0.45)"}} onClick={value ? onImageUpload : () => onImageUpdate(0)}></div>
                         <div className="absolute" style={{width:"30px", height:"30px", zIndex:"10"}} onClick={value ? onImageUpload : () => onImageUpdate(0)}>
                             <EditProfileIcon/>
                         </div>

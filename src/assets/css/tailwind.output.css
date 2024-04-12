@@ -1047,6 +1047,10 @@ select {
   height: 2rem;
 }
 
+.h-\[100px\] {
+  height: 100px;
+}
+
 .h-\[12px\] {
   height: 12px;
 }
@@ -1153,6 +1157,10 @@ select {
 
 .w-8 {
   width: 2rem;
+}
+
+.w-\[100px\] {
+  width: 100px;
 }
 
 .w-\[12px\] {

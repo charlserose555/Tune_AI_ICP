@@ -11,9 +11,9 @@ const initialCurrency = {
 
 const initialUser = {
     _id: '',
-    email: '',
+    principal: '',
+    displaynmae: '',
     username: '',
-    iReferral: '',
     avatar: ''
 };
 
@@ -40,18 +40,10 @@ const auth = createSlice({
     initialState,
     reducers: {
         Login(state, action) {
-            const { balance, user, session, adminAddress, solAdminAddress, ethAdminAddress } = action.payload;
-            state.user = user;
-            state.token = session.accessToken;
-            state.balance = balance.balance;
-            state.balanceId = balance._id;
-            state.currency = balance.currency;
-            state.currencyId = balance.currency._id;
+            const { userInfo } = action.payload;
+            state.user = userInfo;
             state.isLoggedIn = true;
             state.isInitialized = true;
-            state.adminAddress = adminAddress;
-            state.solAdminAddress = solAdminAddress;
-            state.ethAdminAddress = ethAdminAddress;
         },
 
         UpdateInfo(state, action) {
@@ -88,23 +80,11 @@ const auth = createSlice({
         },
 
         Logout(state, action) {
-            console.log(state, "state")
-            state.token = '';
-            state.balance = 0;
-            state.balanceId = '';
-            state.currencyId = '';
             state.user = initialUser;
-            state.currency = initialCurrency;
             state.isLoggedIn = false;
             state.isInitialized = true;
             state = { ...state };
-            if (
-                window.location.pathname.toString().indexOf('blackjack') !== -1 ||
-                window.location.pathname.toString().indexOf('roulette') !== -1 || 
-                window.location.pathname.toString().indexOf('/sports') !== -1
-            ) {
-                window.location.reload();
-            }
+            window.location.reload();
         },
 
         UpdateToken(state, action) {

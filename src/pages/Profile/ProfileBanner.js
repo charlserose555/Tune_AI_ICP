@@ -4,21 +4,12 @@ import { Avatar } from "@windmill/react-ui";
 import { EditProfileIcon, SubscriptionIcon } from "../../icons";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import ProfileEditModal from "./ProfileEditModal";
+import ProfileEditModal from "../../components/Popups/ProfileEditModal";
+import { ShowModal } from "../../store/reducers/menu";
 
 export default function ProfileBanner() {
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="font-plus flex flex-col text-white relative">
@@ -59,7 +50,7 @@ export default function ProfileBanner() {
               <div className="py-2 px-45 gap-[10px]">
                 <Menu.Item>
                   {({ active }) => (
-                    <div onClick={() => openModal()} className={`menu-item flex justify-row items-center flex start px-45 mb-[10px] gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
+                    <div onClick={() => dispatch(ShowModal("editProfile"))} className={`menu-item flex justify-row items-center flex start px-45 mb-[10px] gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
                       <EditProfileIcon/>
                       <a
                         className="block py-2 font-plus font-bold text-14 leading-[19px]"
@@ -88,7 +79,7 @@ export default function ProfileBanner() {
           </div>
       </div>
 
-      <ProfileEditModal isOpen={isModalOpen} onClose={closeModal}/>
+      {/* <ProfileEditModal isOpen={isModalOpen} onClose={closeModal}/> */}
     </div>
   );
 }

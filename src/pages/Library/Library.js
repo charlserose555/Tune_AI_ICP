@@ -4,8 +4,8 @@ import FavouriteTrack from "./FavouriteTrack";
 import ReleasedTrack from "./ReleasedTrack";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import useApi from "../../hooks/useApi";
-import { useDispatch, useSelector } from "../../store";
-import UploadSongModal from "./UploadSongModal";
+import { dispatch, useDispatch, useSelector } from "../../store";
+import { ShowModal } from "../../store/reducers/menu";
 
 function Home() {
   const history = useHistory();
@@ -15,16 +15,6 @@ function Home() {
 
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   const TabContent = ({ id, activeTab, children }) => (
@@ -50,7 +40,7 @@ function Home() {
                 <div className="flex flex-row w-full pr-2" style={{maxWidth:"240px"}}>
                   <input type="text" placeholder="Search.." className="bg-primary-700 opacity-100 py-2 pl-4 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent w-full" style={{height: '40px'}}></input>
                 </div>
-                <a className="cursor-pointer fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => openModal()} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
+                <a className="cursor-pointer fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => dispatch(ShowModal("uploadSong"))} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
                   <p>Upload</p>
                   <img className="" src="/demo/assets/arrow-add.svg"/>
                 </a>
@@ -71,8 +61,6 @@ function Home() {
               </div>     
             </div>
         </div>
-
-        <UploadSongModal isOpen={isModalOpen} onClose={closeModal}/>
       </div>
     </>
   );

@@ -12,10 +12,10 @@ import { APIProvider } from "./context/ApiContext";
 import { Toaster } from "react-hot-toast";
 import { initFlowbite } from "flowbite";
 import Alert from "./components/Alert/Alert";
-import AppLoader from "./components/Loader/AppLoader";
 
 const Layout = lazy(() => import("./pages/Layout/Layout"));
-const AuthLayout = lazy(() => import("./pages/Layout/AuthLayout"));
+const ModalLayout = lazy(() => import("./pages/Modal/ModalLayout"))
+
 require("flowbite/dist/flowbite.js");
 
 function App() {
@@ -30,11 +30,11 @@ function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persister}>
           <APIProvider>
+            <ModalLayout/>
             <AccessibleNavigationAnnouncer />
             <Switch>
               {/* Place new routes over this */}
               <Route index path="/app" component={Layout} />
-              <Route index path="/auth" component={AuthLayout} />
               {/* If you have an index page, you can remothis Redirect */}
               <Redirect exact from="/" to="/app/home" />              
             </Switch>
