@@ -8,12 +8,15 @@ import loading from "../../utils/Loading.js";
 import {idlFactory} from '../../smart-contracts/declarations/manager/manager.did.js';
 import { Principal } from '@dfinity/principal'; 
 import { useSelector } from "../../store/index.js";
+import { useDispatch } from "../../store/index.js";
+import { Login } from "../../store/reducers/auth.js";
 
 function AuthComponent({width, height}) {
     const history = useHistory();
     const location = useLocation();
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
+    const dispatch = useDispatch();
 
     const {isLoggedIn} = useSelector((state) => state.auth);
 
@@ -50,27 +53,36 @@ function AuthComponent({width, height}) {
                 agent.fetchRootKey();
             }
 
-            let artistAccountData = {
-                createdAt: Number(Date.now() * 1000),
-                userPrincipal: Principal.fromText(identity.getPrincipal().toText()),            
+            // let artistAccountData = {
+            //     createdAt: Number(Date.now() * 1000),
+            //     userPrincipal: Principal.fromText(identity.getPrincipal().toText()),            
+            // }
+
+            // let managerActor = Actor.createActor(idlFactory, {
+            //     agent,
+            //     canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
+            // });
+        
+            // let bucket = await managerActor.createProfileArtist(artistAccountData);
+            
+            // console.log('New bucket', bucket.toText());
+            
+            // let accountActor = Actor.createActor(idlFactory, {
+            //     agent,
+            //     canisterId: bucket
+            // });
+            // let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
+            // console.log('profileInfo', profileInfo.toText()); 
+            
+            let userInfo = {
+                principal: identity.getPrincipal().toText(),
+                displaynmae: "User" + identity.getPrincipal().toText().substring(0, 4),
+                usrename: "User" + identity.getPrincipal().toText().substring(0, 4),
+                avatar: ""
             }
 
-            let managerActor = Actor.createActor(idlFactory, {
-                agent,
-                canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
-            });
-        
-            let bucket = await managerActor.createProfileArtist(artistAccountData);
-            
-            console.log('New bucket', bucket.toText());
-            
-            let accountActor = Actor.createActor(idlFactory, {
-                agent,
-                canisterId: bucket
-            });
-            let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
-            console.log('profileInfo', profileInfo.toText()); 
-            
+            dispatch(Login({userInfo : userInfo}));
+
             loading(false);
         } catch (err) {
             console.log(err)
