@@ -47,11 +47,11 @@ function AuthComponent({width, height}) {
         try {
             console.log('identity', identity.getPrincipal().toText())
             
-            const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+            // const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
 
-            if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-                agent.fetchRootKey();
-            }
+            // if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+            //     agent.fetchRootKey();
+            // }
 
             // let artistAccountData = {
             //     createdAt: Number(Date.now() * 1000),

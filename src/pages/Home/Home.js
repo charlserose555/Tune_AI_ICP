@@ -7,10 +7,6 @@ import useApi from "../../hooks/useApi";
 import { useDispatch, useSelector } from "../../store";
 
 function Home() {
-  const history = useHistory();
-  const Api = useApi();
-  const dispatch = useDispatch();
-
   return (
     <>
       <div className="flex flex-col pt-16 font-plus pl-6 pr-6 text-white relative overflow-x-auto">

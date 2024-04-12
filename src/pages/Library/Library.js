@@ -9,8 +9,6 @@ import { ShowModal } from "../../store/reducers/menu";
 
 function Home() {
   const history = useHistory();
-  const Api = useApi();
-
   const [activeTab, setActiveTab] = useState('Released');
 
   const handleTabClick = (tabId) => {

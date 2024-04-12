@@ -27,13 +27,12 @@ function Header() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const getBalances = () => {
-    Api.getBalances().then(({ data }) => {
-      dispatch(SetBalances(data));
-    });
+    // Api.getBalances().then(({ data }) => {
+    //   dispatch(SetBalances(data));
+    // });
   };
 
   const logout = () => {
-    console.log("DFsfdf");
     dispatch(Logout({}))
   }
 
