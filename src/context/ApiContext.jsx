@@ -1,24 +1,82 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { Logout } from "../store/reducers/auth";
 import { useDispatch, useSelector } from "../store";
 import axios from "../utils/Axios"
 import { saveBets, savePools } from "../store/reducers/p2p";
+import { AuthClient } from "@dfinity/auth-client";
+import { HttpAgent, Actor } from "@dfinity/agent";
+import {idlFactory as ManagerIDL} from '../smart-contracts/declarations/manager/manager.did.js';
+import {idlFactory as AccountIDL} from '../smart-contracts/declarations/account/account.did.js';
+
+import { Principal } from '@dfinity/principal'; 
+import { setId } from "@material-tailwind/react/components/Tabs/TabsContext.js";
+
 const APIContext = createContext(null);
 
 export const APIProvider = ({ children }) => {
     const dispatch = useDispatch();
-    const state = useSelector((store) => store.auth);
-    const { user, currencyId, balanceId, code } = state;
+    const auth = useSelector((store) => store.auth);
+    const { user, currencyId, balanceId, code} = auth;
     const userId = user?._id;
     const userName = user?.username;
+    const [identity, setIdentity] = useState(null);
+    const [principal, setPrincipal] = useState('');
 
-    const login = async (email, password) => {
-        const data = await axios.post("api/v2/users/signin", {
-            email,
-            password,
+    useEffect(() => {
+        setIdentity(auth.identity)
+        setPrincipal(auth.principal)
+    }, [auth])
+
+    const login = async () => {
+
+        const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+
+        console.log("principal", principal);
+
+        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+            agent.fetchRootKey();
+        }
+
+        let accountData = {
+            createdAt: Number(Date.now() * 1000),
+            userPrincipal: principal.toText(),            
+        }
+
+        console.log(accountData);
+
+        let managerActor = Actor.createActor(ManagerIDL, {
+            agent,
+            canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
         });
-        return data;
+    
+        let bucket = await managerActor.createProfileArtist(accountData);        
+        
+        return bucket[0].toText();
     };
+
+    const getProfileInfo = async (accountCanisterId) => {
+        const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+
+        let accountActor = Actor.createActor(AccountIDL, {
+            agent,
+            canisterId: accountCanisterId
+        });
+
+        let profileInfo = await accountActor.getProfileInfo(principal);
+
+        return profileInfo;
+    }
+
+    const createProfile = async (profileInfo) => {
+        const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+
+        let accountActor = Actor.createActor(AccountIDL, {
+            agent,
+            canisterId: user.canisterId
+        });
+
+        let result = await accountActor.createProfileInfo(profileInfo);
+    }
 
     const register = async (
         email,
@@ -182,6 +240,8 @@ export const APIProvider = ({ children }) => {
         <APIContext.Provider
             value={{
                 login,
+                getProfileInfo,
+                createProfile,
                 register,
                 signUpAddress,
                 updateUserInfo,

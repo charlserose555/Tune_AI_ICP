@@ -1,11 +1,7 @@
 export const idlFactory = ({ IDL }) => {
   const Timestamp = IDL.Int;
-  const ProfilePhoto = IDL.Vec(IDL.Nat8);
-  const ArtistAccountData = IDL.Record({
-    'userName' : IDL.Opt(IDL.Text),
-    'displayName' : IDL.Opt(IDL.Text),
+  const PrincipalInfo = IDL.Record({
     'createdAt' : Timestamp,
-    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
   const UserId__1 = IDL.Principal;
@@ -33,6 +29,14 @@ export const idlFactory = ({ IDL }) => {
     'extension' : FileExtension,
   });
   const ContentId = IDL.Text;
+  const ProfilePhoto = IDL.Vec(IDL.Nat8);
+  const ArtistAccountData__1 = IDL.Record({
+    'userName' : IDL.Opt(IDL.Text),
+    'displayName' : IDL.Opt(IDL.Text),
+    'createdAt' : Timestamp,
+    'profilePhoto' : IDL.Opt(ProfilePhoto),
+    'userPrincipal' : IDL.Principal,
+  });
   const UserId = IDL.Principal;
   const CanisterId = IDL.Principal;
   const definite_canister_settings = IDL.Record({
@@ -52,7 +56,7 @@ export const idlFactory = ({ IDL }) => {
     'settings' : definite_canister_settings,
     'module_hash' : IDL.Opt(IDL.Vec(IDL.Nat8)),
   });
-  const ArtistAccountData__1 = IDL.Record({
+  const ArtistAccountData = IDL.Record({
     'userName' : IDL.Opt(IDL.Text),
     'displayName' : IDL.Opt(IDL.Text),
     'createdAt' : Timestamp,
@@ -80,7 +84,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'createProfileInfo' : IDL.Func(
-        [IDL.Opt(ArtistAccountData)],
+        [IDL.Opt(ArtistAccountData__1)],
         [IDL.Bool],
         [],
       ),
@@ -102,7 +106,7 @@ export const idlFactory = ({ IDL }) => {
     'getPrincipalThis' : IDL.Func([], [IDL.Principal], ['query']),
     'getProfileInfo' : IDL.Func(
         [UserId],
-        [IDL.Opt(ArtistAccountData__1)],
+        [IDL.Opt(ArtistAccountData)],
         ['query'],
       ),
     'getStatus' : IDL.Func(
@@ -112,19 +116,15 @@ export const idlFactory = ({ IDL }) => {
       ),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
     'transferFreezingThresholdCycles' : IDL.Func([], [], []),
-    'updateProfileInfo' : IDL.Func([ArtistAccountData__1], [IDL.Bool], []),
+    'updateProfileInfo' : IDL.Func([ArtistAccountData], [IDL.Bool], []),
   });
   return ArtistBucket;
 };
 export const init = ({ IDL }) => {
   const Timestamp = IDL.Int;
-  const ProfilePhoto = IDL.Vec(IDL.Nat8);
-  const ArtistAccountData = IDL.Record({
-    'userName' : IDL.Opt(IDL.Text),
-    'displayName' : IDL.Opt(IDL.Text),
+  const PrincipalInfo = IDL.Record({
     'createdAt' : Timestamp,
-    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
-  return [IDL.Opt(ArtistAccountData), IDL.Principal, IDL.Principal];
+  return [IDL.Opt(PrincipalInfo), IDL.Principal, IDL.Principal];
 };

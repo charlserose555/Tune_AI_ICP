@@ -10,9 +10,8 @@ const initialCurrency = {
 };
 
 const initialUser = {
-    _id: '',
-    principal: '',
-    displaynmae: '',
+    canisterId: '',
+    displayname: '',
     username: '',
     avatar: ''
 };
@@ -26,7 +25,9 @@ const initialState = {
     balance: 0,
     balanceId: '',
     currencyId: '',
+    principal: '',
     user: initialUser,
+    identity: null,
     currency: initialCurrency,
     adminAddress: '',
     solAdminAddress: '',
@@ -41,13 +42,28 @@ const auth = createSlice({
     reducers: {
         Login(state, action) {
             const { userInfo } = action.payload;
+            
             state.user = userInfo;
             state.isLoggedIn = true;
             state.isInitialized = true;
-        },
+       },
 
         UpdateInfo(state, action) {
             state.user = action.payload;
+        },
+
+        SetIdentity(state, action) {
+            const {identity} = action.payload;
+
+            console.log("auth Identity", identity)
+
+            state.identity = identity;
+        },
+
+        SetPrincipal(state, action) {
+            const {principal} = action.payload;
+
+            state.principal = principal;
         },
 
         UpdateBalance(state, action) {
@@ -95,4 +111,4 @@ const auth = createSlice({
 
 export default auth.reducer;
 
-export const { Login, Logout, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;
+export const { Login, Logout, SetIdentity, SetPrincipal, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;
