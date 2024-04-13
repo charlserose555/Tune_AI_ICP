@@ -27,10 +27,14 @@ function Header() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const getBalances = () => {
-    Api.getBalances().then(({ data }) => {
-      dispatch(SetBalances(data));
-    });
+    // Api.getBalances().then(({ data }) => {
+    //   dispatch(SetBalances(data));
+    // });
   };
+
+  const logout = () => {
+    dispatch(Logout({}))
+  }
 
   useEffect(() => {
     if (auth.isLoggedIn) {
@@ -121,10 +125,10 @@ function Header() {
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <div className={`menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
+                      <div className={`menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`} onClick={() => logout()}>
                         <LogoutIcon/>
                         <a
-                          className="block py-2 font-plus font-bold text-14 leading-[19px]"
+                          className="block py-2 font-plus font-bold text-14 leading-[19px]" 
                         >
                           Log out
                         </a>

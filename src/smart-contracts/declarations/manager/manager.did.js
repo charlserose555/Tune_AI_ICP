@@ -1,11 +1,7 @@
 export const idlFactory = ({ IDL }) => {
   const Timestamp = IDL.Int;
-  const ProfilePhoto = IDL.Vec(IDL.Nat8);
-  const ArtistAccountData = IDL.Record({
-    'userName' : IDL.Opt(IDL.Text),
-    'displayName' : IDL.Opt(IDL.Text),
+  const PrincipalInfo = IDL.Record({
     'createdAt' : Timestamp,
-    'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
   });
   const UserId = IDL.Principal;
@@ -44,7 +40,7 @@ export const idlFactory = ({ IDL }) => {
     'changeCanisterSize' : IDL.Func([IDL.Nat], [], ['oneway']),
     'changeCycleAmount' : IDL.Func([IDL.Nat], [], ['oneway']),
     'createProfileArtist' : IDL.Func(
-        [ArtistAccountData],
+        [PrincipalInfo],
         [IDL.Opt(IDL.Principal)],
         [],
       ),

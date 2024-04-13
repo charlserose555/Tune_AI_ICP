@@ -20,7 +20,7 @@ export interface ArtistBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
   'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
-  'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData]], boolean>,
+  'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData__1]], boolean>,
   'deleteAccount' : ActorMethod<[Principal], undefined>,
   'deleteContentCanister' : ActorMethod<[UserId, Principal], boolean>,
   'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,
@@ -32,11 +32,11 @@ export interface ArtistBucket {
     Array<[CanisterId, ContentId]>
   >,
   'getPrincipalThis' : ActorMethod<[], Principal>,
-  'getProfileInfo' : ActorMethod<[UserId], [] | [ArtistAccountData__1]>,
+  'getProfileInfo' : ActorMethod<[UserId], [] | [ArtistAccountData]>,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferFreezingThresholdCycles' : ActorMethod<[], undefined>,
-  'updateProfileInfo' : ActorMethod<[ArtistAccountData__1], boolean>,
+  'updateProfileInfo' : ActorMethod<[ArtistAccountData], boolean>,
 }
 export type CanisterId = Principal;
 export interface CanisterStatus {
@@ -70,6 +70,10 @@ export type FileExtension = { 'aac' : null } |
   { 'svg' : null } |
   { 'wav' : null } |
   { 'jpeg' : null };
+export interface PrincipalInfo {
+  'createdAt' : Timestamp,
+  'userPrincipal' : Principal,
+}
 export type ProfilePhoto = Uint8Array | number[];
 export interface StatusRequest {
   'memory_size' : boolean,

@@ -5,15 +5,23 @@ import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent, Actor } from "@dfinity/agent";
 import alert from "../../utils/Alert";
 import loading from "../../utils/Loading.js";
-import {idlFactory} from '../../smart-contracts/declarations/manager/manager.did.js';
+import {idlFactory as ManagerIDL} from '../../smart-contracts/declarations/manager/manager.did.js';
+import {idlFactory as AccountIDL} from '../../smart-contracts/declarations/account/account.did.js';
+
 import { Principal } from '@dfinity/principal'; 
 import { useSelector } from "../../store/index.js";
+import { dispatch } from "../../store/index.js";
+import { ShowModal } from "../../store/reducers/menu.js";
+import { Login, SetIdentity, SetPrincipal } from "../../store/reducers/auth.js";
+import { closeAlert } from "../../store/reducers/alert.js";
+import useApi from "../../hooks/useApi";
 
 function AuthComponent({width, height}) {
     const history = useHistory();
     const location = useLocation();
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
+    const Api = useApi();
 
     const {isLoggedIn} = useSelector((state) => state.auth);
 
@@ -41,37 +49,35 @@ function AuthComponent({width, height}) {
     }
 
     const handleLogin = async (identity) => {
-        try {
-            console.log('identity', identity.getPrincipal().toText())
+        try {            
+            dispatch(SetIdentity({identity: identity}));
             
-            const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+            dispatch(SetPrincipal({principal: identity.getPrincipal().toText()}));
 
-            if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-                agent.fetchRootKey();
-            }
+            let accountCanisterId = await Api.login(identity);
 
-            let artistAccountData = {
-                createdAt: Number(Date.now() * 1000),
-                userPrincipal: Principal.fromText(identity.getPrincipal().toText()),            
-            }
+            console.log("accountCanisterId", accountCanisterId);
 
-            let managerActor = Actor.createActor(idlFactory, {
-                agent,
-                canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
-            });
-        
-            let bucket = await managerActor.createProfileArtist(artistAccountData);
-            
-            console.log('New bucket', bucket.toText());
-            
-            let accountActor = Actor.createActor(idlFactory, {
-                agent,
-                canisterId: bucket
-            });
-            let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
-            console.log('profileInfo', profileInfo.toText()); 
+            let profileInfo = await Api.getProfileInfo(accountCanisterId);
             
             loading(false);
+
+            if(!profileInfo[0]) {
+                let userInfo = {
+                    principal: identity.getPrincipal().toText(),
+                    canisterId: accountCanisterId.toText(),
+                    displaynmae: "User" + identity.getPrincipal().toText().substring(0, 4),
+                    usrename: "User" + identity.getPrincipal().toText().substring(0, 4),
+                    avatar: ""
+                }
+                    
+                dispatch(Login({userInfo : userInfo}));
+                alert("info", "Please create the profile");
+                dispatch(ShowModal("editProfile"))
+            } else {
+            }
+
+            console.log('profileInfo', profileInfo);  
         } catch (err) {
             console.log(err)
             loading(false);

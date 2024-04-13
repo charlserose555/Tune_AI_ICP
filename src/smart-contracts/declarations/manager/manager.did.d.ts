@@ -2,13 +2,6 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
-export interface ArtistAccountData {
-  'userName' : [] | [string],
-  'displayName' : [] | [string],
-  'createdAt' : Timestamp,
-  'profilePhoto' : [] | [ProfilePhoto],
-  'userPrincipal' : Principal,
-}
 export type CanisterId = Principal;
 export interface CanisterStatus {
   'status' : { 'stopped' : null } |
@@ -19,7 +12,10 @@ export interface CanisterStatus {
   'settings' : definite_canister_settings,
   'module_hash' : [] | [Uint8Array | number[]],
 }
-export type ProfilePhoto = Uint8Array | number[];
+export interface PrincipalInfo {
+  'createdAt' : Timestamp,
+  'userPrincipal' : Principal,
+}
 export interface StatusRequest {
   'memory_size' : boolean,
   'version' : boolean,
@@ -45,7 +41,7 @@ export interface definite_canister_settings {
 export interface _SERVICE {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
-  'createProfileArtist' : ActorMethod<[ArtistAccountData], [] | [Principal]>,
+  'createProfileArtist' : ActorMethod<[PrincipalInfo], [] | [Principal]>,
   'cyclesBalance' : ActorMethod<[], bigint>,
   'deleteAccountCanister' : ActorMethod<[UserId, Principal, UserType], boolean>,
   'getArtistAccountEntries' : ActorMethod<[], Array<[UserId, CanisterId]>>,
