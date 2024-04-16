@@ -75,7 +75,7 @@ type ArtistBucket =
                                           ContentId;
                                           principal;
                                         });
-   createProfileInfo: (opt ArtistAccountData__1) -> (bool);
+   createProfileInfo: (opt ArtistAccountData) -> (bool);
    deleteAccount: (principal) -> ();
    deleteContentCanister: (UserId, principal) -> (bool);
    getAllContentCanisters: () -> (vec CanisterId) query;
@@ -94,20 +94,12 @@ type ArtistBucket =
    transferFreezingThresholdCycles: () -> ();
    updateProfileInfo: (ArtistAccountData) -> (bool);
  };
-type ArtistAccountData__1 = 
- record {
-   createdAt: Timestamp;
-   displayName: opt text;
-   profilePhoto: opt ProfilePhoto;
-   userName: opt text;
-   userPrincipal: principal;
- };
 type ArtistAccountData = 
  record {
    createdAt: Timestamp;
-   displayName: opt text;
+   displayName: text;
    profilePhoto: opt ProfilePhoto;
-   userName: opt text;
+   userName: text;
    userPrincipal: principal;
  };
 service : (opt PrincipalInfo, principal, principal) -> ArtistBucket

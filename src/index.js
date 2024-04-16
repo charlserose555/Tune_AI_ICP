@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./assets/css/tailwind.output.css";
 import "./assets/css/global.css";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -33,13 +33,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <SidebarProvider>
     <Provider store={store}>
-      <Router>
-        <Suspense fallback={<AppLoader isPercentage={false}/>}>
-          <Windmill theme={_theme} dark>
-            <Application />
-          </Windmill>
-        </Suspense>
-      </Router>
+      <APIProvider>
+        <Router>
+          <Suspense fallback={<AppLoader isPercentage={false}/>}>
+            <Windmill theme={_theme} dark>
+              <Application />
+            </Windmill>
+          </Suspense>
+        </Router>
+      </APIProvider>
     </Provider>
   </SidebarProvider>
 );

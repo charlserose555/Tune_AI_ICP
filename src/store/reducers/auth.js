@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const initialCurrency = {
     _id: '',
@@ -10,6 +11,7 @@ const initialCurrency = {
 };
 
 const initialUser = {
+    principal: '',
     canisterId: '',
     displayname: '',
     username: '',
@@ -25,9 +27,9 @@ const initialState = {
     balance: 0,
     balanceId: '',
     currencyId: '',
-    principal: '',
+    principal: null,
     user: initialUser,
-    identity: null,
+    identity: '',
     currency: initialCurrency,
     adminAddress: '',
     solAdminAddress: '',
@@ -44,6 +46,8 @@ const auth = createSlice({
             const { userInfo } = action.payload;
             
             state.user = userInfo;
+            console.log("StoreCanisterId", state.user.canisterId);
+
             state.isLoggedIn = true;
             state.isInitialized = true;
        },
@@ -54,8 +58,6 @@ const auth = createSlice({
 
         SetIdentity(state, action) {
             const {identity} = action.payload;
-
-            console.log("auth Identity", identity)
 
             state.identity = identity;
         },
@@ -100,7 +102,6 @@ const auth = createSlice({
             state.isLoggedIn = false;
             state.isInitialized = true;
             state = { ...state };
-            window.location.reload();
         },
 
         UpdateToken(state, action) {

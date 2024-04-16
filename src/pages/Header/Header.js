@@ -3,36 +3,28 @@ import { SidebarContext } from "../../context/SidebarContext";
 import {
   NotificationIcon, ProfileIcon, LogoutIcon, MenuIcon
 } from "../../icons";
-import { Avatar, Badge, Dropdown, DropdownItem } from "@windmill/react-ui";
+import { Avatar} from "@windmill/react-ui";
 import { useDispatch, useSelector } from "../../store";
 import { Logout, SetBalances, UpdateBalances } from "../../store/reducers/auth";
-import debounce from "lodash.debounce";
-import useApi from "../../hooks/useApi";
 import { BASE_URL } from '../../config';
-import { Fragment } from 'react';
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { Link } from 'react-router-dom';
 
 function Header() {
   const history = useHistory();
   const { toggleSidebar } = useContext(SidebarContext);
   const dispatch = useDispatch();
-  const Api = useApi();
-  const { user } = useSelector((state) => state.auth);
   const auth = useSelector((state) => state.auth);
   const { balances } = useSelector((state) => state.auth);
   // eslint-disable-next-line no-unused-vars
   const [avatar, setAvatar] = useState('');
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const getBalances = () => {
-    // Api.getBalances().then(({ data }) => {
-    //   dispatch(SetBalances(data));
-    // });
-  };
+  const [displayName, setDisplayName] = useState('');
+
 
   const logout = () => {
+    history.push("/");
     dispatch(Logout({}))
   }
 
@@ -42,22 +34,24 @@ function Header() {
   }, [auth.isLoggedIn]);
 
   useEffect(() => {
-    if (balances && auth) {
-      const cbalance = balances?.find(
-        (balance) => balance.disabled === false && balance.status === true
-      );
-      if (!cbalance || !auth) return;
-      if (
-        auth.balanceId !== cbalance?._id ||
-        auth.currencyId !== cbalance?.currency._id
-      ) {
-        dispatch(UpdateBalances(cbalance));
-      }
-    }
-  }, [balances, auth]);
+    setDisplayName(auth.user.displayname);
+  }, [auth.user]);
 
   useEffect(() => {
-    setAvatar(auth.user?.avatar);
+    if(auth.user.avatar) {
+      const chunks = [];
+
+      chunks.push(new Uint8Array(auth.user.avatar).buffer);
+  
+      const blob = new Blob(chunks, {type : "image/jpeg"});
+      const url = URL.createObjectURL(blob);
+
+      console.log("url", url);
+
+      setAvatar(url);
+    } else {
+      setAvatar('');
+    }
   }, [auth.user]);
 
   function handleProfileClick() {
@@ -83,7 +77,7 @@ function Header() {
       >
         {auth.isLoggedIn &&
           <div className="w-full h-27 flex flex-row justify-end">
-            <button class="flex items-center justify-center">
+            <button className="flex items-center justify-center">
               <div className="notification-icon" style={{borderRadius: "50%"}}>
                 <NotificationIcon/>
               </div>
@@ -96,14 +90,14 @@ function Header() {
                   <div className="relative">
                     <Avatar
                       className="absolute top-0 left-0 align-middle"
-                      src={'/demo/assets/avatar.png'}
+                      src={avatar? avatar : '/demo/assets/avatar.png'}
                       alt=""
                       aria-hidden="true"
                     />
                     <span className="absolute bg-darkblue-500 w-[12px] h-[12px]" style={{top:"-2px", left:"21px", borderRadius: "50%", border: "solid 1px #FFFFFF"}}></span>
                   </div>
                   <p className="profile-user-name font-plus">
-                    Jenny Wilson
+                    {displayName}
                   </p>
                   <img src="/demo/assets/expand_more.svg" style={{width: "20px", height: "20px"}}/>
                 </Menu.Button>

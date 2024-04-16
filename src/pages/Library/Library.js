@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import FavouriteTrack from "./FavouriteTrack";
 import ReleasedTrack from "./ReleasedTrack";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import useApi from "../../hooks/useApi";
 import { dispatch, useDispatch, useSelector } from "../../store";
 import { ShowModal } from "../../store/reducers/menu";
 

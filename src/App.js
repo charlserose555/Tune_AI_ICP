@@ -12,6 +12,7 @@ import { APIProvider } from "./context/ApiContext";
 import { Toaster } from "react-hot-toast";
 import { initFlowbite } from "flowbite";
 import Alert from "./components/Alert/Alert";
+import { AgentProvider } from "@ic-reactor/react"
 
 const Layout = lazy(() => import("./pages/Layout/Layout"));
 const ModalLayout = lazy(() => import("./pages/Modal/ModalLayout"))
@@ -29,21 +30,23 @@ function App() {
   return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persister}>
-          <APIProvider>
-            <ModalLayout/>
-            <AccessibleNavigationAnnouncer />
-            <Switch>
-              {/* Place new routes over this */}
-              <Route index path="/app" component={Layout} />
-              {/* If you have an index page, you can remothis Redirect */}
-              <Redirect exact from="/" to="/app/home" />              
-            </Switch>
-            <Alert/>
-            <Toaster
-              position="top-right"
-              reverseOrder={false}
-            />
-          </APIProvider>
+          <AgentProvider withDevtools withLocalEnv> 
+            <APIProvider>
+              <ModalLayout/>
+              <AccessibleNavigationAnnouncer />
+              <Switch>
+                {/* Place new routes over this */}
+                <Route index path="/app" component={Layout} />
+                {/* If you have an index page, you can remothis Redirect */}
+                <Redirect exact from="/" to="/app/home" />              
+              </Switch>
+              <Alert/>
+              <Toaster
+                position="top-right"
+                reverseOrder={false}
+              />
+            </APIProvider>
+          </AgentProvider>
         </PersistGate>
       </Provider>
   );

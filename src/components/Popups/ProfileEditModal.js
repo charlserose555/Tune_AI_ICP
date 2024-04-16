@@ -1,31 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { AvatarInput } from '../DragDrop/AvatarInput';
 import { useDispatch } from '../../store';
 import { ShowModal } from '../../store/reducers/menu';
 import { useSelector } from '../../store';
 import { useEffect } from 'react';
-import useApi from '../../hooks/useApi';
+import { APIContext } from "../../context/ApiContext.jsx";
+import alert from '../../utils/Alert.js';
+import { Principal } from '@dfinity/principal';
 
-function stringToBlob(text) {
-    const blob = new Blob([text], { type: 'text/plain' });
-    return blob;
-}
+import { stringToBlob, base64ToBlob, encodeArrayBuffer} from '../../utils/format.js';
 
 function ProfileEditModal() {
     const dispatch = useDispatch();
     const [username, setUsername] = useState("");
     const [displayname, setDisplayname] = useState("");
     const [image, setImage] = useState("");
-    const Api = useApi();
     const [avatar, setAvatar] = useState("");
-    const {user, principal} = useSelector((state) => (state.auth));
+    const {user} = useSelector((state) => (state.auth));
+    const { createProfile } = useContext(APIContext);
+    const [avatarBlob, setAvatarBlob] = useState([]);
 
     const handleAvatar = async (image) => {   
-        setAvatar(image)
+        image = image.replace(/^data:(.*,)?/, '');
+        if ((image.length % 4) > 0) {
+            image += '='.repeat(4 - (image.length % 4));
+        }
         
-        const imageBlob = stringToBlob(image);
+        console.log("image", image);
+        
+        const imageBlob = base64ToBlob(image, 'image/jpeg');
+        
+        let bsf = await imageBlob.arrayBuffer();
 
-        console.log(imageBlob)
+        setAvatarBlob(encodeArrayBuffer(bsf))
     }
 
     const saveProfile = async () => {
@@ -33,13 +40,16 @@ function ProfileEditModal() {
             alert("warning", "Please input profile info")
         } else {            
             let profileInfo = {
-                displayname: displayname,
-                username: username,
-                userPrincipal: user.principal,          
+                displayName: displayname,
+                userName: username,
                 createdAt: Number(Date.now() * 1000),
-                profilePhoto: stringToBlob(image)
+                userPrincipal: Principal.fromText(user.principal),          
+                profilePhoto: [avatarBlob]
             }
 
+            console.log(profileInfo)
+
+            await createProfile(profileInfo);
         }
     }
 
@@ -80,7 +90,7 @@ function ProfileEditModal() {
                                 <p className="font-plus text-white font-light text-14 leading-20">Principal</p>
                                 <p className="text-14 text-coral-500">*</p>
                             </div>
-                            <input readOnly className="bg-primary-700 py-2 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent focus:border-transparent focus:ring-0" value={principal} style={{height: '36px'}}></input>
+                            <input readOnly className="bg-primary-700 py-2 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent focus:border-transparent focus:ring-0" value={user.principal} style={{height: '36px'}}></input>
                         </div>
                         <div className="flex flex-row justify-between items-center w-full gap-[30px] w-[231px] pt-2">
                             <a className="outline-btn text-12 px-4 py-2 font-medium rounded-8 w-full cursor-pointer" 

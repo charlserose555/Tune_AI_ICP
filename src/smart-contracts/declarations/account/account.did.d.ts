@@ -3,15 +3,8 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface ArtistAccountData {
-  'userName' : [] | [string],
-  'displayName' : [] | [string],
-  'createdAt' : Timestamp,
-  'profilePhoto' : [] | [ProfilePhoto],
-  'userPrincipal' : Principal,
-}
-export interface ArtistAccountData__1 {
-  'userName' : [] | [string],
-  'displayName' : [] | [string],
+  'userName' : string,
+  'displayName' : string,
   'createdAt' : Timestamp,
   'profilePhoto' : [] | [ProfilePhoto],
   'userPrincipal' : Principal,
@@ -20,7 +13,7 @@ export interface ArtistBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
   'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
-  'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData__1]], boolean>,
+  'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData]], boolean>,
   'deleteAccount' : ActorMethod<[Principal], undefined>,
   'deleteContentCanister' : ActorMethod<[UserId, Principal], boolean>,
   'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,

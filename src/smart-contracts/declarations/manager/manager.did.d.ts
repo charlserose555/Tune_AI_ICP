@@ -16,22 +16,8 @@ export interface PrincipalInfo {
   'createdAt' : Timestamp,
   'userPrincipal' : Principal,
 }
-export interface StatusRequest {
-  'memory_size' : boolean,
-  'version' : boolean,
-  'cycles' : boolean,
-  'heap_memory_size' : boolean,
-}
-export interface StatusResponse {
-  'memory_size' : [] | [bigint],
-  'version' : [] | [bigint],
-  'cycles' : [] | [bigint],
-  'heap_memory_size' : [] | [bigint],
-}
 export type Timestamp = bigint;
 export type UserId = Principal;
-export type UserType = { 'fan' : null } |
-  { 'artist' : null };
 export interface definite_canister_settings {
   'freezing_threshold' : bigint,
   'controllers' : [] | [Array<Principal>],
@@ -39,18 +25,15 @@ export interface definite_canister_settings {
   'compute_allocation' : bigint,
 }
 export interface _SERVICE {
-  'changeCanisterSize' : ActorMethod<[bigint], undefined>,
-  'changeCycleAmount' : ActorMethod<[bigint], undefined>,
-  'createProfileArtist' : ActorMethod<[PrincipalInfo], [] | [Principal]>,
+  'createAccountCanister' : ActorMethod<[PrincipalInfo], [] | [Principal]>,
   'cyclesBalance' : ActorMethod<[], bigint>,
-  'deleteAccountCanister' : ActorMethod<[UserId, Principal, UserType], boolean>,
-  'getArtistAccountEntries' : ActorMethod<[], Array<[UserId, CanisterId]>>,
-  'getAvailableMemoryCanister' : ActorMethod<[Principal], [] | [bigint]>,
-  'getCanisterArtist' : ActorMethod<[Principal], [] | [Principal]>,
+  'deleteAccountCanister' : ActorMethod<[UserId, Principal], boolean>,
+  'getArtistList' : ActorMethod<[], Array<[UserId, CanisterId]>>,
   'getCanisterStatus' : ActorMethod<[], CanisterStatus>,
-  'getOwnerOfArtistCanister' : ActorMethod<[Principal], [] | [UserId]>,
-  'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
-  'getTotalArtistAccounts' : ActorMethod<[], bigint>,
+  'getCanisterWtihAvailableMemory' : ActorMethod<[Principal], [] | [bigint]>,
+  'getCanisterbyIdentity' : ActorMethod<[Principal], [] | [Principal]>,
+  'getOwnershipOfCanister' : ActorMethod<[Principal], [] | [UserId]>,
+  'getTotalAccounts' : ActorMethod<[], bigint>,
   'installCode' : ActorMethod<
     [Principal, Uint8Array | number[], Uint8Array | number[]],
     undefined
@@ -60,11 +43,12 @@ export interface _SERVICE {
     undefined
   >,
   'transferCyclesToCanister' : ActorMethod<[Principal, bigint], undefined>,
-  'transferCyclesToContentCanister' : ActorMethod<
-    [Principal, Principal, bigint],
+  'transferOwnershipAccountCanister' : ActorMethod<
+    [Principal, Principal],
     undefined
   >,
-  'transferOwnershipArtist' : ActorMethod<[Principal, Principal], undefined>,
+  'updateCanisterSize' : ActorMethod<[bigint], undefined>,
+  'updateCycleAmount' : ActorMethod<[bigint], undefined>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

@@ -20,7 +20,6 @@ function ReleasedTrack() {
                   {"index" : 3, "isFavourite" : false},
                   {"index" : 4, "isFavourite" : false}]
   
-      console.log("list", list);
       setFavouriteList(list)
     }, [])
 
@@ -57,9 +56,7 @@ function ReleasedTrack() {
               </tr>
           </thead>
           <tbody>
-              {console.log(favouriteList.length)}
               {favouriteList.map((item, index) => { 
-                console.log("value", index)
                 return ((
                 <tr style={{color: "white"}} className="group font-normal border-b bg-transparent border-gray-700 cursor-pointer group hover:bg-primary-800 transition-all duration-200 ease-in-out dark" key={index}>
                   <td className="text-center relative flex justify-center w-full items-center">

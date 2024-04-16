@@ -1,27 +1,22 @@
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AuthClient } from "@dfinity/auth-client";
-import { HttpAgent, Actor } from "@dfinity/agent";
-import alert from "../../utils/Alert";
+import alert from "../../utils/Alert.js";
 import loading from "../../utils/Loading.js";
-import {idlFactory as ManagerIDL} from '../../smart-contracts/declarations/manager/manager.did.js';
-import {idlFactory as AccountIDL} from '../../smart-contracts/declarations/account/account.did.js';
 
-import { Principal } from '@dfinity/principal'; 
 import { useSelector } from "../../store/index.js";
 import { dispatch } from "../../store/index.js";
 import { ShowModal } from "../../store/reducers/menu.js";
-import { Login, SetIdentity, SetPrincipal } from "../../store/reducers/auth.js";
-import { closeAlert } from "../../store/reducers/alert.js";
-import useApi from "../../hooks/useApi";
+import { Login } from "../../store/reducers/auth.js";
+import { APIContext } from "../../context/ApiContext.jsx";
 
 function AuthComponent({width, height}) {
-    const history = useHistory();
+
+    const { getProfileInfo, login } = useContext(APIContext);
+
     const location = useLocation();
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
-    const Api = useApi();
 
     const {isLoggedIn} = useSelector((state) => state.auth);
 
@@ -37,30 +32,22 @@ function AuthComponent({width, height}) {
         }
     });
     
-    const handleSuccess = () => {
-        loading();
+    const handleLogin = async () => {
+        try {          
+            loading();
 
-        const principalId = authClient.getIdentity().getPrincipal().toText();
-        console.log(principalId);
+            const authClient = await AuthClient.create();
+            const identity = authClient.getIdentity();
 
-        alert("success", "The login successful!");
+            alert("success", "The login successful!");
+    
+            let accountCanisterId = await login();
 
-        handleLogin(authClient.getIdentity());
-    }
+            console.log("accountCanisterId", accountCanisterId.toText());
 
-    const handleLogin = async (identity) => {
-        try {            
-            dispatch(SetIdentity({identity: identity}));
+            let profileInfo = await getProfileInfo(accountCanisterId);
             
-            dispatch(SetPrincipal({principal: identity.getPrincipal().toText()}));
-
-            let accountCanisterId = await Api.login(identity);
-
-            console.log("accountCanisterId", accountCanisterId);
-
-            let profileInfo = await Api.getProfileInfo(accountCanisterId);
-            
-            loading(false);
+            console.log(profileInfo[0]);
 
             if(!profileInfo[0]) {
                 let userInfo = {
@@ -75,11 +62,21 @@ function AuthComponent({width, height}) {
                 alert("info", "Please create the profile");
                 dispatch(ShowModal("editProfile"))
             } else {
+                let userInfo = {
+                    principal: identity.getPrincipal().toText(),
+                    canisterId: accountCanisterId.toText(),
+                    displayname: profileInfo[0].displayName,
+                    usrename: profileInfo[0].userName,
+                    avatar: profileInfo[0].profilePhoto[0]
+                }
+                    
+                dispatch(Login({userInfo : userInfo}));
             }
 
-            console.log('profileInfo', profileInfo);  
+            loading(false);
         } catch (err) {
-            console.log(err)
+            alert("danger", "Failure on creating canister");
+            console.log("err", err.message)
             loading(false);
         }
     }
@@ -97,7 +94,7 @@ function AuthComponent({width, height}) {
 
         authClient.login({
             identityProvider,
-            onSuccess: () => handleSuccess(),
+            onSuccess: () => handleLogin(),
             windowOpenerFeatures: `
             left=${window.screen.width / 2 - 525 / 2},
             top=${window.screen.height / 2 - 705 / 2},
@@ -111,8 +108,6 @@ function AuthComponent({width, height}) {
 
         if (!authClient) throw new Error("AuthClient not initialized");        
 
-        console.log("Dfdsf");
-
         await new Promise((resolve) => {
             authClient.login({
                 identityProvider: "https://identity.ic0.app",
@@ -120,11 +115,7 @@ function AuthComponent({width, height}) {
             });
         });
 
-        const identity = authClient.getIdentity();
-
-        console.log("ICP", identity.getPrincipal().toText())
-
-        handleLogin(identity);
+        handleLogin();
     }
 
  return (

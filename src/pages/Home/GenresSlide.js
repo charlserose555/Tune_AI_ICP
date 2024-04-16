@@ -131,11 +131,11 @@ export default function GenresSlide() {
           </li>
         </ul>          
       </div>
-      <div className="group" style={{position:"absolute", width:"34px", height:"34px", top:"118px", zIndex:"100", right:"-5px", cursor:"pointer", pointerEvents: 'auto'}} onClick={() => handleScrollRight()}>
+      <div className="group" style={{position:"absolute", width:"34px", height:"34px", top:"118px", zIndex:"20", right:"-5px", cursor:"pointer", pointerEvents: 'auto'}} onClick={() => handleScrollRight()}>
         <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/banner_left.svg"></img>
         <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full" src="/demo/assets/banner_left_hover.svg"></img>
       </div>
-      <div className="group" style={{position:"absolute", width:"34px", height:"34px", top:"118px", zIndex:"100", left:"-5px", cursor:"pointer", pointerEvents: 'auto'}} onClick={() => handleScrollLeft()}>
+      <div className="group" style={{position:"absolute", width:"34px", height:"34px", top:"118px", zIndex:"20", left:"-5px", cursor:"pointer", pointerEvents: 'auto'}} onClick={() => handleScrollLeft()}>
         <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/banner_right.svg"></img>
         <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full transform rotate-180" src="/demo/assets/banner_left_hover.svg"></img>
       </div>

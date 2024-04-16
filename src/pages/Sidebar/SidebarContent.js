@@ -38,7 +38,7 @@ function SidebarContent() {
                   </Route>
                     <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
                     {route.name == "Home" && <Icon.HomeIcon/>}
-                    {route.name == "Geners" && <Icon.GenersIcon/>}
+                    {route.name == "Genres" && <Icon.GenresIcon/>}
                     {route.name == "My Library" && <Icon.LibraryIcon/>}
                   <span className="leading-20">{route.name}</span>
                 </NavLink>

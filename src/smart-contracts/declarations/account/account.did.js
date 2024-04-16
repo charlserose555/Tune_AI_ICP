@@ -30,9 +30,9 @@ export const idlFactory = ({ IDL }) => {
   });
   const ContentId = IDL.Text;
   const ProfilePhoto = IDL.Vec(IDL.Nat8);
-  const ArtistAccountData__1 = IDL.Record({
-    'userName' : IDL.Opt(IDL.Text),
-    'displayName' : IDL.Opt(IDL.Text),
+  const ArtistAccountData = IDL.Record({
+    'userName' : IDL.Text,
+    'displayName' : IDL.Text,
     'createdAt' : Timestamp,
     'profilePhoto' : IDL.Opt(ProfilePhoto),
     'userPrincipal' : IDL.Principal,
@@ -56,13 +56,6 @@ export const idlFactory = ({ IDL }) => {
     'settings' : definite_canister_settings,
     'module_hash' : IDL.Opt(IDL.Vec(IDL.Nat8)),
   });
-  const ArtistAccountData = IDL.Record({
-    'userName' : IDL.Opt(IDL.Text),
-    'displayName' : IDL.Opt(IDL.Text),
-    'createdAt' : Timestamp,
-    'profilePhoto' : IDL.Opt(ProfilePhoto),
-    'userPrincipal' : IDL.Principal,
-  });
   const StatusRequest = IDL.Record({
     'memory_size' : IDL.Bool,
     'version' : IDL.Bool,
@@ -84,7 +77,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'createProfileInfo' : IDL.Func(
-        [IDL.Opt(ArtistAccountData__1)],
+        [IDL.Opt(ArtistAccountData)],
         [IDL.Bool],
         [],
       ),
