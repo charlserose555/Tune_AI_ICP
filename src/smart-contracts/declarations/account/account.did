@@ -23,6 +23,11 @@ type StatusRequest =
    version: bool;
  };
 type ProfilePhoto = blob;
+type PrincipalInfo = 
+ record {
+   createdAt: Timestamp;
+   userPrincipal: principal;
+ };
 type FileExtension = 
  variant {
    aac;
@@ -83,26 +88,20 @@ type ArtistBucket =
            ContentId;
          }) query;
    getPrincipalThis: () -> (principal) query;
-   getProfileInfo: (UserId) -> (opt ArtistAccountData__1) query;
+   getProfileInfo: (UserId) -> (opt ArtistAccountData) query;
    getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
    removeContent: (ContentId, nat) -> ();
    transferFreezingThresholdCycles: () -> ();
-   updateProfileInfo: (ArtistAccountData__1) -> (bool);
- };
-type ArtistAccountData__1 = 
- record {
-   createdAt: Timestamp;
-   displayName: opt text;
-   profilePhoto: opt ProfilePhoto;
-   userName: opt text;
-   userPrincipal: principal;
+   updateProfileInfo: (ArtistAccountData) -> (bool);
  };
 type ArtistAccountData = 
  record {
+   avatar: opt ProfilePhoto;
    createdAt: Timestamp;
-   displayName: opt text;
-   profilePhoto: opt ProfilePhoto;
-   userName: opt text;
+   displayName: text;
+   fileType: opt text;
+   updatedAt: Timestamp;
+   userName: text;
    userPrincipal: principal;
  };
-service : (opt ArtistAccountData, principal, principal) -> ArtistBucket
+service : (opt PrincipalInfo, principal, principal) -> ArtistBucket

@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./assets/css/tailwind.output.css";
 import "./assets/css/global.css";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -12,8 +12,8 @@ import "./assets/css/css/Plus.css";
 import { APIProvider } from "./context/ApiContext.jsx";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store } from "./store/index.js";
 import AppLoader from "./components/Loader/AppLoader.js";
+import { store, persister, useSelector, dispatch } from "./store";
 
 const Application = Loadable.Map({
   loader: {
@@ -32,15 +32,19 @@ const Application = Loadable.Map({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <SidebarProvider>
-    <Provider store={store}>
-      <Router>
-        <Suspense fallback={<AppLoader isPercentage={false}/>}>
-          <Windmill theme={_theme} dark>
-            <Application />
-          </Windmill>
-        </Suspense>
-      </Router>
-    </Provider>
+    <PersistGate loading={null} persistor={persister}>
+      <Provider store={store}>
+        <APIProvider>
+          <Router>
+            <Suspense fallback={<AppLoader isPercentage={false}/>}>
+              <Windmill theme={_theme} dark>
+                <Application />
+              </Windmill>
+            </Suspense>
+          </Router>
+        </APIProvider>
+      </Provider>
+    </PersistGate>
   </SidebarProvider>
 );
 

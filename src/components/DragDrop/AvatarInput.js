@@ -46,7 +46,7 @@ const ImageCropper = ({
     );
 };
 
-export function AvatarInput({setThumbnail}) {
+export function AvatarInput({avatar, setAvatar}) {
     const dropContainer = useRef(null);
     const [dragging, setDragging] = useState(false);
     const [filename, setFilename] = useState("");
@@ -56,7 +56,7 @@ export function AvatarInput({setThumbnail}) {
 
     function handleCroppedImage(image) {
         setCroppedImage(image);
-        setThumbnail(image);
+        setAvatar(image);
     }
 
     const ImageUploadingButton = ({ value, onChange, ...props }) => {
@@ -65,7 +65,7 @@ export function AvatarInput({setThumbnail}) {
             {({ onImageUpload, onImageUpdate }) => (
                 <div className="flex px-4 py-4">
                     <div className="relative cursor-pointer flex justify-center items-center z-20">
-                        <Avatar className="w-[100px] h-[100px] absolute rounded-md cursor-pointer" src={croppedImage? croppedImage : "/demo/assets/avatar.png"} 
+                        <Avatar className="w-[100px] h-[100px] absolute rounded-md cursor-pointer" src={croppedImage? croppedImage : avatar? avatar : "/demo/assets/avatar.png"} 
                             {...props}
                             alt="blab"/>
 

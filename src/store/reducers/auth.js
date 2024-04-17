@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import _ from "lodash";
 
 const initialCurrency = {
     _id: '',
@@ -10,11 +12,13 @@ const initialCurrency = {
 };
 
 const initialUser = {
-    _id: '',
     principal: '',
-    displaynmae: '',
+    canisterId: '',
+    displayname: '',
     username: '',
-    avatar: ''
+    avatar: '',
+    fileType: '',
+    createdAt: 0
 };
 
 const initialState = {
@@ -26,7 +30,9 @@ const initialState = {
     balance: 0,
     balanceId: '',
     currencyId: '',
+    principal: null,
     user: initialUser,
+    identity: '',
     currency: initialCurrency,
     adminAddress: '',
     solAdminAddress: '',
@@ -41,13 +47,29 @@ const auth = createSlice({
     reducers: {
         Login(state, action) {
             const { userInfo } = action.payload;
-            state.user = userInfo;
             state.isLoggedIn = true;
-            state.isInitialized = true;
-        },
+            state.isInitialized = true;    
+            state.user = userInfo;
+       },
 
         UpdateInfo(state, action) {
-            state.user = action.payload;
+            const {userInfo} = action.payload;
+
+            state.user = _.merge({}, state.user, userInfo);
+
+            console.log("state.user", state.user);
+        },
+
+        SetIdentity(state, action) {
+            const {identity} = action.payload;
+
+            state.identity = identity;
+        },
+
+        SetPrincipal(state, action) {
+            const {principal} = action.payload;
+
+            state.principal = principal;
         },
 
         UpdateBalance(state, action) {
@@ -84,7 +106,6 @@ const auth = createSlice({
             state.isLoggedIn = false;
             state.isInitialized = true;
             state = { ...state };
-            window.location.reload();
         },
 
         UpdateToken(state, action) {
@@ -95,4 +116,4 @@ const auth = createSlice({
 
 export default auth.reducer;
 
-export const { Login, Logout, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;
+export const { Login, Logout, SetIdentity, SetPrincipal, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;

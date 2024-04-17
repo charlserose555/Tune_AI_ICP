@@ -1,24 +1,27 @@
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AuthClient } from "@dfinity/auth-client";
-import { HttpAgent, Actor } from "@dfinity/agent";
-import alert from "../../utils/Alert";
+import alert from "../../utils/Alert.js";
 import loading from "../../utils/Loading.js";
-import {idlFactory} from '../../smart-contracts/declarations/manager/manager.did.js';
-import { Principal } from '@dfinity/principal'; 
+
 import { useSelector } from "../../store/index.js";
-import { useDispatch } from "../../store/index.js";
+import { dispatch } from "../../store/index.js";
+import { ShowModal } from "../../store/reducers/menu.js";
 import { Login } from "../../store/reducers/auth.js";
+import { APIContext } from "../../context/ApiContext.jsx";
+import { convertToDataURL } from '../../utils/format.js';
 
 function AuthComponent({width, height}) {
-    const history = useHistory();
+
+    const { getProfileInfo, login } = useContext(APIContext);
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const {isLoggedIn} = useSelector((state) => state.auth);
+
     const location = useLocation();
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
-    const dispatch = useDispatch();
 
-    const {isLoggedIn} = useSelector((state) => state.auth);
 
     useEffect(() => {      
         if(location.pathname.includes('genres/')) {
@@ -32,60 +35,75 @@ function AuthComponent({width, height}) {
         }
     });
     
-    const handleSuccess = () => {
-        loading();
+    useEffect(() => {
+        setLoggedIn(isLoggedIn);
+    }, [isLoggedIn])
 
-        const principalId = authClient.getIdentity().getPrincipal().toText();
-        console.log(principalId);
+    const handleLogin = async () => {
+        try {          
+            loading();
 
-        alert("success", "The login successful!");
+            const authClient = await AuthClient.create();
+            const identity = authClient.getIdentity();
 
-        handleLogin(authClient.getIdentity());
-    }
+            alert("success", "The login successful!");
+    
+            let accountCanisterId = await login();
 
-    const handleLogin = async (identity) => {
-        try {
-            console.log('identity', identity.getPrincipal().toText())
+            console.log("accountCanisterId", accountCanisterId.toText());
+
+            let profileInfo = await getProfileInfo(accountCanisterId);
             
-            // const agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});
+            console.log(profileInfo[0]);
 
-            // if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            //     agent.fetchRootKey();
-            // }
+            if(!profileInfo[0]) {
+                let userInfo = {
+                    principal: identity.getPrincipal().toText(),
+                    canisterId: accountCanisterId.toText(),
+                    displaynmae: "User" + identity.getPrincipal().toText().substring(0, 4),
+                    username: "User" + identity.getPrincipal().toText().substring(0, 4),
+                    avatar: "",
+                    fileType: "",
+                    createdAt : Number(Date.now() * 1000)
+                }
+                    
+                dispatch(Login({userInfo : userInfo}));
+                alert("info", "Please create the profile");
+                dispatch(ShowModal("editProfile"))
+            } else {                
+                let avatarUrl = '';
+                if(profileInfo[0].avatar[0]) {
+                    const chunks = [];
+                    chunks.push(new Uint8Array(profileInfo[0].avatar[0]).buffer);
+                
+                    const blob = new Blob(chunks, {type : profileInfo[0].fileType[0] ? profileInfo[0].fileType[0] : "image/jpeg"});
 
-            // let artistAccountData = {
-            //     createdAt: Number(Date.now() * 1000),
-            //     userPrincipal: Principal.fromText(identity.getPrincipal().toText()),            
-            // }
+                    const result = await convertToDataURL(blob);
 
-            // let managerActor = Actor.createActor(idlFactory, {
-            //     agent,
-            //     canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
-            // });
-        
-            // let bucket = await managerActor.createProfileArtist(artistAccountData);
-            
-            // console.log('New bucket', bucket.toText());
-            
-            // let accountActor = Actor.createActor(idlFactory, {
-            //     agent,
-            //     canisterId: bucket
-            // });
-            // let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
-            // console.log('profileInfo', profileInfo.toText()); 
-            
-            let userInfo = {
-                principal: identity.getPrincipal().toText(),
-                displaynmae: "User" + identity.getPrincipal().toText().substring(0, 4),
-                usrename: "User" + identity.getPrincipal().toText().substring(0, 4),
-                avatar: ""
+                    avatarUrl = result;    
+                }
+
+                console.log("avatarUrl", avatarUrl);
+
+                let userInfo = {
+                    principal: identity.getPrincipal().toText(),
+                    canisterId: accountCanisterId.toText(),
+                    displayname: profileInfo[0].displayName,
+                    username: profileInfo[0].userName,
+                    avatar: avatarUrl,
+                    fileType: profileInfo[0].fileType[0],
+                    createdAt: Number(profileInfo[0].createdAt)
+                }
+
+                console.log("userInfo", userInfo);
+                    
+                dispatch(Login({userInfo : userInfo}));
             }
-
-            dispatch(Login({userInfo : userInfo}));
 
             loading(false);
         } catch (err) {
-            console.log(err)
+            alert("danger", "Failure on creating canister");
+            console.log("err", err.message)
             loading(false);
         }
     }
@@ -103,7 +121,7 @@ function AuthComponent({width, height}) {
 
         authClient.login({
             identityProvider,
-            onSuccess: () => handleSuccess(),
+            onSuccess: () => handleLogin(),
             windowOpenerFeatures: `
             left=${window.screen.width / 2 - 525 / 2},
             top=${window.screen.height / 2 - 705 / 2},
@@ -117,8 +135,6 @@ function AuthComponent({width, height}) {
 
         if (!authClient) throw new Error("AuthClient not initialized");        
 
-        console.log("Dfdsf");
-
         await new Promise((resolve) => {
             authClient.login({
                 identityProvider: "https://identity.ic0.app",
@@ -126,16 +142,12 @@ function AuthComponent({width, height}) {
             });
         });
 
-        const identity = authClient.getIdentity();
-
-        console.log("ICP", identity.getPrincipal().toText())
-
-        handleLogin(identity);
+        handleLogin();
     }
 
  return (
     <>
-    {!isLoggedIn && <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2 relative font-plus text-white" style={{
+    {!loggedIn && <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2 relative font-plus text-white" style={{
             width: width,
             height: height,
             backgroundImage: portraitUrl,

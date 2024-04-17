@@ -5,28 +5,13 @@ type definite_canister_settings =
    freezing_threshold: nat;
    memory_allocation: nat;
  };
-type UserType = 
- variant {
-   artist;
-   fan;
- };
 type UserId = principal;
 type Timestamp = int;
-type StatusResponse = 
+type PrincipalInfo = 
  record {
-   cycles: opt nat;
-   heap_memory_size: opt nat;
-   memory_size: opt nat;
-   version: opt nat;
+   createdAt: Timestamp;
+   userPrincipal: principal;
  };
-type StatusRequest = 
- record {
-   cycles: bool;
-   heap_memory_size: bool;
-   memory_size: bool;
-   version: bool;
- };
-type ProfilePhoto = blob;
 type CanisterStatus = 
  record {
    cycles: nat;
@@ -40,33 +25,23 @@ type CanisterStatus =
            };
  };
 type CanisterId = principal;
-type ArtistAccountData = 
- record {
-   createdAt: Timestamp;
-   displayName: opt text;
-   profilePhoto: opt ProfilePhoto;
-   userName: opt text;
-   userPrincipal: principal;
- };
 service : {
-  changeCanisterSize: (nat) -> () oneway;
-  changeCycleAmount: (nat) -> () oneway;
-  createProfileArtist: (ArtistAccountData) -> (opt principal);
+  createAccountCanister: (PrincipalInfo) -> (opt principal);
   cyclesBalance: () -> (nat) query;
-  deleteAccountCanister: (UserId, principal, UserType) -> (bool);
-  getArtistAccountEntries: () -> (vec record {
-                                        UserId;
-                                        CanisterId;
-                                      }) query;
-  getAvailableMemoryCanister: (principal) -> (opt nat);
-  getCanisterArtist: (principal) -> (opt principal) query;
+  deleteAccountCanister: (UserId, principal) -> (bool);
+  getArtistList: () -> (vec record {
+                              UserId;
+                              CanisterId;
+                            }) query;
   getCanisterStatus: () -> (CanisterStatus);
-  getOwnerOfArtistCanister: (principal) -> (opt UserId) query;
-  getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
-  getTotalArtistAccounts: () -> (nat) query;
+  getCanisterWtihAvailableMemory: (principal) -> (opt nat);
+  getCanisterbyIdentity: (principal) -> (opt principal) query;
+  getOwnershipOfCanister: (principal) -> (opt UserId) query;
+  getTotalAccounts: () -> (nat) query;
   installCode: (principal, blob, blob) -> ();
   transferCyclesToAccountCanister: (principal, nat) -> ();
   transferCyclesToCanister: (principal, nat) -> ();
-  transferCyclesToContentCanister: (principal, principal, nat) -> ();
-  transferOwnershipArtist: (principal, principal) -> ();
+  transferOwnershipAccountCanister: (principal, principal) -> ();
+  updateCanisterSize: (nat) -> () oneway;
+  updateCycleAmount: (nat) -> () oneway;
 }

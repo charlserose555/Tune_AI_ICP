@@ -2,7 +2,7 @@
 const webpack = require('webpack');
 
 module.exports = function override(config, env) {
-    config.resolve.extensions.push('.js', '.jsx');
+    config.resolve.extensions.push('.js', '.jsx', '.ts');
 
     config.resolve.fallback = {
         url: false,

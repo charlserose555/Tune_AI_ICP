@@ -24,8 +24,8 @@ const routes = [
   },
   {
     path: "/genres",
-    icon: "GenersIcon",
-    name: "Geners",
+    icon: "GenresIcon",
+    name: "Genres",
     component: Genres,
   },
   {
