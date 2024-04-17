@@ -34,8 +34,10 @@ export const idlFactory = ({ IDL }) => {
     'userName' : IDL.Text,
     'displayName' : IDL.Text,
     'createdAt' : Timestamp,
-    'profilePhoto' : IDL.Opt(ProfilePhoto),
+    'fileType' : IDL.Opt(IDL.Text),
+    'updatedAt' : Timestamp,
     'userPrincipal' : IDL.Principal,
+    'avatar' : IDL.Opt(ProfilePhoto),
   });
   const UserId = IDL.Principal;
   const CanisterId = IDL.Principal;

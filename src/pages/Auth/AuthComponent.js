@@ -9,16 +9,19 @@ import { dispatch } from "../../store/index.js";
 import { ShowModal } from "../../store/reducers/menu.js";
 import { Login } from "../../store/reducers/auth.js";
 import { APIContext } from "../../context/ApiContext.jsx";
+import { convertToDataURL } from '../../utils/format.js';
 
 function AuthComponent({width, height}) {
 
     const { getProfileInfo, login } = useContext(APIContext);
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const {isLoggedIn} = useSelector((state) => state.auth);
 
     const location = useLocation();
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
 
-    const {isLoggedIn} = useSelector((state) => state.auth);
 
     useEffect(() => {      
         if(location.pathname.includes('genres/')) {
@@ -32,6 +35,10 @@ function AuthComponent({width, height}) {
         }
     });
     
+    useEffect(() => {
+        setLoggedIn(isLoggedIn);
+    }, [isLoggedIn])
+
     const handleLogin = async () => {
         try {          
             loading();
@@ -54,21 +61,41 @@ function AuthComponent({width, height}) {
                     principal: identity.getPrincipal().toText(),
                     canisterId: accountCanisterId.toText(),
                     displaynmae: "User" + identity.getPrincipal().toText().substring(0, 4),
-                    usrename: "User" + identity.getPrincipal().toText().substring(0, 4),
-                    avatar: ""
+                    username: "User" + identity.getPrincipal().toText().substring(0, 4),
+                    avatar: "",
+                    fileType: "",
+                    createdAt : Number(Date.now() * 1000)
                 }
                     
                 dispatch(Login({userInfo : userInfo}));
                 alert("info", "Please create the profile");
                 dispatch(ShowModal("editProfile"))
-            } else {
+            } else {                
+                let avatarUrl = '';
+                if(profileInfo[0].avatar[0]) {
+                    const chunks = [];
+                    chunks.push(new Uint8Array(profileInfo[0].avatar[0]).buffer);
+                
+                    const blob = new Blob(chunks, {type : profileInfo[0].fileType[0] ? profileInfo[0].fileType[0] : "image/jpeg"});
+
+                    const result = await convertToDataURL(blob);
+
+                    avatarUrl = result;    
+                }
+
+                console.log("avatarUrl", avatarUrl);
+
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
                     canisterId: accountCanisterId.toText(),
                     displayname: profileInfo[0].displayName,
-                    usrename: profileInfo[0].userName,
-                    avatar: profileInfo[0].profilePhoto[0]
+                    username: profileInfo[0].userName,
+                    avatar: avatarUrl,
+                    fileType: profileInfo[0].fileType[0],
+                    createdAt: Number(profileInfo[0].createdAt)
                 }
+
+                console.log("userInfo", userInfo);
                     
                 dispatch(Login({userInfo : userInfo}));
             }
@@ -120,7 +147,7 @@ function AuthComponent({width, height}) {
 
  return (
     <>
-    {!isLoggedIn && <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2 relative font-plus text-white" style={{
+    {!loggedIn && <div className="shadow-lg rounded-4 flex flex-col justify-end items-center p-2 relative font-plus text-white" style={{
             width: width,
             height: height,
             backgroundImage: portraitUrl,

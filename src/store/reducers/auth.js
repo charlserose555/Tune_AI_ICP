@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import _ from "lodash";
 
 const initialCurrency = {
     _id: '',
@@ -15,7 +16,9 @@ const initialUser = {
     canisterId: '',
     displayname: '',
     username: '',
-    avatar: ''
+    avatar: '',
+    fileType: '',
+    createdAt: 0
 };
 
 const initialState = {
@@ -44,16 +47,17 @@ const auth = createSlice({
     reducers: {
         Login(state, action) {
             const { userInfo } = action.payload;
-            
-            state.user = userInfo;
-            console.log("StoreCanisterId", state.user.canisterId);
-
             state.isLoggedIn = true;
-            state.isInitialized = true;
+            state.isInitialized = true;    
+            state.user = userInfo;
        },
 
         UpdateInfo(state, action) {
-            state.user = action.payload;
+            const {userInfo} = action.payload;
+
+            state.user = _.merge({}, state.user, userInfo);
+
+            console.log("state.user", state.user);
         },
 
         SetIdentity(state, action) {

@@ -3,10 +3,9 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnnouncer";
-
-import { store, persister, useSelector, dispatch } from "./store";
 
 import { APIProvider } from "./context/ApiContext";
 import { Toaster } from "react-hot-toast";
@@ -20,35 +19,32 @@ const ModalLayout = lazy(() => import("./pages/Modal/ModalLayout"))
 require("flowbite/dist/flowbite.js");
 
 function App() {
+  const history = useHistory();
+
   useEffect(() => {
     setTimeout(() => {
       initFlowbite();
     }, 2000);
   }, []);
 
-
   return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persister}>
-          <AgentProvider withDevtools withLocalEnv> 
-            <APIProvider>
-              <ModalLayout/>
-              <AccessibleNavigationAnnouncer />
-              <Switch>
-                {/* Place new routes over this */}
-                <Route index path="/app" component={Layout} />
-                {/* If you have an index page, you can remothis Redirect */}
-                <Redirect exact from="/" to="/app/home" />              
-              </Switch>
-              <Alert/>
-              <Toaster
-                position="top-right"
-                reverseOrder={false}
-              />
-            </APIProvider>
-          </AgentProvider>
-        </PersistGate>
-      </Provider>
+    <>
+      <ModalLayout/>
+      <AccessibleNavigationAnnouncer />
+      <Switch>
+        {/* Place new routes over this */}
+        <Route index path="/app" component={Layout} />
+        {/* If you have an index page, you can remothis Redirect */}
+        <Redirect exact from="/" to="/app/home" />      
+                
+        <Route path="*" render={() => <Redirect to="/" />} />
+      </Switch>
+      <Alert/>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
+    </>
   );
 }
 

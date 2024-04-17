@@ -6,8 +6,10 @@ export interface ArtistAccountData {
   'userName' : string,
   'displayName' : string,
   'createdAt' : Timestamp,
-  'profilePhoto' : [] | [ProfilePhoto],
+  'fileType' : [] | [string],
+  'updatedAt' : Timestamp,
   'userPrincipal' : Principal,
+  'avatar' : [] | [ProfilePhoto],
 }
 export interface ArtistBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,

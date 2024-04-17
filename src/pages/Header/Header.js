@@ -6,7 +6,6 @@ import {
 import { Avatar} from "@windmill/react-ui";
 import { useDispatch, useSelector } from "../../store";
 import { Logout, SetBalances, UpdateBalances } from "../../store/reducers/auth";
-import { BASE_URL } from '../../config';
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -18,10 +17,8 @@ function Header() {
   const { balances } = useSelector((state) => state.auth);
   // eslint-disable-next-line no-unused-vars
   const [avatar, setAvatar] = useState('');
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const [displayName, setDisplayName] = useState('');
-
 
   const logout = () => {
     history.push("/");
@@ -35,28 +32,12 @@ function Header() {
 
   useEffect(() => {
     setDisplayName(auth.user.displayname);
+
+    setAvatar(auth.user.avatar);
+
+    console.log("Header avatar ////", avatar)
+
   }, [auth.user]);
-
-  useEffect(() => {
-    if(auth.user.avatar) {
-      const chunks = [];
-
-      chunks.push(new Uint8Array(auth.user.avatar).buffer);
-  
-      const blob = new Blob(chunks, {type : "image/jpeg"});
-      const url = URL.createObjectURL(blob);
-
-      console.log("url", url);
-
-      setAvatar(url);
-    } else {
-      setAvatar('');
-    }
-  }, [auth.user]);
-
-  function handleProfileClick() {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
-  }
 
   return (
     <>

@@ -7,58 +7,96 @@ import { useEffect } from 'react';
 import { APIContext } from "../../context/ApiContext.jsx";
 import alert from '../../utils/Alert.js';
 import { Principal } from '@dfinity/principal';
+import loading from "../../utils/Loading.js";
+import { UpdateInfo } from '../../store/reducers/auth.js';
 
-import { stringToBlob, base64ToBlob, encodeArrayBuffer} from '../../utils/format.js';
+import { base64ToBlob, encodeArrayBuffer} from '../../utils/format.js';
 
 function ProfileEditModal() {
     const dispatch = useDispatch();
     const [username, setUsername] = useState("");
     const [displayname, setDisplayname] = useState("");
-    const [image, setImage] = useState("");
     const [avatar, setAvatar] = useState("");
+    const [fileType, setFileType] = useState("");
+    const [createdAt, setCreatedAt] = useState("");
     const {user} = useSelector((state) => (state.auth));
     const { createProfile } = useContext(APIContext);
     const [avatarBlob, setAvatarBlob] = useState([]);
 
     const handleAvatar = async (image) => {   
-        image = image.replace(/^data:(.*,)?/, '');
-        if ((image.length % 4) > 0) {
-            image += '='.repeat(4 - (image.length % 4));
-        }
-        
-        console.log("image", image);
-        
-        const imageBlob = base64ToBlob(image, 'image/jpeg');
-        
-        let bsf = await imageBlob.arrayBuffer();
-
-        setAvatarBlob(encodeArrayBuffer(bsf))
+        setAvatar(image);
     }
 
     const saveProfile = async () => {
-        if(!displayname && !username) {
-            alert("warning", "Please input profile info")
-        } else {            
-            let profileInfo = {
-                displayName: displayname,
-                userName: username,
-                createdAt: Number(Date.now() * 1000),
-                userPrincipal: Principal.fromText(user.principal),          
-                profilePhoto: [avatarBlob]
+        try{
+            if(!displayname && !username && !avatar) {
+                alert("warning", "Please input profile info")
+            } else {            
+                loading();
+
+                console.log("avatar~~~~~", avatar);
+
+                let matches = avatar.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,/);
+                setFileType(matches[1]);
+
+                let avatarImage = avatar.replace(/^data:(.*,)?/, '');
+                if ((avatarImage.length % 4) > 0) {
+                    avatarImage += '='.repeat(4 - (avatarImage.length % 4));
+                }
+
+                console.log("avatarimage", avatarImage)
+                
+                const imageBlob = base64ToBlob(avatarImage, 'image/jpeg');
+                
+                let bsf = await imageBlob.arrayBuffer();
+   
+                let profileInfo = {
+                    displayName: displayname,
+                    userName: username,
+                    createdAt: createdAt,
+                    updatedAt: Number(Date.now() * 1000),
+                    userPrincipal: Principal.fromText(user.principal),          
+                    avatar: [encodeArrayBuffer(bsf)],
+                    fileType: [fileType]
+                }
+    
+                console.log(profileInfo)
+    
+                const result = await createProfile(profileInfo);
+    
+                loading(false);
+    
+                let userInfo = {
+                    displayname: displayname,
+                    username: username,
+                    avatar: avatar,
+                    fileType: fileType
+                }
+
+                console.log("userInfo", userInfo);
+                    
+                if(!result) {
+                    alert('warning', "Failure on updating profile")
+                } else {
+                    alert('success', "Success on updating profile")
+                    dispatch(UpdateInfo({userInfo : userInfo}));    
+                    dispatch(ShowModal(""))
+                }
             }
-
-            console.log(profileInfo)
-
-            await createProfile(profileInfo);
+        } catch (err) {
+            console.log(err.message);
+            loading(false);
+            alert('warning', "failure on updating profile")
         }
     }
 
     useEffect(() => {       
-        setUsername(user.name);
+        setUsername(user.username);
         setDisplayname(user.displayname);
         setAvatar(user.avatar);
+        setFileType(user.fileType);
+        setCreatedAt(user.createdAt);
     }, [user])
-
     
     return (
         <div className="modal-overlay fixed inset-0 flex items-center justify-center text-white">

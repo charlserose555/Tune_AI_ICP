@@ -103,9 +103,11 @@ export const APIProvider = ({ children }) => {
             canisterId: accountCanisterId
         });
         
-        let result = await accountActor.createProfileInfo([profileInfo]);
+        console.log("profileInfo", profileInfo)
 
-        console.log("result", result);
+        let result = await accountActor.updateProfileInfo(profileInfo);
+
+        return result;
     }
     
     // const value = useMemo(

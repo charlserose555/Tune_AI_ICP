@@ -96,9 +96,11 @@ type ArtistBucket =
  };
 type ArtistAccountData = 
  record {
+   avatar: opt ProfilePhoto;
    createdAt: Timestamp;
    displayName: text;
-   profilePhoto: opt ProfilePhoto;
+   fileType: opt text;
+   updatedAt: Timestamp;
    userName: text;
    userPrincipal: principal;
  };
