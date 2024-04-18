@@ -10,12 +10,15 @@ import { APIContext } from '../../context/ApiContext';
 import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
 import { Principal } from '@dfinity/principal';
 import { UploadSong } from "../../store/reducers/auth";
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min.js';
+import { Logout } from '../../store/reducers/auth';
 
 function UploadSongModal() {
     const {user} = useSelector((state) => (state.auth));
     const MAX_CHUNK_SIZE = 1024 * 500; // 500kb
     const { createContentInfo, processAndUploadChunk } = useContext(APIContext);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [audioInfo, setAudioInfo] = useState({
         duration: 0,
@@ -106,6 +109,9 @@ function UploadSongModal() {
                     dispatch(ShowModal(""))
                     alert('success', "Success on uploading song");
                 } else {
+                    history.push("/");
+                    dispatch(Logout({}));
+
                     loading(false);
                     alert('warning', "Failure on uploading song");
                 }

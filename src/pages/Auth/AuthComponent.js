@@ -107,7 +107,7 @@ function AuthComponent({width, height}) {
             loading(false);
         } catch (err) {
             alert("danger", "Failure on creating canister");
-            console.log("err", err.message)
+            console.log("err", err)
             loading(false);
         }
     }

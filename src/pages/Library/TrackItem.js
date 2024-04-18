@@ -35,7 +35,7 @@ function TrackItem({songItem, index}) {
     return (<>
      <tr style={{color: "white"}} className="group font-normal border-b bg-transparent border-gray-700 cursor-pointer group hover:bg-primary-800 transition-all duration-200 ease-in-out dark">
         <td className="text-center relative flex justify-center w-full items-center">
-          <img className="opacity-0 group-hover:opacity-100 absolute top-5 right-0" style={{width: "43px", height:"34px"}} src="/demo/assets/list_player.svg"/>
+          <img className="opacity-0 group-hover:opacity-100 absolute top-6 right-0" style={{width: "43px", height:"34px"}} src="/demo/assets/list_player.svg"/>
           <span className="opacity:100 group-hover:opacity-0 absolute top-8 right-4">{index + 1}</span>
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle">
