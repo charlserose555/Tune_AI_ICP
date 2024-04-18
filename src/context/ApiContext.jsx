@@ -158,6 +158,22 @@ export const APIProvider = ({ children }) => {
         return contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
     }
 
+    const getSongListByIdentity = async () => {
+        let {agent} = await initAgent();
+        
+        if (agent == null) 
+            return null;
+
+        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
+            agent,
+            canisterId: process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID
+        });
+
+        let result = await contentManagerActor.getAllContentInfoByUserId(Principal.fromText(user.principal));
+
+        return result;
+    }
+
     // const value = useMemo(
     //     () => ({
     //         getProfileInfo,
@@ -175,6 +191,7 @@ export const APIProvider = ({ children }) => {
                 getProfileInfo,
                 editProfile,
                 createContentInfo,
+                getSongListByIdentity,
                 processAndUploadChunk
             }}
         >

@@ -34,11 +34,9 @@ const initialState = {
     principal: null,
     user: initialUser,
     identity: '',
+    songUploaded : 0,
     currency: initialCurrency,
     adminAddress: '',
-    solAdminAddress: '',
-    ethAdminAddress: '',
-    balances: [],
     nowpayMinAmount: 0,
 };
 
@@ -112,9 +110,13 @@ const auth = createSlice({
         UpdateToken(state, action) {
             state.token = action.payload
         },
+
+        UploadSong(state, action) {
+            state.songUploaded = state.songUploaded + 1;
+        }
     }
 });
 
 export default auth.reducer;
 
-export const { Login, Logout, SetIdentity, SetPrincipal, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;
+export const { Login, Logout, SetIdentity, UploadSong, SetPrincipal, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;

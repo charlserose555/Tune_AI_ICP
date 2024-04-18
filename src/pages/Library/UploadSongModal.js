@@ -9,12 +9,13 @@ import loading from '../../utils/Loading';
 import { APIContext } from '../../context/ApiContext';
 import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
 import { Principal } from '@dfinity/principal';
-import load from '../../store/reducers/load.js';
+import { UploadSong } from "../../store/reducers/auth";
 
 function UploadSongModal() {
     const {user} = useSelector((state) => (state.auth));
     const MAX_CHUNK_SIZE = 1024 * 500; // 500kb
     const { createContentInfo, processAndUploadChunk } = useContext(APIContext);
+    const dispatch = useDispatch();
 
     const [audioInfo, setAudioInfo] = useState({
         duration: 0,
@@ -28,8 +29,6 @@ function UploadSongModal() {
     const [thumbnailType, setThumbnailType] = useState('');
 
     const [title, setTitle] = useState('');
-
-    const dispatch = useDispatch();
 
     const uploadSong = async () => {
         try {
@@ -80,12 +79,8 @@ function UploadSongModal() {
                         file : encodeArrayBuffer(bsf)
                     }
                 }
-    
-                console.log(songFileInfo);
 
                 const result = await createContentInfo(songFileInfo);
-
-                console.log(result)
 
                 if(result[0] != null) {
                     const contentCanisterId = result[0][1];
@@ -94,7 +89,7 @@ function UploadSongModal() {
 
                     console.log("contentCanisterId", contentCanisterId.toText())
 
-                    let chunk = 1;s
+                    let chunk = 1;
                     for (let byteStart = 0; byteStart < audioInfo.size; byteStart += MAX_CHUNK_SIZE, chunk++ ) {
                         putChunkPromises.push(
                             processAndUploadChunk(audioInfo.data, byteStart, contentId, contentCanisterId, chunk, audioInfo.size)
@@ -106,16 +101,14 @@ function UploadSongModal() {
                     console.log(putResult);
                     loading(false);
 
+                    dispatch(UploadSong());
+
+                    dispatch(ShowModal(""))
                     alert('success', "Success on uploading song");
                 } else {
                     loading(false);
                     alert('warning', "Failure on uploading song");
                 }
-    
-                // setTimeout(() => {
-                //     loading(false);
-                //     alert("warning", "The main canister is lack of cycle. Topup with cycle")
-                // }, 5000);
             }
         } catch (error) {
             loading(false);

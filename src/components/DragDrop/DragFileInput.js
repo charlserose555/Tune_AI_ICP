@@ -116,7 +116,7 @@ export function DragFileInput({
             <div className="text-[12px] font-normal text-gray-200">
                 Only files MP3, WAV, FLAC (Can't upload the file bigger than 10MB)
             </div>
-            <p className="text-[16px] font-normal text-red-500">{filename}</p>
+            <p className="text-[16px] font-normal text-green-500">{filename}</p>
             </div>
         </div>
         </>
