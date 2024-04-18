@@ -126,3 +126,19 @@ export const getReverseFileExtension = (type)=> {
       return null;
     }
   };
+
+  export const formatDate = (timestamp) => {
+    const dateObject = new Date(timestamp);
+
+    const options = {
+      year: 'numeric',   // e.g., "2020"
+      month: 'long',     // "January" through "December"
+      day: 'numeric',    // 1, 2, 3, ..., 31
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    };
+
+    const formattedDateTime = dateObject.toLocaleString('en-US', options);
+    return formattedDateTime;
+  }
