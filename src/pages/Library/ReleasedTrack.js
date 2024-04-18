@@ -12,8 +12,6 @@ function ReleasedTrack() {
     const getMySongList = async () => {
       let result = await getSongListByIdentity();
 
-      console.log("mySongList", result)
-
       result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
 
       setMySongList(result)
@@ -59,7 +57,7 @@ function ReleasedTrack() {
           <tbody>
               {mySongList.map((item, index) => { 
                 return ((
-                  <TrackItem songItem={item} key={index}/>
+                  <TrackItem songItem={item} index={index}/>
               )) } )}
             </tbody>
           </table>
