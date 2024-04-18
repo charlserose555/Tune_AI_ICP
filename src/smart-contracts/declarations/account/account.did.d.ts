@@ -14,10 +14,12 @@ export interface ArtistAccountData {
 export interface ArtistBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
+  'checkCyclesBalance' : ActorMethod<[], undefined>,
   'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
   'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData]], boolean>,
   'deleteAccount' : ActorMethod<[Principal], undefined>,
   'deleteContentCanister' : ActorMethod<[UserId, Principal], boolean>,
+  'editProfileInfo' : ActorMethod<[ArtistAccountData], boolean>,
   'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,
   'getCanisterOfContent' : ActorMethod<[ContentId], [] | [CanisterId]>,
   'getCanisterStatus' : ActorMethod<[], CanisterStatus>,
@@ -30,8 +32,8 @@ export interface ArtistBucket {
   'getProfileInfo' : ActorMethod<[UserId], [] | [ArtistAccountData]>,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
+  'transferCyclesToThisCanister' : ActorMethod<[], undefined>,
   'transferFreezingThresholdCycles' : ActorMethod<[], undefined>,
-  'updateProfileInfo' : ActorMethod<[ArtistAccountData], boolean>,
 }
 export type CanisterId = Principal;
 export interface CanisterStatus {
@@ -45,26 +47,16 @@ export interface CanisterStatus {
 }
 export type ContentId = string;
 export interface ContentInit {
-  'contentId' : string,
+  'title' : string,
+  'duration' : bigint,
+  'thumbnail' : Thumbnail,
   'userId' : UserId__1,
-  'name' : string,
   'createdAt' : Timestamp,
   'size' : bigint,
-  'tags' : Array<string>,
-  'description' : string,
+  'fileType' : string,
+  'userCanisterId' : Principal,
   'chunkCount' : bigint,
-  'extension' : FileExtension,
 }
-export type FileExtension = { 'aac' : null } |
-  { 'avi' : null } |
-  { 'gif' : null } |
-  { 'jpg' : null } |
-  { 'mp3' : null } |
-  { 'mp4' : null } |
-  { 'png' : null } |
-  { 'svg' : null } |
-  { 'wav' : null } |
-  { 'jpeg' : null };
 export interface PrincipalInfo {
   'createdAt' : Timestamp,
   'userPrincipal' : Principal,
@@ -81,6 +73,10 @@ export interface StatusResponse {
   'version' : [] | [bigint],
   'cycles' : [] | [bigint],
   'heap_memory_size' : [] | [bigint],
+}
+export interface Thumbnail {
+  'file' : Uint8Array | number[],
+  'fileType' : string,
 }
 export type Timestamp = bigint;
 export type UserId = Principal;

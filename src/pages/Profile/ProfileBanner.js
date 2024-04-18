@@ -10,6 +10,11 @@ import { ShowModal } from "../../store/reducers/menu";
 export default function ProfileBanner() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { user } = useSelector((state) => state.auth);
+
+  // useEffect(() => {
+
+  // }, [user])
 
   return (
     <div className="font-plus flex flex-col text-white relative">
@@ -27,13 +32,13 @@ export default function ProfileBanner() {
           <div className="flex flex-row justify-start gap-[33px] items-center absolute top-16 left-9">
             <Avatar
                 className="cursor-pointer w-[70px] h-[70px] md:w-[80px] md:h-[80px] lg:w-[142px] lg:h-[142px]"
-                src={'/demo/assets/banner_profile_icon.png'}
+                src={user.avatar? user.avatar : "/demo/assets/avatar.png"}
                 alt=""
                 aria-hidden="true"
               />
             <div className="flex flex-col gap-[10px]">
-              <h1 className="font-plus-bold font-normal text-[24px] md:text-[40px] text-white leading-[50px]">Jenny Wilson</h1>
-              <h5 className="font-plus font-light text-sm text-white leading-[17px]">Joined 05 March22</h5>
+              <h1 className="font-plus-bold font-normal text-[24px] md:text-[40px] text-white leading-[50px]">{user.displayname}</h1>
+              <h5 className="font-plus font-light text-md text-white leading-[17px]">{user.username}</h5>
             </div>
           </div>
 

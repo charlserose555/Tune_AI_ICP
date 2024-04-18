@@ -6,7 +6,10 @@ export interface ArtistContentBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
   'checkCyclesBalance' : ActorMethod<[], undefined>,
-  'createContent' : ActorMethod<[ContentInit], [] | [ContentId]>,
+  'createContent' : ActorMethod<
+    [ContentInit, bigint],
+    [] | [[ContentId, ContentData]]
+  >,
   'getAllContentInfo' : ActorMethod<
     [ContentId],
     Array<[ContentId, ContentData]>
@@ -22,7 +25,7 @@ export interface ArtistContentBucket {
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
   'putContentChunk' : ActorMethod<
     [ContentId, bigint, Uint8Array | number[]],
-    undefined
+    bigint
   >,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferCyclesToThisCanister' : ActorMethod<[], undefined>,
@@ -38,39 +41,32 @@ export interface CanisterStatus {
   'module_hash' : [] | [Uint8Array | number[]],
 }
 export interface ContentData {
+  'title' : string,
   'contentId' : string,
+  'duration' : bigint,
+  'thumbnail' : Thumbnail,
   'userId' : UserId,
-  'name' : string,
   'createdAt' : Timestamp,
   'size' : bigint,
-  'tags' : Array<string>,
-  'description' : string,
+  'contentCanisterId' : Principal,
+  'fileType' : string,
+  'playCount' : bigint,
+  'userCanisterId' : Principal,
   'chunkCount' : bigint,
-  'extension' : FileExtension,
   'uploadedAt' : Timestamp,
 }
 export type ContentId = string;
 export interface ContentInit {
-  'contentId' : string,
+  'title' : string,
+  'duration' : bigint,
+  'thumbnail' : Thumbnail,
   'userId' : UserId,
-  'name' : string,
   'createdAt' : Timestamp,
   'size' : bigint,
-  'tags' : Array<string>,
-  'description' : string,
+  'fileType' : string,
+  'userCanisterId' : Principal,
   'chunkCount' : bigint,
-  'extension' : FileExtension,
 }
-export type FileExtension = { 'aac' : null } |
-  { 'avi' : null } |
-  { 'gif' : null } |
-  { 'jpg' : null } |
-  { 'mp3' : null } |
-  { 'mp4' : null } |
-  { 'png' : null } |
-  { 'svg' : null } |
-  { 'wav' : null } |
-  { 'jpeg' : null };
 export interface StatusRequest {
   'memory_size' : boolean,
   'version' : boolean,
@@ -82,6 +78,10 @@ export interface StatusResponse {
   'version' : [] | [bigint],
   'cycles' : [] | [bigint],
   'heap_memory_size' : [] | [bigint],
+}
+export interface Thumbnail {
+  'file' : Uint8Array | number[],
+  'fileType' : string,
 }
 export type Timestamp = bigint;
 export type UserId = Principal;

@@ -10,7 +10,7 @@ import { Principal } from '@dfinity/principal';
 import loading from "../../utils/Loading.js";
 import { UpdateInfo } from '../../store/reducers/auth.js';
 
-import { base64ToBlob, encodeArrayBuffer} from '../../utils/format.js';
+import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
 
 function ProfileEditModal() {
     const dispatch = useDispatch();
@@ -20,8 +20,7 @@ function ProfileEditModal() {
     const [fileType, setFileType] = useState("");
     const [createdAt, setCreatedAt] = useState("");
     const {user} = useSelector((state) => (state.auth));
-    const { createProfile } = useContext(APIContext);
-    const [avatarBlob, setAvatarBlob] = useState([]);
+    const { editProfile } = useContext(APIContext);
 
     const handleAvatar = async (image) => {   
         setAvatar(image);
@@ -34,7 +33,11 @@ function ProfileEditModal() {
             } else {            
                 loading();
 
-                console.log("avatar~~~~~", avatar);
+                if(getBinaryFileSizeFromBase64(avatar) > 512000) {
+                    loading(false);
+
+                    alert('info', "File size shouldn't be bigger than 500Kb")
+                }  
 
                 let matches = avatar.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,/);
                 setFileType(matches[1]);
@@ -43,10 +46,8 @@ function ProfileEditModal() {
                 if ((avatarImage.length % 4) > 0) {
                     avatarImage += '='.repeat(4 - (avatarImage.length % 4));
                 }
-
-                console.log("avatarimage", avatarImage)
-                
-                const imageBlob = base64ToBlob(avatarImage, 'image/jpeg');
+               
+                const imageBlob = base64ToBlob(avatarImage, fileType);
                 
                 let bsf = await imageBlob.arrayBuffer();
    
@@ -62,7 +63,7 @@ function ProfileEditModal() {
     
                 console.log(profileInfo)
     
-                const result = await createProfile(profileInfo);
+                const result = await editProfile(profileInfo);
     
                 loading(false);
     
@@ -75,6 +76,8 @@ function ProfileEditModal() {
 
                 console.log("userInfo", userInfo);
                     
+                console.log("result", result);
+
                 if(!result) {
                     alert('warning', "Failure on updating profile")
                 } else {

@@ -1,42 +1,125 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { DragFileInput } from '../../components/DragDrop/DragFileInput';
 import { ThumbnailInput } from '../../components/DragDrop/ThumbnailInput';
-import { formatDuration } from '../../utils/format';
-import { useDispatch } from '../../store';
+import { formatDuration, getFileExtension } from '../../utils/format';
+import { useDispatch, useSelector } from '../../store';
 import { ShowModal } from '../../store/reducers/menu';
 import alert from "../../utils/Alert";
 import loading from '../../utils/Loading';
+import { APIContext } from '../../context/ApiContext';
+import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
+import { Principal } from '@dfinity/principal';
+import load from '../../store/reducers/load.js';
 
 function UploadSongModal() {
+    const {user} = useSelector((state) => (state.auth));
+    const MAX_CHUNK_SIZE = 1024 * 500; // 500kb
+    const { createContentInfo, processAndUploadChunk } = useContext(APIContext);
+
     const [audioInfo, setAudioInfo] = useState({
         duration: 0,
         size: 0,
         type: '',
-        name: ''
+        name: '',
+        data: null,
     });
 
     const [thumbnail, setThumbnail] = useState('');
+    const [thumbnailType, setThumbnailType] = useState('');
 
     const [title, setTitle] = useState('');
 
     const dispatch = useDispatch();
 
-    const uploadSong = () => {
-        if(!audioInfo.type) {
-            alert("warning", "Please upload song file")
-        } else if (!thumbnail) {
-            alert("warning", "Please upload thumbnail file")
-        } else if (!title) {
-            alert("warning", "Please input song title")
-        } else {
-            close();
+    const uploadSong = async () => {
+        try {
+            if(!audioInfo.type) {
+                alert("warning", "Please upload song file")
+            } else if (!thumbnail) {
+                alert("warning", "Please upload thumbnail file")
+            } else if (!title) {
+                alert("warning", "Please input song title")
+            } else {                
+                if(getBinaryFileSizeFromBase64(thumbnail) > 512000) {
+                    loading(false);
+                    alert('info', "Thumbnail size shouldn't be bigger than 500Kb");
+                    return;
+                }  
+                if(audioInfo.size > 10550000) {
+                    loading(false);
+                    alert('info', "Audio file size shouldn't be bigger than 10MB");
+                    return;
+                }    
+                
+                let matches = thumbnail.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,/);
+                
+                setThumbnailType(matches[1]);
+                
+                let thumbnailImage = thumbnail.replace(/^data:(.*,)?/, '');
+                if ((thumbnailImage.length % 4) > 0) {
+                    thumbnailImage += '='.repeat(4 - (thumbnailImage.length % 4));
+                }
+               
+                const imageBlob = base64ToBlob(thumbnailImage, thumbnailType);
+                
+                let bsf = await imageBlob.arrayBuffer();
+                
+                loading(true);
+    
+                let songFileInfo = {
+                    userId: Principal.from(user.principal),
+                    userCanisterId: Principal.from(user.canisterId),
+                    title: title,
+                    createdAt : Number(Date.now() * 1000),      
+                    chunkCount: Number(Math.ceil(audioInfo.size / MAX_CHUNK_SIZE)),
+                    fileType: audioInfo.type,
+                    size: audioInfo.size,
+                    duration: parseInt(audioInfo.duration, 10),
+                    thumbnail: {
+                        fileType : matches[1],
+                        file : encodeArrayBuffer(bsf)
+                    }
+                }
+    
+                console.log(songFileInfo);
 
-            loading(true);
+                const result = await createContentInfo(songFileInfo);
 
-            setTimeout(() => {
-                loading(false);
-                alert("warning", "The main canister is lack of cycle. Topup with cycle")
-            }, 5000);
+                console.log(result)
+
+                if(result[0] != null) {
+                    const contentCanisterId = result[0][1];
+                    const contentId = result[0][0];    
+                    const putChunkPromises = [];
+
+                    console.log("contentCanisterId", contentCanisterId.toText())
+
+                    let chunk = 1;s
+                    for (let byteStart = 0; byteStart < audioInfo.size; byteStart += MAX_CHUNK_SIZE, chunk++ ) {
+                        putChunkPromises.push(
+                            processAndUploadChunk(audioInfo.data, byteStart, contentId, contentCanisterId, chunk, audioInfo.size)
+                        );
+                    }
+
+                    const putResult = await Promise.all(putChunkPromises);
+
+                    console.log(putResult);
+                    loading(false);
+
+                    alert('success', "Success on uploading song");
+                } else {
+                    loading(false);
+                    alert('warning', "Failure on uploading song");
+                }
+    
+                // setTimeout(() => {
+                //     loading(false);
+                //     alert("warning", "The main canister is lack of cycle. Topup with cycle")
+                // }, 5000);
+            }
+        } catch (error) {
+            loading(false);
+            console.log(error.message)
         }
     }
 
@@ -45,7 +128,8 @@ function UploadSongModal() {
             duration: 0,
             size: 0,
             type: '',
-            name: ''
+            name: '',
+            data: null,
         })
 
         dispatch(ShowModal(""));
@@ -58,12 +142,19 @@ function UploadSongModal() {
                 const audio = new Audio(e.target.result);
                 audio.onloadedmetadata = () => {
                     console.log(audio.duration);
+                    
+                    let encoded = e.target.result.toString().replace(/^data:(.*,)?/, '');
+                    if ((encoded.length % 4) > 0) {
+                        encoded += '='.repeat(4 - (encoded.length % 4));
+                    }
+                    const blob = base64ToBlob(encoded, file.type);
 
                     setAudioInfo({
-                        duration: formatDuration(audio.duration),
+                        duration: audio.duration,
                         size: file.size,
                         type: file.type,
-                        name: file.name
+                        name: file.name,
+                        data: blob
                     });
                 };
             };
@@ -121,7 +212,7 @@ function UploadSongModal() {
                                 <p className="font-plus text-white font-light text-14 leading-20">Duration</p>
                                 <p className="text-14 text-coral-500">*</p>
                             </div>
-                            <input readOnly className="disabled bg-primary-700 py-2 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent focus:border-transparent focus:ring-0" value={audioInfo.duration == 0 ? "" : audioInfo.duration} style={{height: '36px'}}></input>
+                            <input readOnly className="disabled bg-primary-700 py-2 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent focus:border-transparent focus:ring-0" value={audioInfo.duration == 0 ? "" : formatDuration(audioInfo.duration)} style={{height: '36px'}}></input>
                         </div>
                         <div className="flex flex-row justify-between items-center w-full gap-[30px] w-[231px] pt-2">
                             <a className="outline-btn text-12 px-4 py-2 font-medium rounded-8 w-full cursor-pointer" 

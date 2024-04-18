@@ -52,6 +52,8 @@ function AuthComponent({width, height}) {
 
             console.log("accountCanisterId", accountCanisterId.toText());
 
+            console.log("principal", identity.getPrincipal().toText());
+
             let profileInfo = await getProfileInfo(accountCanisterId);
             
             console.log(profileInfo[0]);
@@ -60,10 +62,11 @@ function AuthComponent({width, height}) {
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
                     canisterId: accountCanisterId.toText(),
-                    displaynmae: "User" + identity.getPrincipal().toText().substring(0, 4),
-                    username: "User" + identity.getPrincipal().toText().substring(0, 4),
+                    displaynmae: "",
+                    username: "",
                     avatar: "",
                     fileType: "",
+                    isInitialized: false,
                     createdAt : Number(Date.now() * 1000)
                 }
                     
@@ -92,6 +95,7 @@ function AuthComponent({width, height}) {
                     username: profileInfo[0].userName,
                     avatar: avatarUrl,
                     fileType: profileInfo[0].fileType[0],
+                    isInitialized: true,
                     createdAt: Number(profileInfo[0].createdAt)
                 }
 
