@@ -23,10 +23,16 @@ export const APIProvider = ({ children }) => {
     const dispatch = useDispatch();
     const [accountCanisterId, setAccountCanisterId] = useState(''); 
 
+
     useEffect(() => {
         console.log("userCaniserID", user.canisterId)
         setAccountCanisterId(user.canisterId);
     }, [user.canisterId])
+
+    const logout = () => {
+        history.push("/");
+        dispatch(Logout({}))
+    }
 
     const initAgent = async () => {
         let authClient, identity, agent;
@@ -41,13 +47,11 @@ export const APIProvider = ({ children }) => {
                 agent.fetchRootKey();
             }
 
+            console.log("identity", identity.getPrincipal().toText())
+
             return {identity: identity, agent: agent}
         } else {
-            agent = null;
-            history.push("/");
-            dispatch(Logout({}))
-
-            return null;
+            return {agent: null};
         }
     }
 

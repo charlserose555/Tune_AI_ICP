@@ -11,10 +11,11 @@ function ReleasedTrack() {
 
     const getMySongList = async () => {
       let result = await getSongListByIdentity();
-
-      result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
-
-      setMySongList(result)
+      if(result != null && result.length > 0) {
+        result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
+  
+        setMySongList(result)
+      }
     }
 
     useEffect(() => {
