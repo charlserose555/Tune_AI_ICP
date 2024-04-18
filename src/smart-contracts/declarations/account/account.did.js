@@ -4,29 +4,21 @@ export const idlFactory = ({ IDL }) => {
     'createdAt' : Timestamp,
     'userPrincipal' : IDL.Principal,
   });
-  const UserId__1 = IDL.Principal;
-  const FileExtension = IDL.Variant({
-    'aac' : IDL.Null,
-    'avi' : IDL.Null,
-    'gif' : IDL.Null,
-    'jpg' : IDL.Null,
-    'mp3' : IDL.Null,
-    'mp4' : IDL.Null,
-    'png' : IDL.Null,
-    'svg' : IDL.Null,
-    'wav' : IDL.Null,
-    'jpeg' : IDL.Null,
+  const Thumbnail = IDL.Record({
+    'file' : IDL.Vec(IDL.Nat8),
+    'fileType' : IDL.Text,
   });
+  const UserId__1 = IDL.Principal;
   const ContentInit = IDL.Record({
-    'contentId' : IDL.Text,
+    'title' : IDL.Text,
+    'duration' : IDL.Nat,
+    'thumbnail' : Thumbnail,
     'userId' : UserId__1,
-    'name' : IDL.Text,
     'createdAt' : Timestamp,
     'size' : IDL.Nat,
-    'tags' : IDL.Vec(IDL.Text),
-    'description' : IDL.Text,
+    'fileType' : IDL.Text,
+    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
-    'extension' : FileExtension,
   });
   const ContentId = IDL.Text;
   const ProfilePhoto = IDL.Vec(IDL.Nat8);
@@ -73,6 +65,7 @@ export const idlFactory = ({ IDL }) => {
   const ArtistBucket = IDL.Service({
     'changeCanisterSize' : IDL.Func([IDL.Nat], [], ['oneway']),
     'changeCycleAmount' : IDL.Func([IDL.Nat], [], ['oneway']),
+    'checkCyclesBalance' : IDL.Func([], [], []),
     'createContent' : IDL.Func(
         [ContentInit],
         [IDL.Opt(IDL.Tuple(ContentId, IDL.Principal))],
@@ -85,6 +78,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'deleteAccount' : IDL.Func([IDL.Principal], [], []),
     'deleteContentCanister' : IDL.Func([UserId, IDL.Principal], [IDL.Bool], []),
+    'editProfileInfo' : IDL.Func([ArtistAccountData], [IDL.Bool], []),
     'getAllContentCanisters' : IDL.Func([], [IDL.Vec(CanisterId)], ['query']),
     'getCanisterOfContent' : IDL.Func(
         [ContentId],
@@ -110,8 +104,8 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
+    'transferCyclesToThisCanister' : IDL.Func([], [], []),
     'transferFreezingThresholdCycles' : IDL.Func([], [], []),
-    'updateProfileInfo' : IDL.Func([ArtistAccountData], [IDL.Bool], []),
   });
   return ArtistBucket;
 };

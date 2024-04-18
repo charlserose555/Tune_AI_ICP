@@ -34,9 +34,6 @@ function Header() {
     setDisplayName(auth.user.displayname);
 
     setAvatar(auth.user.avatar);
-
-    console.log("Header avatar ////", avatar)
-
   }, [auth.user]);
 
   return (

@@ -1,40 +1,35 @@
 export const idlFactory = ({ IDL }) => {
+  const Thumbnail = IDL.Record({
+    'file' : IDL.Vec(IDL.Nat8),
+    'fileType' : IDL.Text,
+  });
   const UserId = IDL.Principal;
   const Timestamp = IDL.Int;
-  const FileExtension = IDL.Variant({
-    'aac' : IDL.Null,
-    'avi' : IDL.Null,
-    'gif' : IDL.Null,
-    'jpg' : IDL.Null,
-    'mp3' : IDL.Null,
-    'mp4' : IDL.Null,
-    'png' : IDL.Null,
-    'svg' : IDL.Null,
-    'wav' : IDL.Null,
-    'jpeg' : IDL.Null,
-  });
   const ContentInit = IDL.Record({
-    'contentId' : IDL.Text,
+    'title' : IDL.Text,
+    'duration' : IDL.Nat,
+    'thumbnail' : Thumbnail,
     'userId' : UserId,
-    'name' : IDL.Text,
     'createdAt' : Timestamp,
     'size' : IDL.Nat,
-    'tags' : IDL.Vec(IDL.Text),
-    'description' : IDL.Text,
+    'fileType' : IDL.Text,
+    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
-    'extension' : FileExtension,
   });
   const ContentId = IDL.Text;
   const ContentData = IDL.Record({
+    'title' : IDL.Text,
     'contentId' : IDL.Text,
+    'duration' : IDL.Nat,
+    'thumbnail' : Thumbnail,
     'userId' : UserId,
-    'name' : IDL.Text,
     'createdAt' : Timestamp,
     'size' : IDL.Nat,
-    'tags' : IDL.Vec(IDL.Text),
-    'description' : IDL.Text,
+    'contentCanisterId' : IDL.Principal,
+    'fileType' : IDL.Text,
+    'playCount' : IDL.Nat,
+    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
-    'extension' : FileExtension,
     'uploadedAt' : Timestamp,
   });
   const definite_canister_settings = IDL.Record({
@@ -70,7 +65,11 @@ export const idlFactory = ({ IDL }) => {
     'changeCanisterSize' : IDL.Func([IDL.Nat], [], ['oneway']),
     'changeCycleAmount' : IDL.Func([IDL.Nat], [], ['oneway']),
     'checkCyclesBalance' : IDL.Func([], [], []),
-    'createContent' : IDL.Func([ContentInit], [IDL.Opt(ContentId)], []),
+    'createContent' : IDL.Func(
+        [ContentInit, IDL.Nat],
+        [IDL.Opt(IDL.Tuple(ContentId, ContentData))],
+        [],
+      ),
     'getAllContentInfo' : IDL.Func(
         [ContentId],
         [IDL.Vec(IDL.Tuple(ContentId, ContentData))],
@@ -92,7 +91,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'putContentChunk' : IDL.Func(
         [ContentId, IDL.Nat, IDL.Vec(IDL.Nat8)],
-        [],
+        [IDL.Nat],
         [],
       ),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),

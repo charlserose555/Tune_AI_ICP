@@ -8,6 +8,11 @@ type definite_canister_settings =
 type UserId__1 = principal;
 type UserId = principal;
 type Timestamp = int;
+type Thumbnail = 
+ record {
+   file: blob;
+   fileType: text;
+ };
 type StatusResponse = 
  record {
    cycles: opt nat;
@@ -28,29 +33,16 @@ type PrincipalInfo =
    createdAt: Timestamp;
    userPrincipal: principal;
  };
-type FileExtension = 
- variant {
-   aac;
-   avi;
-   gif;
-   jpeg;
-   jpg;
-   mp3;
-   mp4;
-   png;
-   svg;
-   wav;
- };
 type ContentInit = 
  record {
    chunkCount: nat;
-   contentId: text;
    createdAt: Timestamp;
-   description: text;
-   extension: FileExtension;
-   name: text;
+   duration: nat;
+   fileType: text;
    size: nat;
-   tags: vec text;
+   thumbnail: Thumbnail;
+   title: text;
+   userCanisterId: principal;
    userId: UserId__1;
  };
 type ContentId = text;
@@ -71,6 +63,7 @@ type ArtistBucket =
  service {
    changeCanisterSize: (nat) -> () oneway;
    changeCycleAmount: (nat) -> () oneway;
+   checkCyclesBalance: () -> ();
    createContent: (ContentInit) -> (opt record {
                                           ContentId;
                                           principal;
@@ -78,6 +71,7 @@ type ArtistBucket =
    createProfileInfo: (opt ArtistAccountData) -> (bool);
    deleteAccount: (principal) -> ();
    deleteContentCanister: (UserId, principal) -> (bool);
+   editProfileInfo: (ArtistAccountData) -> (bool);
    getAllContentCanisters: () -> (vec CanisterId) query;
    getCanisterOfContent: (ContentId) -> (opt CanisterId) query;
    getCanisterStatus: () -> (CanisterStatus);
@@ -91,8 +85,8 @@ type ArtistBucket =
    getProfileInfo: (UserId) -> (opt ArtistAccountData) query;
    getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
    removeContent: (ContentId, nat) -> ();
+   transferCyclesToThisCanister: () -> ();
    transferFreezingThresholdCycles: () -> ();
-   updateProfileInfo: (ArtistAccountData) -> (bool);
  };
 type ArtistAccountData = 
  record {

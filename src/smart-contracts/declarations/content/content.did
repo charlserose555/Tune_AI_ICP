@@ -7,6 +7,11 @@ type definite_canister_settings =
  };
 type UserId = principal;
 type Timestamp = int;
+type Thumbnail = 
+ record {
+   file: blob;
+   fileType: text;
+ };
 type StatusResponse = 
  record {
    cycles: opt nat;
@@ -21,43 +26,33 @@ type StatusRequest =
    memory_size: bool;
    version: bool;
  };
-type FileExtension = 
- variant {
-   aac;
-   avi;
-   gif;
-   jpeg;
-   jpg;
-   mp3;
-   mp4;
-   png;
-   svg;
-   wav;
- };
 type ContentInit = 
  record {
    chunkCount: nat;
-   contentId: text;
    createdAt: Timestamp;
-   description: text;
-   extension: FileExtension;
-   name: text;
+   duration: nat;
+   fileType: text;
    size: nat;
-   tags: vec text;
+   thumbnail: Thumbnail;
+   title: text;
+   userCanisterId: principal;
    userId: UserId;
  };
 type ContentId = text;
 type ContentData = 
  record {
    chunkCount: nat;
+   contentCanisterId: principal;
    contentId: text;
    createdAt: Timestamp;
-   description: text;
-   extension: FileExtension;
-   name: text;
+   duration: nat;
+   fileType: text;
+   playCount: nat;
    size: nat;
-   tags: vec text;
+   thumbnail: Thumbnail;
+   title: text;
    uploadedAt: Timestamp;
+   userCanisterId: principal;
    userId: UserId;
  };
 type CanisterStatus = 
@@ -77,7 +72,10 @@ type ArtistContentBucket =
    changeCanisterSize: (nat) -> () oneway;
    changeCycleAmount: (nat) -> () oneway;
    checkCyclesBalance: () -> ();
-   createContent: (ContentInit) -> (opt ContentId);
+   createContent: (ContentInit, nat) -> (opt record {
+                                               ContentId;
+                                               ContentData;
+                                             });
    getAllContentInfo: (ContentId) ->
     (vec record {
            ContentId;
@@ -89,7 +87,7 @@ type ArtistContentBucket =
    getCurrentCyclesBalance: () -> (nat) query;
    getPrincipalThis: () -> (principal) query;
    getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
-   putContentChunk: (ContentId, nat, blob) -> ();
+   putContentChunk: (ContentId, nat, blob) -> (nat);
    removeContent: (ContentId, nat) -> ();
    transferCyclesToThisCanister: () -> ();
    transferFreezingThresholdCycles: () -> ();

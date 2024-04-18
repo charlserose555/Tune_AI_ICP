@@ -1,0 +1,38 @@
+type UserId__1 = principal;
+type UserId = principal;
+type Timestamp = int;
+type Thumbnail = 
+ record {
+   file: blob;
+   fileType: text;
+ };
+type ContentId = text;
+type ContentData = 
+ record {
+   chunkCount: nat;
+   contentCanisterId: principal;
+   contentId: text;
+   createdAt: Timestamp;
+   duration: nat;
+   fileType: text;
+   playCount: nat;
+   size: nat;
+   thumbnail: Thumbnail;
+   title: text;
+   uploadedAt: Timestamp;
+   userCanisterId: principal;
+   userId: UserId;
+ };
+service : {
+  getAllContentInfo: () -> (vec record {
+                                  ContentId;
+                                  ContentData;
+                                }) query;
+  getAllContentInfoByUserId: (UserId__1) ->
+   (vec record {
+          ContentId;
+          ContentData;
+        }) query;
+  getAvailableContentId: () -> (nat) query;
+  registerContentInfo: (ContentData) -> (opt ContentId);
+}

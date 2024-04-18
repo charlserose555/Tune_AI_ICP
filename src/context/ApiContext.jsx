@@ -4,16 +4,20 @@ import { AuthClient, LocalStorage } from "@dfinity/auth-client";
 import { HttpAgent, Actor } from "@dfinity/agent";
 import {idlFactory as ManagerIDL} from '../smart-contracts/declarations/manager/manager.did.js';
 import {idlFactory as AccountIDL} from '../smart-contracts/declarations/account/account.did.js';
+import {idlFactory as ContentIDL} from '../smart-contracts/declarations/content/content.did.js';
+import {idlFactory as ContentManagerIDL} from '../smart-contracts/declarations/contentManager/contentManager.did.js';
 import { useMemo } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Logout, SetIdentity } from "../store/reducers/auth";
 
 import { Principal } from '@dfinity/principal'; 
 import { auth } from "../routes/index.js";
+import { encodeArrayBuffer} from '../utils/format.js';
 
 export const APIContext = React.createContext();
 
 export const APIProvider = ({ children }) => {
+    const MAX_CHUNK_SIZE = 1024 * 500; // 500kb
     const {user, isLoggedIn} = useSelector((store) => store.auth);
     const history = useHistory();
     const dispatch = useDispatch();
@@ -90,7 +94,7 @@ export const APIProvider = ({ children }) => {
         return profileInfo;
     }
 
-    const createProfile = async (profileInfo) => {   
+    const editProfile = async (profileInfo) => {   
         let {agent} = await initAgent();
         
         if (agent == null) 
@@ -105,11 +109,55 @@ export const APIProvider = ({ children }) => {
         
         console.log("profileInfo", profileInfo)
 
-        let result = await accountActor.updateProfileInfo(profileInfo);
+        let result = await accountActor.editProfileInfo(profileInfo);
 
         return result;
     }
     
+    const createContentInfo = async (contentInfo) => {
+        let {agent} = await initAgent();
+        
+        if (agent == null) 
+            return null;
+
+        let accountActor = Actor.createActor(AccountIDL, {
+            agent,
+            canisterId: accountCanisterId
+        });
+
+        let result = await accountActor.createContent(contentInfo);
+
+        return result;
+    }
+
+    const processAndUploadChunk = async (
+        blob,
+        byteStart,
+        contentId,
+        contentCanisterId,
+        chunk,
+        fileSize,
+    )  => {
+        let {agent} = await initAgent();
+        
+        if (agent == null) 
+            return null;
+
+        const blobSlice = blob.slice(
+            byteStart,
+            Math.min(Number(fileSize), byteStart + MAX_CHUNK_SIZE),
+            blob.type
+        );
+        const bsf = await blobSlice.arrayBuffer();
+    
+        let contentActor = Actor.createActor(ContentIDL, {
+            agent,
+            canisterId: contentCanisterId
+        });
+
+        return contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
+    }
+
     // const value = useMemo(
     //     () => ({
     //         getProfileInfo,
@@ -123,9 +171,11 @@ export const APIProvider = ({ children }) => {
     return (
         <APIContext.Provider
             value={{
+                login,
                 getProfileInfo,
-                createProfile,
-                login
+                editProfile,
+                createContentInfo,
+                processAndUploadChunk
             }}
         >
             {children}

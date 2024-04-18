@@ -55,3 +55,74 @@ export const convertToDataURL = (blob) => {
 export const encodeArrayBuffer = (file) => {
     return Array.from(new Uint8Array(file));
 }
+
+export const getBinaryFileSizeFromBase64 = (base64String) => {
+    // Remove any Data URL prefix (optional)
+    const base64Data = base64String.replace(/^data:image\/[a-z]+;base64,/, '');
+
+    // Calculate the file size in bytes
+    const byteLength = (base64Data.length * 3) / 4; // Exclude padding characters from base64 ('=')
+    
+    // Adjust calculations for padding characters
+    if (base64Data.endsWith('==')) {
+        return byteLength - 2;
+    } else if (base64Data.endsWith('=')) {
+        return byteLength - 1;
+    }
+
+    return byteLength;
+}
+
+export const getReverseFileExtension = (type)=> {
+    switch(Object.keys(type)[0]) {
+      case 'jpeg':
+        return  'image/jpeg';
+      case 'gif':
+        return  'image/gif'; 
+      case 'jpg':
+        return  'image/jpg';       
+      case 'png':
+        return  'image/png';
+      case 'svg':
+        return  'image/svg';
+      case 'avi':
+        return  'video/avi';
+      case 'mp4':
+        return  'video/mp4';
+      case 'aac':
+        return  'video/aac';
+      case 'wav':
+        return  'audio/wav';
+      case 'mp3':
+        return  'audio/mp3';                                                                                                              
+      default :
+      return "";
+    }
+  };
+  
+ export const getFileExtension = (type) => {
+    switch(type) {
+      case 'image/jpeg':
+        return { 'jpeg' : null };
+      case 'image/gif':
+        return { 'gif' : null };
+      case 'image/jpg':
+        return { 'jpg' : null };
+      case 'image/png':
+        return { 'png' : null };          
+      case 'image/svg':
+        return { 'svg' : null };          
+      case 'video/avi':
+        return { 'avi' : null };                            
+      case 'video/aac':
+        return { 'aac' : null };
+      case 'video/mp4':
+        return { 'mp4' : null };        
+      case 'audio/wav':
+        return { 'wav' : null };                         
+      case 'audio/mp3':
+        return { 'mp3' : null };
+      default :
+      return null;
+    }
+  };

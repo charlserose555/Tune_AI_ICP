@@ -18,7 +18,8 @@ const initialUser = {
     username: '',
     avatar: '',
     fileType: '',
-    createdAt: 0
+    createdAt: 0,
+    isInitialized: false,
 };
 
 const initialState = {
