@@ -6,6 +6,32 @@ type Thumbnail =
    file: blob;
    fileType: text;
  };
+type StatusResponse = 
+ record {
+   cycles: opt nat;
+   heap_memory_size: opt nat;
+   memory_size: opt nat;
+   version: opt nat;
+ };
+type StatusRequest = 
+ record {
+   cycles: bool;
+   heap_memory_size: bool;
+   memory_size: bool;
+   version: bool;
+ };
+type ContentInit = 
+ record {
+   chunkCount: nat;
+   createdAt: Timestamp;
+   duration: nat;
+   fileType: text;
+   size: nat;
+   thumbnail: Thumbnail;
+   title: text;
+   userCanisterId: principal;
+   userId: UserId;
+ };
 type ContentId = text;
 type ContentData = 
  record {
@@ -23,7 +49,17 @@ type ContentData =
    userCanisterId: principal;
    userId: UserId;
  };
+type CanisterId = principal;
 service : {
+  changeCanisterSize: (nat) -> () oneway;
+  changeCycleAmount: (nat) -> () oneway;
+  checkCyclesBalance: () -> ();
+  createContent: (ContentInit) -> (opt record {
+                                         ContentId;
+                                         principal;
+                                       });
+  deleteContentCanister: (UserId__1, principal) -> (bool);
+  getAllContentCanisters: () -> (vec CanisterId) query;
   getAllContentInfo: () -> (vec record {
                                   ContentId;
                                   ContentData;
@@ -34,5 +70,14 @@ service : {
           ContentData;
         }) query;
   getAvailableContentId: () -> (nat) query;
+  getCanisterOfContent: (ContentId) -> (opt CanisterId) query;
+  getEntriesOfCanisterToContent: () ->
+   (vec record {
+          CanisterId;
+          ContentId;
+        }) query;
+  getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
   registerContentInfo: (ContentData) -> (opt ContentId);
+  removeContent: (ContentId, nat) -> ();
+  transferCyclesToThisCanister: () -> ();
 }
