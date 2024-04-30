@@ -35,22 +35,20 @@ function TrackItem({songItem, getMySongList, index, play}) {
       
       dispatch(hideAudioPlay());
       
-      // audioPlay(songItem[1]);
-      
       play(index)
-
+      
       await increasePlayCount(contentId)
 
       getMySongList();
 
-      if (process.env.DFX_NETWORK !== "ic") {
-        playUrl = "http://127.0.0.1:4943/?canisterId=" + contentCanisterId + "&contentId=" + contentId;       
-      }
+      // if (process.env.DFX_NETWORK !== "ic") {
+      //   playUrl = "http://127.0.0.1:4943/?canisterId=" + contentCanisterId + "&contentId=" + contentId;       
+      // }
 
-      console.log("playUrl", playUrl);
+      // console.log("playUrl", playUrl);
     }
 
-    useEffect( () => {
+    useEffect(() => {
       setContentId(songItem[1].contentId);
       setTitle(songItem[1].title);
       setDuration(songItem[1].duration);

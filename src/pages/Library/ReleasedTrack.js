@@ -23,8 +23,6 @@ function ReleasedTrack() {
     }, [songUploaded])
 
     const play = (index) => {
-      console.log("index", index)
-
       audioPlay(mySongList, index);
     }
 

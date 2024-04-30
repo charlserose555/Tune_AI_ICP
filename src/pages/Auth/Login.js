@@ -69,10 +69,10 @@ function Login() {
                             <img src="/demo/assets/arrow-right.svg"/>
                         </a>
                     </div>
-                    <div class="flex justify-center items-center w-full gap-[20px]">
-                        <div class="relative w-full h-[1px]" style={{backgroundColor: "#C4C4C4"}}></div>
-                        <span class="font-plus text-neutral-700 font-light text-16 leading-20">o</span>
-                        <div class="relative w-full h-[1px]" style={{backgroundColor: "#C4C4C4"}}></div>
+                    <div className="flex justify-center items-center w-full gap-[20px]">
+                        <div className="relative w-full h-[1px]" style={{backgroundColor: "#C4C4C4"}}></div>
+                        <span className="font-plus text-neutral-700 font-light text-16 leading-20">o</span>
+                        <div className="relative w-full h-[1px]" style={{backgroundColor: "#C4C4C4"}}></div>
                     </div>
                     <div className="flex flex-col justify-center items-center w-full gap-[5px]">
                         <p className="font-plus text-white font-normal text-16 leading-20">Do not you have an account yet?</p>
