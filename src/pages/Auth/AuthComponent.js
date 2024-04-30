@@ -22,7 +22,6 @@ function AuthComponent({width, height}) {
     const [portraitUrl, setPortraitUrl] = useState('url("/demo/assets/portrait_1.png")');
     let authClient = null;
 
-
     useEffect(() => {      
         if(location.pathname.includes('genres/')) {
             setPortraitUrl('url("/demo/assets/portrait_3.png")');
@@ -85,8 +84,6 @@ function AuthComponent({width, height}) {
 
                     avatarUrl = result;    
                 }
-
-                console.log("avatarUrl", avatarUrl);
 
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),

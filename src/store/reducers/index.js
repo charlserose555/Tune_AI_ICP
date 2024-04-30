@@ -6,6 +6,7 @@ import sportsReducer from './sports';
 import p2pReducer from './p2p';
 import alertReducer from './alert';
 import loadReducer from './load';
+import playerReducer from './player';
 
 const reducer = combineReducers({
     auth: authReducer,
@@ -14,6 +15,7 @@ const reducer = combineReducers({
     p2p: p2pReducer,
     alert: alertReducer,
     load: loadReducer,
+    player : playerReducer,
 });
 
 export default reducer;

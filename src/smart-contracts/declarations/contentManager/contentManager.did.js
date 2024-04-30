@@ -17,7 +17,6 @@ export const idlFactory = ({ IDL }) => {
     'chunkCount' : IDL.Nat,
   });
   const ContentId = IDL.Text;
-  const UserId__1 = IDL.Principal;
   const CanisterId = IDL.Principal;
   const ContentData = IDL.Record({
     'title' : IDL.Text,
@@ -34,6 +33,7 @@ export const idlFactory = ({ IDL }) => {
     'chunkCount' : IDL.Nat,
     'uploadedAt' : Timestamp,
   });
+  const UserId__1 = IDL.Principal;
   const StatusRequest = IDL.Record({
     'memory_size' : IDL.Bool,
     'version' : IDL.Bool,
@@ -55,11 +55,8 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(IDL.Tuple(ContentId, IDL.Principal))],
         [],
       ),
-    'deleteContentCanister' : IDL.Func(
-        [UserId__1, IDL.Principal],
-        [IDL.Bool],
-        [],
-      ),
+    'cyclesBalance' : IDL.Func([], [IDL.Nat], ['query']),
+    'deleteContentCanister' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllContentCanisters' : IDL.Func([], [IDL.Vec(CanisterId)], ['query']),
     'getAllContentInfo' : IDL.Func(
         [],
@@ -87,6 +84,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(StatusResponse)],
         ['query'],
       ),
+    'increasePlayCount' : IDL.Func([ContentId], [], ['oneway']),
     'registerContentInfo' : IDL.Func([ContentData], [IDL.Opt(ContentId)], []),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
     'transferCyclesToThisCanister' : IDL.Func([], [], []),

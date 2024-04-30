@@ -5,10 +5,11 @@ import ReleasedTrack from "./ReleasedTrack";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { dispatch, useDispatch, useSelector } from "../../store";
 import { ShowModal } from "../../store/reducers/menu";
+import PlayPane from "./PlayPane";
 
-function Home() {
+function Library() {
   const history = useHistory();
-  const [activeTab, setActiveTab] = useState('Released');
+  const [activeTab, setActiveTab] = useState('');
 
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
@@ -20,9 +21,13 @@ function Home() {
         display: id === activeTab ? 'block' : 'none'
       }}
     >
-      {children}
+      {id === activeTab && children}
     </div>
   );
+
+  useEffect(() => {
+    setActiveTab('Released')
+  }, [])
 
   return (
     <>
@@ -46,6 +51,7 @@ function Home() {
                 <ul className="tab-titles">
                   <li className={`${activeTab === 'Released' ? 'text-gray-200 border-gray-200' : 'text-gray-400 border-transparent'} inline-block cursor-pointer hover:text-gray-300 rounded-t-lg py-4 px-4 text-md font-medium text-center border-b-2`} onClick={() => handleTabClick('Released')}>Released</li>
                   <li className={`${activeTab === 'Favorite' ? 'text-gray-200 border-gray-200' : 'text-gray-400 border-transparent'} inline-block cursor-pointer hover:text-gray-300 rounded-t-lg py-4 px-4 text-md font-medium text-center border-b-2`} onClick={() => handleTabClick('Favorite')}>Favorites</li>
+                  <li className={`${activeTab === 'Play' ? 'text-gray-200 border-gray-200' : 'text-gray-400 border-transparent'} inline-block cursor-pointer hover:text-gray-300 rounded-t-lg py-4 px-4 text-md font-medium text-center border-b-2`} onClick={() => handleTabClick('Play')}>Play</li>
                 </ul>
                 <div className="tab-content">
                   <TabContent id="Released" activeTab={activeTab}>
@@ -53,6 +59,9 @@ function Home() {
                   </TabContent>
                   <TabContent id="Favorite" activeTab={activeTab}>
                     <FavouriteTrack/>
+                  </TabContent>
+                  <TabContent id="Play" activeTab={activeTab}>
+                    <PlayPane/>
                   </TabContent>
                 </div>
               </div>     
@@ -63,4 +72,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Library;

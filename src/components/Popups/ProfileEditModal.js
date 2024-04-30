@@ -19,6 +19,7 @@ function ProfileEditModal() {
     const [avatar, setAvatar] = useState("");
     const [fileType, setFileType] = useState("");
     const [createdAt, setCreatedAt] = useState("");
+    const [accountCanisterId, setAccountCanisterId] = useState("");
     const {user} = useSelector((state) => (state.auth));
     const { editProfile } = useContext(APIContext);
 
@@ -55,6 +56,7 @@ function ProfileEditModal() {
                     displayName: displayname,
                     userName: username,
                     createdAt: createdAt,
+                    accountCanisterId : accountCanisterId,
                     updatedAt: Number(Date.now() * 1000),
                     userPrincipal: Principal.fromText(user.principal),          
                     avatar: [encodeArrayBuffer(bsf)],
@@ -99,6 +101,7 @@ function ProfileEditModal() {
         setAvatar(user.avatar);
         setFileType(user.fileType);
         setCreatedAt(user.createdAt);
+        setAccountCanisterId(user.canisterId);
     }, [user])
     
     return (

@@ -14,6 +14,8 @@ function FavouriteTrack() {
     } 
   
     useEffect(() => {
+      console.log("ASDfasfdsadf")
+
       let list = [{"index" : 0, "isFavourite" : false},
                   {"index" : 1, "isFavourite" : false},
                   {"index" : 2, "isFavourite" : false},

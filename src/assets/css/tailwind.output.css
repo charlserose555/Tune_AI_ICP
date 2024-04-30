@@ -755,10 +755,6 @@ select {
   bottom: 0px;
 }
 
-.bottom-7 {
-  bottom: 1.75rem;
-}
-
 .bottom-\[60px\] {
   bottom: 60px;
 }
@@ -787,8 +783,8 @@ select {
   right: 0px;
 }
 
-.right-1 {
-  right: 0.25rem;
+.right-2 {
+  right: 0.5rem;
 }
 
 .right-4 {
@@ -963,6 +959,20 @@ select {
   margin-top: 1rem;
 }
 
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
 .block {
   display: block;
 }
@@ -993,10 +1003,6 @@ select {
 
 .hidden {
   display: none;
-}
-
-.h-1 {
-  height: 0.25rem;
 }
 
 .h-10 {
@@ -1107,6 +1113,10 @@ select {
   height: 100vh;
 }
 
+.min-h-\[24px\] {
+  min-height: 24px;
+}
+
 .w-1 {
   width: 0.25rem;
 }
@@ -1207,6 +1217,10 @@ select {
   width: 47px;
 }
 
+.w-\[50px\] {
+  width: 50px;
+}
+
 .w-\[54px\] {
   width: 54px;
 }
@@ -1223,12 +1237,20 @@ select {
   width: 70px;
 }
 
+.w-\[90px\] {
+  width: 90px;
+}
+
 .w-full {
   width: 100%;
 }
 
 .min-w-0 {
   min-width: 0px;
+}
+
+.min-w-\[24px\] {
+  min-width: 24px;
 }
 
 .min-w-\[385px\] {
@@ -1496,6 +1518,16 @@ select {
   overflow-y: auto;
 }
 
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -1544,10 +1576,6 @@ select {
   border-radius: 0.375rem;
 }
 
-.rounded-none {
-  border-radius: 0px;
-}
-
 .rounded-sm {
   border-radius: 0.125rem;
 }
@@ -1592,10 +1620,6 @@ select {
 .border-\[\#2B92EC\] {
   --tw-border-opacity: 1;
   border-color: rgb(43 146 236 / var(--tw-border-opacity));
-}
-
-.border-\[\#2ec946\]\/20 {
-  border-color: rgb(46 201 70 / 0.2);
 }
 
 .border-\[\#e0e0e0\] {
@@ -1650,10 +1674,6 @@ select {
 
 .border-transparent {
   border-color: transparent;
-}
-
-.\!bg-\[\#2ec946\]\/10 {
-  background-color: rgb(46 201 70 / 0.1) !important;
 }
 
 .bg-background {
@@ -1908,9 +1928,9 @@ select {
   padding-right: 2rem;
 }
 
-.px-\[30px\] {
-  padding-left: 30px;
-  padding-right: 30px;
+.px-\[10px\] {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .py-1 {
@@ -3171,10 +3191,6 @@ select {
 }
 
 @media (min-width: 640px) {
-  .sm\:right-5 {
-    right: 1.25rem;
-  }
-
   .sm\:m-4 {
     margin: 1rem;
   }
@@ -3287,6 +3303,11 @@ select {
     padding-right: 10px;
   }
 
+  .md\:px-\[30px\] {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
   .md\:pl-4 {
     padding-left: 1rem;
   }
@@ -3346,28 +3367,4 @@ select {
 
 .rtl\:text-right:where([dir="rtl"], [dir="rtl"] *) {
   text-align: right;
-}
-
-.\[\&\:\:-moz-range-thumb\]\:-mt-\[0px\]::-moz-range-thumb {
-  margin-top: -0px;
-}
-
-.\[\&\:\:-moz-range-thumb\]\:rounded-none::-moz-range-thumb {
-  border-radius: 0px;
-}
-
-.\[\&\:\:-moz-range-track\]\:bg-transparent::-moz-range-track {
-  background-color: transparent;
-}
-
-.\[\&\:\:-webkit-slider-runnable-track\]\:bg-transparent::-webkit-slider-runnable-track {
-  background-color: transparent;
-}
-
-.\[\&\:\:-webkit-slider-thumb\]\:-mt-\[0px\]::-webkit-slider-thumb {
-  margin-top: -0px;
-}
-
-.\[\&\:\:-webkit-slider-thumb\]\:rounded-none::-webkit-slider-thumb {
-  border-radius: 0px;
 }
