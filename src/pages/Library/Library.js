@@ -37,7 +37,7 @@ function Library() {
             <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
         </div>
         <div className="relative pt-[58px]">
-            <div class="flex flex-col mx-auto">  
+            <div className="flex flex-col mx-auto">  
               <div className="flex flex-row w-full justify-between gap-[10px]">
                 <div className="flex flex-row w-full pr-2" style={{maxWidth:"240px"}}>
                   <input type="text" placeholder="Search.." className="bg-primary-700 opacity-100 py-2 pl-4 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent w-full" style={{height: '40px'}}></input>
@@ -51,7 +51,6 @@ function Library() {
                 <ul className="tab-titles">
                   <li className={`${activeTab === 'Released' ? 'text-gray-200 border-gray-200' : 'text-gray-400 border-transparent'} inline-block cursor-pointer hover:text-gray-300 rounded-t-lg py-4 px-4 text-md font-medium text-center border-b-2`} onClick={() => handleTabClick('Released')}>Released</li>
                   <li className={`${activeTab === 'Favorite' ? 'text-gray-200 border-gray-200' : 'text-gray-400 border-transparent'} inline-block cursor-pointer hover:text-gray-300 rounded-t-lg py-4 px-4 text-md font-medium text-center border-b-2`} onClick={() => handleTabClick('Favorite')}>Favorites</li>
-                  <li className={`${activeTab === 'Play' ? 'text-gray-200 border-gray-200' : 'text-gray-400 border-transparent'} inline-block cursor-pointer hover:text-gray-300 rounded-t-lg py-4 px-4 text-md font-medium text-center border-b-2`} onClick={() => handleTabClick('Play')}>Play</li>
                 </ul>
                 <div className="tab-content">
                   <TabContent id="Released" activeTab={activeTab}>
@@ -59,9 +58,6 @@ function Library() {
                   </TabContent>
                   <TabContent id="Favorite" activeTab={activeTab}>
                     <FavouriteTrack/>
-                  </TabContent>
-                  <TabContent id="Play" activeTab={activeTab}>
-                    <PlayPane/>
                   </TabContent>
                 </div>
               </div>     

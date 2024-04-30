@@ -25,6 +25,8 @@ export default function AudioPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(60);
     const [muteVolume, setMuteVolume] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+
     const dispatch = useDispatch();
 
     const togglePlayPause = () => {
@@ -53,9 +55,6 @@ export default function AudioPlayer() {
 
     const setCurrentTrackInfo = async (tracks, currentIndex) => {
         const chunks = [];
-
-        console.log("tracks", tracks)
-        console.log("currentIndex", currentIndex);
         
         chunks.push(new Uint8Array(tracks[currentIndex][1].thumbnail.file).buffer);
         
@@ -72,9 +71,19 @@ export default function AudioPlayer() {
             artistName : artistInfo[0].displayName,
             duration : tracks[currentIndex][1].duration  
         }
+
+        // const trackInfo = {
+        //     src : "https://" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + ".raw.icp0.io/?contentId=" + tracks[currentIndex][1].contentId,
+        //     thumbnailUrl : thumbnailUrl,
+        //     title : tracks[currentIndex][1].title,
+        //     artistName : artistInfo[0].displayName,
+        //     duration : tracks[currentIndex][1].duration  
+        // }
         
         console.log("track", trackInfo);
         setCurrentTrack(trackInfo);
+
+        setIsLoaded(true)
     }
 
     const setAudioTrackInfo = (tracks, currentIndex) => {
@@ -118,13 +127,31 @@ export default function AudioPlayer() {
             setTrackIndex(currentIndex)
 
             setAudioTrackInfo(tracks, currentIndex);  
+        } else {
+            setDuration(0);
+
+            setTimeProgress(0);
+
+            setCurrentTrack(null);
+
+            setTrackIndex(0);
+
+            setIsLoaded(false);
+        }
+        return () => {
+            setDuration(0);
+
+            setTimeProgress(0);
+
+            setCurrentTrack(null);
+
+            setTrackIndex(0);
+
+            setIsLoaded(false);
         }
     }, [tracks, currentIndex])
 
     useEffect(() => {
-        console.log("audioRef", audioRef)
-        console.log("isPlaying", isPlaying)
-
         if(audioRef.current) {
             if (isPlaying) {
               audioRef.current.play();
@@ -155,7 +182,8 @@ export default function AudioPlayer() {
 
     return (
         <>
-            {play && (
+            {(play && isLoaded) && (
+                
                 <div className="absolute font-plus text-white bottom-0 left-0 w-full z-40" style={{boxShadow: "0px -20px 40px rgba(0, 0, 0, 0.45)"}}>
                     <div className="flex relative justify-start items-center w-full bg-primary-700 w-fixed gap-[10px] py-[20px] px-[10px] md:px-[30px]">
                         <div className="absolute top-2 right-2 cursor-pointer" onClick={() => closeAudioPanel()}>

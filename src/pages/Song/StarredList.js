@@ -23,7 +23,7 @@ function StarredList() {
 
     return (<>
       <div className="px-6 grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 pt-[70px] gap-[40px] pb-[120px]">
-        <div class="col-span-1 md:col-span-1 xl:col-span-2">
+        <div className="col-span-1 md:col-span-1 xl:col-span-2">
           <div className="flex flex-col gap-[24px]">
             <div className="flex flex-row justify-start items-end">
                 <p className="text-16 font-normal leading-30 font-plus">Starred songs</p>
@@ -72,7 +72,7 @@ function StarredList() {
                 style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer', width:"124px"}}>Show more</a>
           </div>
         </div>
-        <div class="col-span-1 md:col-span-1 xl:col-span-1 pt-[10px] md:pt-[10px] xl:pt-[80px] gap-[6px]">
+        <div className="col-span-1 md:col-span-1 xl:col-span-1 pt-[10px] md:pt-[10px] xl:pt-[80px] gap-[6px]">
           <div className="flex flex-row">
             <div className="font-plus text-16 font-normal leading-[20px] pr-2">Starred songs</div>
             <Icon.FullStarIcon/>

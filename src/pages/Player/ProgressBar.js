@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const ProgressBar = ({
     progressBarRef,
     audioRef,
@@ -20,7 +22,11 @@ const ProgressBar = ({
       }
       return '00:00';
     };
-  
+
+    useEffect(() => {
+      console.log("duration", duration)
+    }, [duration]);
+
     return (
       <div className="progress">
         <span className="time current font-bold w-[50px]">{formatTime(timeProgress)}</span>
