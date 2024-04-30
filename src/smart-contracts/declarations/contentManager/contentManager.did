@@ -58,7 +58,8 @@ service : {
                                          ContentId;
                                          principal;
                                        });
-  deleteContentCanister: (UserId__1, principal) -> (bool);
+  cyclesBalance: () -> (nat) query;
+  deleteContentCanister: (principal) -> (bool);
   getAllContentCanisters: () -> (vec CanisterId) query;
   getAllContentInfo: () -> (vec record {
                                   ContentId;
@@ -77,6 +78,7 @@ service : {
           ContentId;
         }) query;
   getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
+  increasePlayCount: (ContentId) -> () oneway;
   registerContentInfo: (ContentData) -> (opt ContentId);
   removeContent: (ContentId, nat) -> ();
   transferCyclesToThisCanister: () -> ();

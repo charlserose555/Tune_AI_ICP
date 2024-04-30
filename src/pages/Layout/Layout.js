@@ -6,7 +6,7 @@ import Sidebar from "../Sidebar";
 import Historybar from "../History/Historybar";
 import Main from "../Main/Main";
 import { SidebarContext } from "../../context/SidebarContext";
-import PlayerControlPanel from "../Player/PlayerControlPanel";
+import AudioPlayer from "../Player/AudioPlayer";
 import { useState } from "react";
 import PageLoader from "../../components/Loader/PageLoader";
 import LoadingOverlay from "../../components/Loader/LoadingOverlay";
@@ -59,7 +59,7 @@ function Layout() {
       </div>
       <Historybar/>
 
-      <PlayerControlPanel/>
+      <AudioPlayer/>
     </div>
   );
 }

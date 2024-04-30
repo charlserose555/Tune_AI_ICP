@@ -54,7 +54,8 @@ export interface _SERVICE {
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
   'checkCyclesBalance' : ActorMethod<[], undefined>,
   'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
-  'deleteContentCanister' : ActorMethod<[UserId__1, Principal], boolean>,
+  'cyclesBalance' : ActorMethod<[], bigint>,
+  'deleteContentCanister' : ActorMethod<[Principal], boolean>,
   'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,
   'getAllContentInfo' : ActorMethod<[], Array<[ContentId, ContentData]>>,
   'getAllContentInfoByUserId' : ActorMethod<
@@ -68,6 +69,7 @@ export interface _SERVICE {
     Array<[CanisterId, ContentId]>
   >,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
+  'increasePlayCount' : ActorMethod<[ContentId], undefined>,
   'registerContentInfo' : ActorMethod<[ContentData], [] | [ContentId]>,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferCyclesToThisCanister' : ActorMethod<[], undefined>,

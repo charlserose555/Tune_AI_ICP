@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import * as Icon from "../../icons";
 import { APIContext } from "../../context/ApiContext";
 import TrackItem from "./TrackItem";
 import { useSelector } from "../../store";
+import audioPlay from "../../utils/AudioPlay";
 
 function ReleasedTrack() {
     const [ mySongList, setMySongList] = useState([]); 
@@ -22,6 +22,12 @@ function ReleasedTrack() {
       getMySongList();
     }, [songUploaded])
 
+    const play = (index) => {
+      console.log("index", index)
+
+      audioPlay(mySongList, index);
+    }
+
     return (<>
     <div className="flex flex-row justify-start items-end pt-[20px] mb-[120px]">
       <div className="w-full">
@@ -40,7 +46,7 @@ function ReleasedTrack() {
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row">
-                      <img src="/demo/assets/eye_hidden.svg" className="w-[24px] h-[24px]"/>
+                      <img src="/demo/assets/eye_hidden.svg" className="min-w-[24px] min-h-[24px]"/>
                   </div>
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
@@ -58,7 +64,7 @@ function ReleasedTrack() {
           <tbody>
               {mySongList.map((item, index) => { 
                 return ((
-                  <TrackItem songItem={item} index={index}/>
+                  <TrackItem songItem={item} getMySongList = {getMySongList} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>

@@ -22,12 +22,14 @@ export const APIProvider = ({ children }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [accountCanisterId, setAccountCanisterId] = useState(''); 
-
+    const [principal, setPrincipal] = useState(''); 
+    // const [isSessionExpired, setIsSessionExpired] = useState(false);
 
     useEffect(() => {
         console.log("userCaniserID", user.canisterId)
         setAccountCanisterId(user.canisterId);
-    }, [user.canisterId])
+        setPrincipal(user.principal);
+    }, [user.principal])
 
     const logout = () => {
         history.push("/");
@@ -38,18 +40,21 @@ export const APIProvider = ({ children }) => {
         let authClient, identity, agent;
 
         authClient = await AuthClient.create();
+        let isSessionExpired = false
         if(authClient.isAuthenticated) {
             identity = authClient.getIdentity();
     
             agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});  
     
             if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-                agent.fetchRootKey();
+                await agent.fetchRootKey();
             }
 
-            console.log("identity", identity.getPrincipal().toText())
+            if(principal != identity.getPrincipal().toText()) {
+                console.log("sessionExpired~~~~~~~", isSessionExpired)
+            }
 
-            return {identity: identity, agent: agent}
+            return {identity: identity, agent: agent, isSessionExpired: isSessionExpired}
         } else {
             return {agent: null};
         }
@@ -70,7 +75,7 @@ export const APIProvider = ({ children }) => {
             agent,
             canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
         });
-    
+        
         let bucket = await managerActor.createAccountCanister(accountData);        
         
         console.log("bucket", bucket[0]);
@@ -78,7 +83,7 @@ export const APIProvider = ({ children }) => {
         return bucket[0];
     };
 
-    const getProfileInfo = async (accountCanisterId) => {
+    const getProfileInfo = async (accountCanisterId, userPrincipal = null) => {
         let {agent, identity} = await initAgent();
         
         if (agent == null) 
@@ -93,15 +98,18 @@ export const APIProvider = ({ children }) => {
             canisterId: accountCanisterId.toText()
         });
 
-        let profileInfo = await accountActor.getProfileInfo(identity.getPrincipal());
+        let profileInfo = await accountActor.getProfileInfo(userPrincipal ? userPrincipal : identity.getPrincipal());
 
         return profileInfo;
     }
 
     const editProfile = async (profileInfo) => {   
-        let {agent} = await initAgent();
+        let {agent, isSessionExpired} = await initAgent();
         
         if (agent == null) 
+            return null;
+
+        if (isSessionExpired) 
             return null;
         
         console.log("user.canisterId", accountCanisterId);
@@ -111,6 +119,8 @@ export const APIProvider = ({ children }) => {
             canisterId: accountCanisterId
         });
         
+        profileInfo.accountCanisterId = accountCanisterId;
+
         console.log("profileInfo", profileInfo)
 
         let result = await accountActor.editProfileInfo(profileInfo);
@@ -119,9 +129,14 @@ export const APIProvider = ({ children }) => {
     }
     
     const createContentInfo = async (contentInfo) => {
-        let {agent} = await initAgent();
+        let {agent, isSessionExpired} = await initAgent();
         
+        console.log(isSessionExpired);
+
         if (agent == null) 
+            return null;
+
+        if (isSessionExpired) 
             return null;
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
@@ -142,9 +157,12 @@ export const APIProvider = ({ children }) => {
         chunk,
         fileSize,
     )  => {
-        let {agent} = await initAgent();
+        let {agent, isSessionExpired} = await initAgent();
         
         if (agent == null) 
+            return null;
+
+        if (isSessionExpired) 
             return null;
 
         const blobSlice = blob.slice(
@@ -163,9 +181,12 @@ export const APIProvider = ({ children }) => {
     }
 
     const getSongListByIdentity = async () => {
-        let {agent} = await initAgent();
+        let {agent, isSessionExpired} = await initAgent();
         
         if (agent == null) 
+            return null;
+
+        if (isSessionExpired) 
             return null;
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
@@ -174,6 +195,25 @@ export const APIProvider = ({ children }) => {
         });
 
         let result = await contentManagerActor.getAllContentInfoByUserId(Principal.fromText(user.principal));
+
+        return result;
+    }
+
+    const increasePlayCount = async (contentId) => {
+        let {agent, isSessionExpired} = await initAgent();
+        
+        if (agent == null) 
+            return null;
+
+        if (isSessionExpired) 
+            return null;
+
+        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
+            agent,
+            canisterId: process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID
+        });
+
+        let result = await contentManagerActor.increasePlayCount(contentId);
 
         return result;
     }
@@ -196,7 +236,8 @@ export const APIProvider = ({ children }) => {
                 editProfile,
                 createContentInfo,
                 getSongListByIdentity,
-                processAndUploadChunk
+                processAndUploadChunk,
+                increasePlayCount
             }}
         >
             {children}
