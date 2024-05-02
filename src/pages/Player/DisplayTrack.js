@@ -13,8 +13,6 @@ const DisplayTrack = ({
 
     setDuration(parseInt(seconds, 10));
 
-    console.log("onLoadedMetaData");
-
     progressBarRef.current.max = seconds;
   };
 
@@ -30,11 +28,12 @@ const DisplayTrack = ({
   return (
     <div>
       <audio
-        src={currentTrack?.src}
+        controlsList="nodownload"
         ref={audioRef}
         onLoadedMetadata={onLoadedMetadata}
-        onEnded={handleNext}
-      />
+        onEnded={handleNext}>
+        <source src={currentTrack?.src} type="audio/mpeg" />
+      </audio>
     </div>
   );
 };

@@ -7,7 +7,9 @@ import {idlFactory as AccountIDL} from '../smart-contracts/declarations/account/
 import {idlFactory as ContentIDL} from '../smart-contracts/declarations/content/content.did.js';
 import {idlFactory as ContentManagerIDL} from '../smart-contracts/declarations/contentManager/contentManager.did.js';
 import { useMemo } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from 'react-router-dom';
+
 import { Logout, SetIdentity } from "../store/reducers/auth";
 
 import { Principal } from '@dfinity/principal'; 
@@ -32,11 +34,13 @@ export const APIProvider = ({ children }) => {
     }, [user.principal])
 
     const logout = () => {
-        history.push("/");
+        // console.log("history", history)
+
+        // history.push("/");
         dispatch(Logout({}))
     }
 
-    const initAgent = async () => {
+    const initAgent = async (init = false) => {
         let authClient, identity, agent;
 
         authClient = await AuthClient.create();
@@ -50,8 +54,15 @@ export const APIProvider = ({ children }) => {
                 await agent.fetchRootKey();
             }
 
-            if(principal != identity.getPrincipal().toText()) {
+            if(!init && principal != identity.getPrincipal().toText()) {
+                isSessionExpired = true;
+
+                console.log("session", identity.getPrincipal().toText())
                 console.log("sessionExpired~~~~~~~", isSessionExpired)
+
+                logout();
+
+                return {agent: null};
             }
 
             return {identity: identity, agent: agent, isSessionExpired: isSessionExpired}
@@ -61,7 +72,7 @@ export const APIProvider = ({ children }) => {
     }
 
     const login = async () => {
-        let {agent, identity} = await initAgent();
+        let {agent, identity} = await initAgent(true);
         
         if (agent == null) 
             return null;
@@ -84,7 +95,7 @@ export const APIProvider = ({ children }) => {
     };
 
     const getProfileInfo = async (accountCanisterId, userPrincipal = null) => {
-        let {agent, identity} = await initAgent();
+        let {agent, identity} = await initAgent(true);
         
         if (agent == null) 
             return null;
@@ -104,12 +115,9 @@ export const APIProvider = ({ children }) => {
     }
 
     const editProfile = async (profileInfo) => {   
-        let {agent, isSessionExpired} = await initAgent();
+        let { agent } = await initAgent();
         
         if (agent == null) 
-            return null;
-
-        if (isSessionExpired) 
             return null;
         
         console.log("user.canisterId", accountCanisterId);
@@ -129,14 +137,9 @@ export const APIProvider = ({ children }) => {
     }
     
     const createContentInfo = async (contentInfo) => {
-        let {agent, isSessionExpired} = await initAgent();
+        let {agent} = await initAgent();
         
-        console.log(isSessionExpired);
-
         if (agent == null) 
-            return null;
-
-        if (isSessionExpired) 
             return null;
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
@@ -149,21 +152,87 @@ export const APIProvider = ({ children }) => {
         return result;
     }
 
+    // const processAndUploadChunk = async (
+    //     blob,
+    //     byteStart,
+    //     contentId,
+    //     contentCanisterId,
+    //     chunk,
+    //     fileSize,
+    // )  => {
+    //     const t0 = performance.now();
+
+    //     let {agent, isSessionExpired} = await initAgent();
+        
+    //     if (agent == null) 
+    //         return null;
+
+    //     if (isSessionExpired) 
+    //         return null;
+
+    //     const blobSlice = blob.slice(
+    //         byteStart,
+    //         Math.min(Number(fileSize), byteStart + MAX_CHUNK_SIZE),
+    //         blob.type
+    //     );
+    //     const bsf = await blobSlice.arrayBuffer();
+    
+    //     let contentActor = Actor.createActor(ContentIDL, {
+    //         agent,
+    //         canisterId: contentCanisterId
+    //     });
+
+    //     let result = await contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
+
+    //     const t1 = performance.now();
+    //     console.log("Upload took " + (t1 - t0) / 1000 + " seconds.")
+
+    //     return result;
+    // }
+
     const processAndUploadChunk = async (
-        blob,
-        byteStart,
-        contentId,
-        contentCanisterId,
-        chunk,
-        fileSize,
+        audioInfo, contentCanisterId, contentId
     )  => {
-        let {agent, isSessionExpired} = await initAgent();
+        const t0 = performance.now();
+
+        let { agent } = await initAgent();
         
         if (agent == null) 
             return null;
 
-        if (isSessionExpired) 
-            return null;
+        let putChunkPromises = [];
+
+        let contentActor = Actor.createActor(ContentIDL, {
+            agent,
+            canisterId: contentCanisterId
+        });
+
+        let chunk = 1;
+        for (let byteStart = 0; byteStart < audioInfo.size; byteStart += MAX_CHUNK_SIZE, chunk++ ) {
+            putChunkPromises.push(
+                putContentChunk(audioInfo.data, byteStart, contentId, contentCanisterId, chunk, audioInfo.size, contentActor)
+            );
+        }
+
+        let result = await Promise.all(putChunkPromises)
+
+        console.log("result", result)
+
+        const t1 = performance.now();
+        console.log("Upload took " + (t1 - t0) / 1000 + " seconds.")
+
+        return null;
+    }
+
+    const putContentChunk = async (blob,
+        byteStart,
+        contentId,
+        contentCanisterId,
+        chunk,
+        fileSize, 
+        contentActor) => {
+
+        const t0 = performance.now();
 
         const blobSlice = blob.slice(
             byteStart,
@@ -171,22 +240,19 @@ export const APIProvider = ({ children }) => {
             blob.type
         );
         const bsf = await blobSlice.arrayBuffer();
-    
-        let contentActor = Actor.createActor(ContentIDL, {
-            agent,
-            canisterId: contentCanisterId
-        });
 
-        return contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
+        let result = await contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
+
+        const t1 = performance.now();
+        console.log("Upload one took " + (t1 - t0) / 1000 + " seconds.")
+
+        return result;        
     }
 
     const getSongListByIdentity = async () => {
-        let {agent, isSessionExpired} = await initAgent();
+        let { agent } = await initAgent();
         
         if (agent == null) 
-            return null;
-
-        if (isSessionExpired) 
             return null;
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
@@ -203,9 +269,6 @@ export const APIProvider = ({ children }) => {
         let {agent, isSessionExpired} = await initAgent();
         
         if (agent == null) 
-            return null;
-
-        if (isSessionExpired) 
             return null;
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {

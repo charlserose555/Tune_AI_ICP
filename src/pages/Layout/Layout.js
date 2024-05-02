@@ -10,12 +10,15 @@ import AudioPlayer from "../Player/AudioPlayer";
 import { useState } from "react";
 import PageLoader from "../../components/Loader/PageLoader";
 import LoadingOverlay from "../../components/Loader/LoadingOverlay";
-
-const Page404 = lazy(() => import("../404"));
+import { useSelector } from "../../store";
 
 function Layout() {
+  const { isLoggedIn } = useSelector(
+    (state) => state.auth
+  );
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const [delayed, setDelayed] = useState(true);
+  const Page404 = lazy(() => import("../404"));
 
   let location = useLocation();
 
@@ -44,12 +47,20 @@ function Layout() {
             <Switch>
               {sidebar.map((route, i) => {
                 return route.component ? (
-                <Route
-                    key={i}
-                    exact={true}
-                    path={`/app${route.path}`}
-                    render={(props) => <route.component {...props} />}
-                  />
+                  !isLoggedIn && route.auth ? (
+                    <Route
+                      key={i}
+                      path={`/app${route.path}`}
+                      render={() => <Redirect to="/" />}
+                    />
+                  ) : (
+                    <Route
+                      key={i}
+                      exact={true}
+                      path={`/app${route.path}`}
+                      render={(props) => <route.component {...props} />}
+                    />
+                  )
                 ) : null;
               })}
               <Route component={Page404} />

@@ -32,10 +32,12 @@ const routes = [
     path: "/library",
     icon: "LibarayIcon",
     name: "My Library",
+    auth: true,
     component: Library,
   },
   {
     path: "/profile",
+    auth: true,
     component: Profile,
   },
   {

@@ -5,8 +5,6 @@ import { useSelector } from '../../store';
 
 function Sidebar() {
 
-  const { isPlaying, isSports } = useSelector((state) => state.menu);
-
   return (
     <>
       <DesktopSidebar />
