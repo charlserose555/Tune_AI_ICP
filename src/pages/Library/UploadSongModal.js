@@ -90,16 +90,24 @@ function UploadSongModal() {
                     const contentId = result[0][0];    
                     const putChunkPromises = [];
 
+                    const t0 = performance.now();
+
                     console.log("contentCanisterId", contentCanisterId.toText())
 
-                    let chunk = 1;
-                    for (let byteStart = 0; byteStart < audioInfo.size; byteStart += MAX_CHUNK_SIZE, chunk++ ) {
-                        putChunkPromises.push(
-                            processAndUploadChunk(audioInfo.data, byteStart, contentId, contentCanisterId, chunk, audioInfo.size)
-                        );
-                    }
+                    // let chunk = 1;
+                    // for (let byteStart = 0; byteStart < audioInfo.size; byteStart += MAX_CHUNK_SIZE, chunk++ ) {
+                    //     putChunkPromises.push(
+                    //         processAndUploadChunk(audioInfo.data, byteStart, contentId, contentCanisterId, chunk, audioInfo.size)
+                    //     );
+                    // }
 
-                    const putResult = await Promise.all(putChunkPromises);
+
+                    // const putResult = await Promise.all(putChunkPromises);
+
+                    const putResult = await processAndUploadChunk(audioInfo, contentCanisterId, contentId)
+
+                    const t1 = performance.now();
+                    console.log("Upload took " + (t1 - t0) / 1000 + " seconds.")
 
                     console.log(putResult);
                     loading(false);

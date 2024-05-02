@@ -64,21 +64,21 @@ export default function AudioPlayer() {
         
         let artistInfo = await getProfileInfo(tracks[currentIndex][1].userCanisterId, tracks[currentIndex][1].userId);
         
-        const trackInfo = {
-            src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + "&contentId=" + tracks[currentIndex][1].contentId,
-            thumbnailUrl : thumbnailUrl,
-            title : tracks[currentIndex][1].title,
-            artistName : artistInfo[0].displayName,
-            duration : tracks[currentIndex][1].duration  
-        }
-
         // const trackInfo = {
-        //     src : "https://" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + ".raw.icp0.io/?contentId=" + tracks[currentIndex][1].contentId,
+        //     src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + "&contentId=" + tracks[currentIndex][1].contentId,
         //     thumbnailUrl : thumbnailUrl,
         //     title : tracks[currentIndex][1].title,
         //     artistName : artistInfo[0].displayName,
         //     duration : tracks[currentIndex][1].duration  
         // }
+
+        const trackInfo = {
+            src : "https://" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + ".c/?contentId=" + tracks[currentIndex][1].contentId,
+            thumbnailUrl : thumbnailUrl,
+            title : tracks[currentIndex][1].title,
+            artistName : artistInfo[0].displayName,
+            duration : tracks[currentIndex][1].duration  
+        }
         
         console.log("track", trackInfo);
         setCurrentTrack(trackInfo);
