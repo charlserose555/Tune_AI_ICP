@@ -1,11 +1,16 @@
 export const idlFactory = ({ IDL }) => {
   const Timestamp = IDL.Int;
-  const PrincipalInfo = IDL.Record({
+  const ProfilePhoto = IDL.Vec(IDL.Nat8);
+  const ArtistAccountData = IDL.Record({
+    'userName' : IDL.Text,
+    'displayName' : IDL.Text,
     'createdAt' : Timestamp,
+    'fileType' : IDL.Opt(IDL.Text),
+    'updatedAt' : Timestamp,
     'userPrincipal' : IDL.Principal,
+    'avatar' : IDL.Opt(ProfilePhoto),
   });
   const UserId = IDL.Principal;
-  const CanisterId = IDL.Principal;
   const definite_canister_settings = IDL.Record({
     'freezing_threshold' : IDL.Nat,
     'controllers' : IDL.Opt(IDL.Vec(IDL.Principal)),
@@ -24,16 +29,11 @@ export const idlFactory = ({ IDL }) => {
     'module_hash' : IDL.Opt(IDL.Vec(IDL.Nat8)),
   });
   return IDL.Service({
-    'createAccountCanister' : IDL.Func(
-        [PrincipalInfo],
-        [IDL.Opt(IDL.Principal)],
-        [],
-      ),
     'cyclesBalance' : IDL.Func([], [IDL.Nat], ['query']),
-    'deleteAccountCanister' : IDL.Func([UserId, IDL.Principal], [IDL.Bool], []),
+    'editProfileInfo' : IDL.Func([ArtistAccountData], [IDL.Bool], []),
     'getArtistList' : IDL.Func(
         [],
-        [IDL.Vec(IDL.Tuple(UserId, CanisterId))],
+        [IDL.Vec(IDL.Tuple(UserId, ArtistAccountData))],
         ['query'],
       ),
     'getCanisterStatus' : IDL.Func([], [CanisterStatus], []),
@@ -42,14 +42,9 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(IDL.Nat)],
         [],
       ),
-    'getCanisterbyIdentity' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Opt(IDL.Principal)],
-        ['query'],
-      ),
-    'getOwnershipOfCanister' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Opt(UserId)],
+    'getProfileInfo' : IDL.Func(
+        [UserId],
+        [IDL.Opt(ArtistAccountData)],
         ['query'],
       ),
     'getTotalAccounts' : IDL.Func([], [IDL.Nat], ['query']),
@@ -58,17 +53,7 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
-    'transferCyclesToAccountCanister' : IDL.Func(
-        [IDL.Principal, IDL.Nat],
-        [],
-        [],
-      ),
     'transferCyclesToCanister' : IDL.Func([IDL.Principal, IDL.Nat], [], []),
-    'transferOwnershipAccountCanister' : IDL.Func(
-        [IDL.Principal, IDL.Principal],
-        [],
-        [],
-      ),
     'updateCanisterSize' : IDL.Func([IDL.Nat], [], ['oneway']),
     'updateCycleAmount' : IDL.Func([IDL.Nat], [], ['oneway']),
   });

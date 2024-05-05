@@ -4,23 +4,6 @@ export const idlFactory = ({ IDL }) => {
     'createdAt' : Timestamp,
     'userPrincipal' : IDL.Principal,
   });
-  const Thumbnail = IDL.Record({
-    'file' : IDL.Vec(IDL.Nat8),
-    'fileType' : IDL.Text,
-  });
-  const UserId__1 = IDL.Principal;
-  const ContentInit = IDL.Record({
-    'title' : IDL.Text,
-    'duration' : IDL.Nat,
-    'thumbnail' : Thumbnail,
-    'userId' : UserId__1,
-    'createdAt' : Timestamp,
-    'size' : IDL.Nat,
-    'fileType' : IDL.Text,
-    'userCanisterId' : IDL.Principal,
-    'chunkCount' : IDL.Nat,
-  });
-  const ContentId = IDL.Text;
   const ProfilePhoto = IDL.Vec(IDL.Nat8);
   const ArtistAccountData = IDL.Record({
     'userName' : IDL.Text,
@@ -31,8 +14,6 @@ export const idlFactory = ({ IDL }) => {
     'userPrincipal' : IDL.Principal,
     'avatar' : IDL.Opt(ProfilePhoto),
   });
-  const UserId = IDL.Principal;
-  const CanisterId = IDL.Principal;
   const definite_canister_settings = IDL.Record({
     'freezing_threshold' : IDL.Nat,
     'controllers' : IDL.Opt(IDL.Vec(IDL.Principal)),
@@ -50,6 +31,7 @@ export const idlFactory = ({ IDL }) => {
     'settings' : definite_canister_settings,
     'module_hash' : IDL.Opt(IDL.Vec(IDL.Nat8)),
   });
+  const UserId = IDL.Principal;
   const StatusRequest = IDL.Record({
     'memory_size' : IDL.Bool,
     'version' : IDL.Bool,
@@ -66,32 +48,15 @@ export const idlFactory = ({ IDL }) => {
     'changeCanisterSize' : IDL.Func([IDL.Nat], [], ['oneway']),
     'changeCycleAmount' : IDL.Func([IDL.Nat], [], ['oneway']),
     'checkCyclesBalance' : IDL.Func([], [], []),
-    'createContent' : IDL.Func(
-        [ContentInit],
-        [IDL.Opt(IDL.Tuple(ContentId, IDL.Principal))],
-        [],
-      ),
     'createProfileInfo' : IDL.Func(
         [IDL.Opt(ArtistAccountData)],
         [IDL.Bool],
         [],
       ),
     'deleteAccount' : IDL.Func([IDL.Principal], [], []),
-    'deleteContentCanister' : IDL.Func([UserId, IDL.Principal], [IDL.Bool], []),
     'editProfileInfo' : IDL.Func([ArtistAccountData], [IDL.Bool], []),
-    'getAllContentCanisters' : IDL.Func([], [IDL.Vec(CanisterId)], ['query']),
-    'getCanisterOfContent' : IDL.Func(
-        [ContentId],
-        [IDL.Opt(CanisterId)],
-        ['query'],
-      ),
     'getCanisterStatus' : IDL.Func([], [CanisterStatus], []),
     'getCurrentCyclesBalance' : IDL.Func([], [IDL.Nat], []),
-    'getEntriesOfCanisterToContent' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(CanisterId, ContentId))],
-        ['query'],
-      ),
     'getPrincipalThis' : IDL.Func([], [IDL.Principal], ['query']),
     'getProfileInfo' : IDL.Func(
         [UserId],
@@ -103,7 +68,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(StatusResponse)],
         ['query'],
       ),
-    'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
     'transferCyclesToThisCanister' : IDL.Func([], [], []),
     'transferFreezingThresholdCycles' : IDL.Func([], [], []),
   });

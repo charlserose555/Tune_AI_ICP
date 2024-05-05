@@ -5,14 +5,8 @@ type definite_canister_settings =
    freezing_threshold: nat;
    memory_allocation: nat;
  };
-type UserId__1 = principal;
 type UserId = principal;
 type Timestamp = int;
-type Thumbnail = 
- record {
-   file: blob;
-   fileType: text;
- };
 type StatusResponse = 
  record {
    cycles: opt nat;
@@ -33,19 +27,6 @@ type PrincipalInfo =
    createdAt: Timestamp;
    userPrincipal: principal;
  };
-type ContentInit = 
- record {
-   chunkCount: nat;
-   createdAt: Timestamp;
-   duration: nat;
-   fileType: text;
-   size: nat;
-   thumbnail: Thumbnail;
-   title: text;
-   userCanisterId: principal;
-   userId: UserId__1;
- };
-type ContentId = text;
 type CanisterStatus = 
  record {
    cycles: nat;
@@ -58,33 +39,19 @@ type CanisterStatus =
              stopping;
            };
  };
-type CanisterId = principal;
 type ArtistBucket = 
  service {
    changeCanisterSize: (nat) -> () oneway;
    changeCycleAmount: (nat) -> () oneway;
    checkCyclesBalance: () -> ();
-   createContent: (ContentInit) -> (opt record {
-                                          ContentId;
-                                          principal;
-                                        });
    createProfileInfo: (opt ArtistAccountData) -> (bool);
    deleteAccount: (principal) -> ();
-   deleteContentCanister: (UserId, principal) -> (bool);
    editProfileInfo: (ArtistAccountData) -> (bool);
-   getAllContentCanisters: () -> (vec CanisterId) query;
-   getCanisterOfContent: (ContentId) -> (opt CanisterId) query;
    getCanisterStatus: () -> (CanisterStatus);
    getCurrentCyclesBalance: () -> (nat);
-   getEntriesOfCanisterToContent: () ->
-    (vec record {
-           CanisterId;
-           ContentId;
-         }) query;
    getPrincipalThis: () -> (principal) query;
    getProfileInfo: (UserId) -> (opt ArtistAccountData) query;
    getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
-   removeContent: (ContentId, nat) -> ();
    transferCyclesToThisCanister: () -> ();
    transferFreezingThresholdCycles: () -> ();
  };

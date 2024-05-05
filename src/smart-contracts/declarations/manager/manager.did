@@ -7,11 +7,7 @@ type definite_canister_settings =
  };
 type UserId = principal;
 type Timestamp = int;
-type PrincipalInfo = 
- record {
-   createdAt: Timestamp;
-   userPrincipal: principal;
- };
+type ProfilePhoto = blob;
 type CanisterStatus = 
  record {
    cycles: nat;
@@ -24,24 +20,29 @@ type CanisterStatus =
              stopping;
            };
  };
-type CanisterId = principal;
+type ArtistAccountData = 
+ record {
+   avatar: opt ProfilePhoto;
+   createdAt: Timestamp;
+   displayName: text;
+   fileType: opt text;
+   updatedAt: Timestamp;
+   userName: text;
+   userPrincipal: principal;
+ };
 service : {
-  createAccountCanister: (PrincipalInfo) -> (opt principal);
   cyclesBalance: () -> (nat) query;
-  deleteAccountCanister: (UserId, principal) -> (bool);
+  editProfileInfo: (ArtistAccountData) -> (bool);
   getArtistList: () -> (vec record {
                               UserId;
-                              CanisterId;
+                              ArtistAccountData;
                             }) query;
   getCanisterStatus: () -> (CanisterStatus);
   getCanisterWtihAvailableMemory: (principal) -> (opt nat);
-  getCanisterbyIdentity: (principal) -> (opt principal) query;
-  getOwnershipOfCanister: (principal) -> (opt UserId) query;
+  getProfileInfo: (UserId) -> (opt ArtistAccountData) query;
   getTotalAccounts: () -> (nat) query;
   installCode: (principal, blob, blob) -> ();
-  transferCyclesToAccountCanister: (principal, nat) -> ();
   transferCyclesToCanister: (principal, nat) -> ();
-  transferOwnershipAccountCanister: (principal, principal) -> ();
   updateCanisterSize: (nat) -> () oneway;
   updateCycleAmount: (nat) -> () oneway;
 }

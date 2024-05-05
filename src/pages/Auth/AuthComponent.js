@@ -9,7 +9,7 @@ import { dispatch } from "../../store/index.js";
 import { ShowModal } from "../../store/reducers/menu.js";
 import { Login } from "../../store/reducers/auth.js";
 import { APIContext } from "../../context/ApiContext.jsx";
-import { convertToDataURL } from '../../utils/format.js';
+import { convertToDataURL, isAdmin } from '../../utils/format.js';
 
 function AuthComponent({width, height}) {
 
@@ -47,25 +47,21 @@ function AuthComponent({width, height}) {
 
             alert("success", "The login successful!");
     
-            let accountCanisterId = await login();
-
-            console.log("accountCanisterId", accountCanisterId.toText());
-
             console.log("principal", identity.getPrincipal().toText());
 
-            let profileInfo = await getProfileInfo(accountCanisterId);
+            let profileInfo = await getProfileInfo();
             
             console.log(profileInfo[0]);
 
             if(!profileInfo[0]) {
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
-                    canisterId: accountCanisterId.toText(),
                     displaynmae: "",
                     username: "",
                     avatar: "",
                     fileType: "",
                     isInitialized: false,
+                    role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
                     createdAt : Number(Date.now() * 1000)
                 }
                     
@@ -87,7 +83,7 @@ function AuthComponent({width, height}) {
 
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
-                    canisterId: accountCanisterId.toText(),
+                    role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
                     displayname: profileInfo[0].displayName,
                     username: profileInfo[0].userName,
                     avatar: avatarUrl,

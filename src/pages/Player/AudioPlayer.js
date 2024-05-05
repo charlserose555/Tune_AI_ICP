@@ -11,11 +11,12 @@ import { Principal } from "@dfinity/principal";
 import ProgressBar from "./ProgressBar";
 import { useDispatch } from "../../store";
 import { hideAudioPlay } from "../../store/reducers/player";
+import { UpdateSongList } from "../../store/reducers/auth";
 
 export default function AudioPlayer() {
     const player = useSelector((state) => state.player);
     const { play, tracks, currentIndex } = player;
-    const { getProfileInfo } = useContext(APIContext);
+    const { getProfileInfo, increasePlayCount } = useContext(APIContext);
 
     const [timeProgress, setTimeProgress] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -62,24 +63,32 @@ export default function AudioPlayer() {
   
         const thumbnailUrl = await convertToDataURL(blob);
         
-        let artistInfo = await getProfileInfo(tracks[currentIndex][1].userCanisterId, tracks[currentIndex][1].userId);
-        
-        // const trackInfo = {
-        //     src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + "&contentId=" + tracks[currentIndex][1].contentId,
-        //     thumbnailUrl : thumbnailUrl,
-        //     title : tracks[currentIndex][1].title,
-        //     artistName : artistInfo[0].displayName,
-        //     duration : tracks[currentIndex][1].duration  
-        // }
+        let artistInfo = await getProfileInfo(tracks[currentIndex][1].userId);
 
-        const trackInfo = {
-            src : "https://" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + ".c/?contentId=" + tracks[currentIndex][1].contentId,
-            thumbnailUrl : thumbnailUrl,
-            title : tracks[currentIndex][1].title,
-            artistName : artistInfo[0].displayName,
-            duration : tracks[currentIndex][1].duration  
+        increasePlayCount(tracks[currentIndex][1].contentId).then(result => {
+            dispatch(UpdateSongList());
+        })
+
+        let trackInfo;
+
+        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+            trackInfo = {
+                src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + "&contentId=" + tracks[currentIndex][1].contentId,
+                thumbnailUrl : thumbnailUrl,
+                title : tracks[currentIndex][1].title,
+                artistName : artistInfo[0].displayName,
+                duration : tracks[currentIndex][1].duration  
+            }            
+        } else {
+            trackInfo = {
+                src : "https://" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + ".raw.icp0.io/?&contentId=" + tracks[currentIndex][1].contentId,
+                thumbnailUrl : thumbnailUrl,
+                title : tracks[currentIndex][1].title,
+                artistName : artistInfo[0].displayName,
+                duration : tracks[currentIndex][1].duration  
+            }
         }
-        
+
         console.log("track", trackInfo);
         setCurrentTrack(trackInfo);
 
@@ -98,6 +107,7 @@ export default function AudioPlayer() {
     }
 
     const handleNext = () => {
+        setIsLoaded(false)
         if (trackIndex >= tracks.length - 1) {
           setTrackIndex(0);
           setCurrentTrackInfo(tracks, 0);
@@ -108,6 +118,7 @@ export default function AudioPlayer() {
     };
 
     const handlePrevious = () => {
+        setIsLoaded(false)
         if (trackIndex === 0) {
           let lastTrackIndex = tracks.length - 1;
           setTrackIndex(lastTrackIndex);

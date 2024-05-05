@@ -9,7 +9,7 @@ import loading from '../../utils/Loading';
 import { APIContext } from '../../context/ApiContext';
 import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
 import { Principal } from '@dfinity/principal';
-import { UploadSong } from "../../store/reducers/auth";
+import { UpdateSongList } from "../../store/reducers/auth";
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min.js';
 import { Logout } from '../../store/reducers/auth';
 
@@ -70,7 +70,6 @@ function UploadSongModal() {
     
                 let songFileInfo = {
                     userId: Principal.from(user.principal),
-                    userCanisterId: Principal.from(user.canisterId),
                     title: title,
                     createdAt : Number(Date.now() * 1000),      
                     chunkCount: Number(Math.ceil(audioInfo.size / MAX_CHUNK_SIZE)),
@@ -112,7 +111,7 @@ function UploadSongModal() {
                     console.log(putResult);
                     loading(false);
 
-                    dispatch(UploadSong());
+                    dispatch(UpdateSongList());
 
                     dispatch(ShowModal(""))
                     alert('success', "Success on uploading song");

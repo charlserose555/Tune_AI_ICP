@@ -29,7 +29,6 @@ type ContentInit =
    size: nat;
    thumbnail: Thumbnail;
    title: text;
-   userCanisterId: principal;
    userId: UserId;
  };
 type ContentId = text;
@@ -46,7 +45,6 @@ type ContentData =
    thumbnail: Thumbnail;
    title: text;
    uploadedAt: Timestamp;
-   userCanisterId: principal;
    userId: UserId;
  };
 type CanisterId = principal;
@@ -79,6 +77,7 @@ service : {
         }) query;
   getStatus: (opt StatusRequest) -> (opt StatusResponse) query;
   increasePlayCount: (ContentId) -> () oneway;
+  installCode: (principal, blob, blob) -> ();
   registerContentInfo: (ContentData) -> (opt ContentId);
   removeContent: (ContentId, nat) -> ();
   transferCyclesToThisCanister: () -> ();

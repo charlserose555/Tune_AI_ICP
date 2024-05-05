@@ -14,7 +14,6 @@ export interface ContentData {
   'contentCanisterId' : Principal,
   'fileType' : string,
   'playCount' : bigint,
-  'userCanisterId' : Principal,
   'chunkCount' : bigint,
   'uploadedAt' : Timestamp,
 }
@@ -27,7 +26,6 @@ export interface ContentInit {
   'createdAt' : Timestamp,
   'size' : bigint,
   'fileType' : string,
-  'userCanisterId' : Principal,
   'chunkCount' : bigint,
 }
 export interface StatusRequest {
@@ -70,6 +68,10 @@ export interface _SERVICE {
   >,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
   'increasePlayCount' : ActorMethod<[ContentId], undefined>,
+  'installCode' : ActorMethod<
+    [Principal, Uint8Array | number[], Uint8Array | number[]],
+    undefined
+  >,
   'registerContentInfo' : ActorMethod<[ContentData], [] | [ContentId]>,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferCyclesToThisCanister' : ActorMethod<[], undefined>,

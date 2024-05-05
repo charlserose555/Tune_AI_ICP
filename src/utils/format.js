@@ -100,45 +100,51 @@ export const getReverseFileExtension = (type)=> {
     }
   };
   
- export const getFileExtension = (type) => {
-    switch(type) {
-      case 'image/jpeg':
-        return { 'jpeg' : null };
-      case 'image/gif':
-        return { 'gif' : null };
-      case 'image/jpg':
-        return { 'jpg' : null };
-      case 'image/png':
-        return { 'png' : null };          
-      case 'image/svg':
-        return { 'svg' : null };          
-      case 'video/avi':
-        return { 'avi' : null };                            
-      case 'video/aac':
-        return { 'aac' : null };
-      case 'video/mp4':
-        return { 'mp4' : null };        
-      case 'audio/wav':
-        return { 'wav' : null };                         
-      case 'audio/mp3':
-        return { 'mp3' : null };
-      default :
-      return null;
-    }
+export const getFileExtension = (type) => {
+  switch(type) {
+    case 'image/jpeg':
+      return { 'jpeg' : null };
+    case 'image/gif':
+      return { 'gif' : null };
+    case 'image/jpg':
+      return { 'jpg' : null };
+    case 'image/png':
+      return { 'png' : null };          
+    case 'image/svg':
+      return { 'svg' : null };          
+    case 'video/avi':
+      return { 'avi' : null };                            
+    case 'video/aac':
+      return { 'aac' : null };
+    case 'video/mp4':
+      return { 'mp4' : null };        
+    case 'audio/wav':
+      return { 'wav' : null };                         
+    case 'audio/mp3':
+      return { 'mp3' : null };
+    default :
+    return null;
+  }
+};
+
+export const formatDate = (timestamp) => {
+  const dateObject = new Date(timestamp);
+
+  const options = {
+    year: 'numeric',   // e.g., "2020"
+    month: 'long',     // "January" through "December"
+    day: 'numeric',    // 1, 2, 3, ..., 31
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
   };
 
-  export const formatDate = (timestamp) => {
-    const dateObject = new Date(timestamp);
+  const formattedDateTime = dateObject.toLocaleString('en-US', options);
+  return formattedDateTime;
+}
 
-    const options = {
-      year: 'numeric',   // e.g., "2020"
-      month: 'long',     // "January" through "December"
-      day: 'numeric',    // 1, 2, 3, ..., 31
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    };
+export const isAdmin = (principal) => {
+  const manager = ['efgt6-hgbiw-3ufoz-quje7-knvpa-fd7h5-pitrf-5fzqj-oclaa-mzpiz-nqe', ''];
 
-    const formattedDateTime = dateObject.toLocaleString('en-US', options);
-    return formattedDateTime;
-  }
+  return manager.includes(principal);
+}
