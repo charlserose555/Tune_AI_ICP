@@ -235,11 +235,19 @@ function LibraryIcon() {
     </svg>);
 }
 
+function ManageIcon() {
+  return (
+    <svg className="svg-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 8C16 5.8125 14.1875 4 12 4C9.78125 4 8 5.8125 8 8H5V17.5C5 18.9062 6.09375 20 7.5 20H16.5C17.875 20 19 18.9062 19 17.5V8H16ZM12 5.5C13.375 5.5 14.5 6.625 14.5 8H9.5C9.5 6.625 10.5938 5.5 12 5.5ZM17.5 17.5C17.5 18.0625 17.0312 18.5 16.5 18.5H7.5C6.9375 18.5 6.5 18.0625 6.5 17.5V9.5H8V10.75C8 11.1875 8.3125 11.5 8.75 11.5C9.15625 11.5 9.5 11.1875 9.5 10.75V9.5H14.5V10.75C14.5 11.1875 14.8125 11.5 15.25 11.5C15.6562 11.5 16 11.1875 16 10.75V9.5H17.5V17.5Z" fill="#A4A4A4"/>
+  </svg>);
+}
+
 export {
   HomeIcon,
   GenresIcon,
   FavouriteIcon,
   LibraryIcon,
+  ManageIcon,
   StarIcon,
   FullStarIcon,
   NotificationIcon,

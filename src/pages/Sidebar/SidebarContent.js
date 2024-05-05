@@ -10,12 +10,8 @@ function SidebarContent() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { isLoggedIn, balance, token, user } = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
   const [isWalletMenuOpen, setIsWalletMenuOpen] = useState(false);
-
-  function handleWalletClick() {
-    setIsWalletMenuOpen(!isWalletMenuOpen);
-  }
 
   return (
     <div className="text-gray-500 dark:text-gray-400 font-normal font-plus text-16 h-full" style={{padding: "20px 10px"}}>
@@ -28,19 +24,20 @@ function SidebarContent() {
           <ul className="w-full gap-45 flex flex-col" key={isLoggedIn}>
             {routes.map((route) =>
               (route.icon? 
-              ((route.name != "My Library" || isLoggedIn) && <li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
-                <NavLink
-                  exact
-                  to={`/app${route.path}`}
+              ((!route.auth || isLoggedIn) && (route.role == "user" || (route.role == "admin" && user.role == "admin")) && 
+              <li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
+              <NavLink
+                exact
+                to={`/app${route.path}`}
                   className="parent-navlink inline-flex gap-45 rounded-2 py-45 px-4 items-center w-full"
                   activeClassName="parent-navlink-active bg-primary-700">
-                  <Route path={`/app${route.path}`} exact={route.exact}>
-                  </Route>
+                  <Route path={`/app${route.path}`} exact={route.exact}/>
                     <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
                     {route.name == "Home" && <Icon.HomeIcon/>}
                     {route.name == "Genres" && <Icon.GenresIcon/>}
                     {route.name == "My Library" && <Icon.LibraryIcon/>}
-                  <span className="leading-20">{route.name}</span>
+                    {route.name == "Manage" && <Icon.ManageIcon/>}
+                    <span className="leading-20">{route.name}</span>
                 </NavLink>
               </li>) : ("")))}
           </ul>

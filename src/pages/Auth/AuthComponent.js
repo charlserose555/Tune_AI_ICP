@@ -9,7 +9,7 @@ import { dispatch } from "../../store/index.js";
 import { ShowModal } from "../../store/reducers/menu.js";
 import { Login } from "../../store/reducers/auth.js";
 import { APIContext } from "../../context/ApiContext.jsx";
-import { convertToDataURL } from '../../utils/format.js';
+import { convertToDataURL, isAdmin } from '../../utils/format.js';
 
 function AuthComponent({width, height}) {
 
@@ -66,6 +66,7 @@ function AuthComponent({width, height}) {
                     avatar: "",
                     fileType: "",
                     isInitialized: false,
+                    role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
                     createdAt : Number(Date.now() * 1000)
                 }
                     
@@ -87,6 +88,7 @@ function AuthComponent({width, height}) {
 
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
+                    role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
                     canisterId: accountCanisterId.toText(),
                     displayname: profileInfo[0].displayName,
                     username: profileInfo[0].userName,

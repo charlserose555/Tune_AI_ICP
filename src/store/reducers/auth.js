@@ -16,6 +16,7 @@ const initialUser = {
     canisterId: '',
     displayname: '',
     username: '',
+    role : '',
     avatar: '',
     fileType: '',
     createdAt: 0,

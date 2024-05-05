@@ -152,6 +152,22 @@ export const APIProvider = ({ children }) => {
         return result;
     }
 
+    // const upgradeContentCanister = async (contentInfo) => {
+    //     let {agent} = await initAgent();
+        
+    //     if (agent == null) 
+    //         return null;
+
+    //     let contentManagerActor = Actor.createActor(ContentManagerIDL, {
+    //         agent,
+    //         canisterId: process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID
+    //     });
+
+    //     let result = await contentManagerActor.createContent(contentInfo);
+
+    //     return result;
+    // }
+
     // const processAndUploadChunk = async (
     //     blob,
     //     byteStart,
