@@ -1,27 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import * as Icon from "../../icons";
+import { APIContext } from "../../context/ApiContext";
+import audioPlay from "../../utils/AudioPlay";
+import PopularTrackItem from "./PopularTrackItem";
+import { dispatch, useSelector } from "../../store";
 
 function PopularTracks() {
-    const [favouriteList, setFavouriteList] = useState([]); 
+    const [ songList, setSongList] = useState([]); 
+    const { getSongListAPI } = useContext(APIContext);
+    const { songListUpdated } = useSelector((state) => state.auth);
 
-    function changeFavourite(index) {
-      let items = [...favouriteList];
+    const getSongList = async () => {
+      let result = await getSongListAPI();
+      if(result != null && result.length > 0) {
+        result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
   
-      items[index] = {...items[index], "isFavourite" : !items[index]?.isFavourite};
-  
-  
-      setFavouriteList(items);
-    } 
-  
+        setSongList(result)
+      }
+    }
+
     useEffect(() => {
-      let list = [{"index" : 0, "isFavourite" : false},
-                  {"index" : 1, "isFavourite" : false},
-                  {"index" : 2, "isFavourite" : false},
-                  {"index" : 3, "isFavourite" : false},
-                  {"index" : 4, "isFavourite" : false}]
-  
-      setFavouriteList(list)
-    }, [])
+      getSongList();
+    }, [songListUpdated])
+
+    const play = (index) => {
+      audioPlay(songList, index);
+    }
 
     return (<>
     <div className="flex flex-row justify-start items-end">
@@ -34,14 +38,16 @@ function PopularTracks() {
           <table className="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-800 min-w-[610px]">
             <thead className="border-b dark:border-gray-700 text-sm text-gray-700 bg-transparent dark:bg-primary" style={{color: "white"}}>
               <tr>
-                  <th scope="col" className="px-4 pb-5 text-center">
+                  <th scope="col" className="px-4 pb-5 text-center relative">
+                    <p className="top-1 right-4 absolute">
                       # 
+                    </p>
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
-                      Title
+                      thumbnail
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center"> 
-                      Genres
+                      title
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row">
@@ -55,30 +61,12 @@ function PopularTracks() {
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">                    
                   </th>
-                  <th scope="col" className="px-4 pb-5 text-center">                    
-                  </th>
               </tr>
           </thead>
           <tbody>
-              {favouriteList.map((item, index) => { 
+              {songList.map((item, index) => { 
                 return ((
-                <tr style={{color: "white"}} className="group font-normal border-b bg-transparent border-gray-700 cursor-pointer group hover:bg-primary-800 transition-all duration-200 ease-in-out dark" key={index}>
-                  <td className="text-center relative flex justify-center w-full items-center">
-                    <img className="opacity-0 group-hover:opacity-100 absolute top-3 right-0" style={{width: "43px", height:"34px"}} src="/demo/assets/list_player.svg"/>
-                    <span className="opacity:100 group-hover:opacity-0 absolute top-5 right-4">1</span>
-                  </td>
-                  <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle">
-                    <div className="flex justify-center w-full items-center flex-row">
-                      <img className="rounded-2" src="/demo/assets/avatar_list.png"/>
-                      <p className="pl-2">Lorem ipsum dolor sit amet</p>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-center group-hover:text-darkblue-500">Lorem ipsum dolor sit amet</td>
-                  <td className="px-4 py-3 text-center group-hover:text-darkblue-500">100k</td>
-                  <td className="px-4 py-3 text-center group-hover:text-darkblue-500">3:03</td>
-                  <td className="px-4 py-3 text-center" onClick={() => changeFavourite(index)}> {item?.isFavourite? (<Icon.FullStarIcon/>) : (<Icon.StarIcon/>)} </td>
-                  <td className="px-4 py-3 text-center"><Icon.OptionIcon/></td>
-                </tr>
+                  <PopularTrackItem songItem={item} getSongList = {getSongList} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>

@@ -13,7 +13,6 @@ export const idlFactory = ({ IDL }) => {
     'createdAt' : Timestamp,
     'size' : IDL.Nat,
     'fileType' : IDL.Text,
-    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
   });
   const ContentId = IDL.Text;
@@ -29,7 +28,6 @@ export const idlFactory = ({ IDL }) => {
     'contentCanisterId' : IDL.Principal,
     'fileType' : IDL.Text,
     'playCount' : IDL.Nat,
-    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
     'uploadedAt' : Timestamp,
   });
@@ -85,6 +83,11 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'increasePlayCount' : IDL.Func([ContentId], [], ['oneway']),
+    'installCode' : IDL.Func(
+        [IDL.Principal, IDL.Vec(IDL.Nat8), IDL.Vec(IDL.Nat8)],
+        [],
+        [],
+      ),
     'registerContentInfo' : IDL.Func([ContentData], [IDL.Opt(ContentId)], []),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
     'transferCyclesToThisCanister' : IDL.Func([], [], []),

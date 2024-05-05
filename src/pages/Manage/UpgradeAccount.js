@@ -6,7 +6,6 @@ import audioPlay from "../../utils/AudioPlay";
 function UpgradeAccount() {
     const [ mySongList, setMySongList] = useState([]); 
     const { getSongListByIdentity } = useContext(APIContext);
-    const {songUploaded} = useSelector((state) => state.auth);
 
     const getMySongList = async () => {
       let result = await getSongListByIdentity();
@@ -19,7 +18,7 @@ function UpgradeAccount() {
 
     useEffect(() => {
       getMySongList();
-    }, [songUploaded])
+    })
 
     const play = (index) => {
       audioPlay(mySongList, index);

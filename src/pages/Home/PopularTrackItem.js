@@ -7,7 +7,7 @@ import audioPlay from "../../utils/AudioPlay";
 import { useDispatch } from "../../store";
 import { hideAudioPlay } from "../../store/reducers/player";
 
-function TrackItem({songItem, getMySongList, index, play}) {
+function PopularTrackItem({songItem, getSongList, index, play}) {
     const [ contentId, setContentId] = useState(''); 
     const [ title, setTitle] = useState(''); 
     const [ duration, setDuration] = useState(0); 
@@ -72,10 +72,9 @@ function TrackItem({songItem, getMySongList, index, play}) {
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(duration))}</td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{createdAt}</td>
         <td className="px-4 py-3 text-center"><Icon.OptionIcon/></td>
       </tr>
     </>)
 }
 
-export default TrackItem;
+export default PopularTrackItem;

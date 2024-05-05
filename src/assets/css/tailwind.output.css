@@ -811,6 +811,10 @@ select {
   top: 0.75rem;
 }
 
+.top-4 {
+  top: 1rem;
+}
+
 .top-5 {
   top: 1.25rem;
 }
@@ -1245,10 +1249,6 @@ select {
 
 .min-w-\[385px\] {
   min-width: 385px;
-}
-
-.min-w-\[50px\] {
-  min-width: 50px;
 }
 
 .min-w-\[610px\] {

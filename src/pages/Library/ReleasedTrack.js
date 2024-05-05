@@ -7,7 +7,7 @@ import audioPlay from "../../utils/AudioPlay";
 function ReleasedTrack() {
     const [ mySongList, setMySongList] = useState([]); 
     const { getSongListByIdentity } = useContext(APIContext);
-    const {songUploaded} = useSelector((state) => state.auth);
+    const { songListUpdated } = useSelector((state) => state.auth);
 
     const getMySongList = async () => {
       let result = await getSongListByIdentity();
@@ -20,7 +20,7 @@ function ReleasedTrack() {
 
     useEffect(() => {
       getMySongList();
-    }, [songUploaded])
+    }, [songListUpdated])
 
     const play = (index) => {
       audioPlay(mySongList, index);
@@ -33,8 +33,10 @@ function ReleasedTrack() {
           <table className="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-800 min-w-[610px]">
             <thead className="border-b dark:border-gray-700 text-sm text-gray-700 bg-transparent dark:bg-primary" style={{color: "white"}}>
               <tr>
-                  <th scope="col" className="px-4 pb-5 text-center min-w-[50px]">
+                  <th scope="col" className="px-4 pb-5 text-center relative">
+                    <p className="top-1 right-4 absolute">
                       # 
+                    </p>
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
                       Thumbnail

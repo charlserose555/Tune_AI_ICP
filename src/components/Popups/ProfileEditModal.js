@@ -11,6 +11,7 @@ import loading from "../../utils/Loading.js";
 import { UpdateInfo } from '../../store/reducers/auth.js';
 
 import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
+import { isIdentifier } from 'typescript';
 
 function ProfileEditModal() {
     const dispatch = useDispatch();
@@ -19,7 +20,6 @@ function ProfileEditModal() {
     const [avatar, setAvatar] = useState("");
     const [fileType, setFileType] = useState("");
     const [createdAt, setCreatedAt] = useState("");
-    const [accountCanisterId, setAccountCanisterId] = useState("");
     const {user} = useSelector((state) => (state.auth));
     const { editProfile } = useContext(APIContext);
 
@@ -56,7 +56,6 @@ function ProfileEditModal() {
                     displayName: displayname,
                     userName: username,
                     createdAt: createdAt,
-                    accountCanisterId : accountCanisterId,
                     updatedAt: Number(Date.now() * 1000),
                     userPrincipal: Principal.fromText(user.principal),          
                     avatar: [encodeArrayBuffer(bsf)],
@@ -73,7 +72,8 @@ function ProfileEditModal() {
                     displayname: displayname,
                     username: username,
                     avatar: avatar,
-                    fileType: fileType
+                    fileType: fileType,
+                    isInitialized: true
                 }
 
                 console.log("userInfo", userInfo);
@@ -101,7 +101,6 @@ function ProfileEditModal() {
         setAvatar(user.avatar);
         setFileType(user.fileType);
         setCreatedAt(user.createdAt);
-        setAccountCanisterId(user.canisterId);
     }, [user])
     
     return (

@@ -23,13 +23,11 @@ export const APIProvider = ({ children }) => {
     const {user, isLoggedIn} = useSelector((store) => store.auth);
     const history = useHistory();
     const dispatch = useDispatch();
-    const [accountCanisterId, setAccountCanisterId] = useState(''); 
     const [principal, setPrincipal] = useState(''); 
     // const [isSessionExpired, setIsSessionExpired] = useState(false);
 
     useEffect(() => {
         console.log("userCaniserID", user.canisterId)
-        setAccountCanisterId(user.canisterId);
         setPrincipal(user.principal);
     }, [user.principal])
 
@@ -48,7 +46,8 @@ export const APIProvider = ({ children }) => {
         if(authClient.isAuthenticated) {
             identity = authClient.getIdentity();
     
-            agent = new HttpAgent({ identity, host : process.env.REACT_APP_PUBLIC_HOST});  
+            agent = new HttpAgent({ identity, 
+                host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});  
     
             if(process.env.REACT_APP_DFX_NETWORK != "ic") {
                 await agent.fetchRootKey();
@@ -84,7 +83,7 @@ export const APIProvider = ({ children }) => {
 
         let managerActor = Actor.createActor(ManagerIDL, {
             agent,
-            canisterId: process.env.REACT_APP_MANAGER_CANISTER_ID
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
         });
         
         let bucket = await managerActor.createAccountCanister(accountData);        
@@ -94,7 +93,7 @@ export const APIProvider = ({ children }) => {
         return bucket[0];
     };
 
-    const getProfileInfo = async (accountCanisterId, userPrincipal = null) => {
+    const getProfileInfo = async (userPrincipal = null) => {
         let {agent, identity} = await initAgent(true);
         
         if (agent == null) 
@@ -106,7 +105,7 @@ export const APIProvider = ({ children }) => {
 
         let accountActor = Actor.createActor(AccountIDL, {
             agent,
-            canisterId: accountCanisterId.toText()
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
         });
 
         let profileInfo = await accountActor.getProfileInfo(userPrincipal ? userPrincipal : identity.getPrincipal());
@@ -120,15 +119,11 @@ export const APIProvider = ({ children }) => {
         if (agent == null) 
             return null;
         
-        console.log("user.canisterId", accountCanisterId);
-
         let accountActor = Actor.createActor(AccountIDL, {
             agent,
-            canisterId: accountCanisterId
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
         });
         
-        profileInfo.accountCanisterId = accountCanisterId;
-
         console.log("profileInfo", profileInfo)
 
         let result = await accountActor.editProfileInfo(profileInfo);
@@ -144,7 +139,7 @@ export const APIProvider = ({ children }) => {
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
             agent,
-            canisterId: process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
         });
 
         let result = await contentManagerActor.createContent(contentInfo);
@@ -273,7 +268,7 @@ export const APIProvider = ({ children }) => {
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
             agent,
-            canisterId: process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
         });
 
         let result = await contentManagerActor.getAllContentInfoByUserId(Principal.fromText(user.principal));
@@ -281,15 +276,50 @@ export const APIProvider = ({ children }) => {
         return result;
     }
 
-    const increasePlayCount = async (contentId) => {
-        let {agent, isSessionExpired} = await initAgent();
+    const getSongListAPI = async () => {
+
+        const authClient = await AuthClient.create();        
         
+        const identity = authClient.getIdentity();
+        
+        const agent = new HttpAgent({ identity, 
+            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
+
+        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+            await agent.fetchRootKey();
+        }
+
+        console.log("identity", identity.getPrincipal().toText())
+
         if (agent == null) 
             return null;
 
         let contentManagerActor = Actor.createActor(ContentManagerIDL, {
             agent,
-            canisterId: process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+        });
+
+        let result = await contentManagerActor.getAllContentInfo();
+
+        return result;           
+
+    }
+
+    const increasePlayCount = async (contentId) => {
+        const authClient = await AuthClient.create();        
+        
+        const identity = authClient.getIdentity();
+        
+        const agent = new HttpAgent({ identity, 
+            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
+            
+        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+            await agent.fetchRootKey();
+        }
+        
+        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
+            agent,
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
         });
 
         let result = await contentManagerActor.increasePlayCount(contentId);
@@ -315,6 +345,7 @@ export const APIProvider = ({ children }) => {
                 editProfile,
                 createContentInfo,
                 getSongListByIdentity,
+                getSongListAPI,
                 processAndUploadChunk,
                 increasePlayCount
             }}

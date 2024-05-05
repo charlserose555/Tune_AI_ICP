@@ -47,20 +47,15 @@ function AuthComponent({width, height}) {
 
             alert("success", "The login successful!");
     
-            let accountCanisterId = await login();
-
-            console.log("accountCanisterId", accountCanisterId.toText());
-
             console.log("principal", identity.getPrincipal().toText());
 
-            let profileInfo = await getProfileInfo(accountCanisterId);
+            let profileInfo = await getProfileInfo();
             
             console.log(profileInfo[0]);
 
             if(!profileInfo[0]) {
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
-                    canisterId: accountCanisterId.toText(),
                     displaynmae: "",
                     username: "",
                     avatar: "",
@@ -89,7 +84,6 @@ function AuthComponent({width, height}) {
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
                     role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
-                    canisterId: accountCanisterId.toText(),
                     displayname: profileInfo[0].displayName,
                     username: profileInfo[0].userName,
                     avatar: avatarUrl,

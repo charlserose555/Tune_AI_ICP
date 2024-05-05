@@ -10,10 +10,21 @@ import PlayPane from "./PlayPane";
 function Library() {
   const history = useHistory();
   const [activeTab, setActiveTab] = useState('');
+  const {user} = useSelector((state) => (state.auth));
 
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
   };
+
+  const uploadSong = () => {
+
+    if(!user.isInitialized) {
+      dispatch(ShowModal("editProfile"))
+      return;
+    }
+
+    dispatch(ShowModal("uploadSong"))
+  }
 
   const TabContent = ({ id, activeTab, children }) => (
     <div
@@ -42,7 +53,7 @@ function Library() {
                 <div className="flex flex-row w-full pr-2" style={{maxWidth:"240px"}}>
                   <input type="text" placeholder="Search.." className="bg-primary-700 opacity-100 py-2 pl-4 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent w-full" style={{height: '40px'}}></input>
                 </div>
-                <a className="cursor-pointer fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => dispatch(ShowModal("uploadSong"))} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
+                <a className="cursor-pointer fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => uploadSong()} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
                   <p>Upload</p>
                   <img className="" src="/demo/assets/arrow-add.svg"/>
                 </a>

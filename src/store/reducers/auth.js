@@ -13,7 +13,6 @@ const initialCurrency = {
 
 const initialUser = {
     principal: '',
-    canisterId: '',
     displayname: '',
     username: '',
     role : '',
@@ -35,7 +34,7 @@ const initialState = {
     principal: null,
     user: initialUser,
     identity: '',
-    songUploaded : 0,
+    songListUpdated : 0,
     currency: initialCurrency,
     adminAddress: '',
     nowpayMinAmount: 0,
@@ -112,12 +111,12 @@ const auth = createSlice({
             state.token = action.payload
         },
 
-        UploadSong(state, action) {
-            state.songUploaded = state.songUploaded + 1;
+        UpdateSongList(state, action) {
+            state.songListUpdated = state.songListUpdated + 1;
         }
     }
 });
 
 export default auth.reducer;
 
-export const { Login, Logout, SetIdentity, UploadSong, SetPrincipal, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;
+export const { Login, Logout, SetIdentity, UpdateSongList, SetPrincipal, UpdateInfo, UpdateBalances, SetBalances, UpdateBalance, SetCode, SetBetsId, UpdateToken, SetNowpayMinAmount } = auth.actions;

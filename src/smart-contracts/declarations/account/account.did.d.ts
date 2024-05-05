@@ -15,27 +15,17 @@ export interface ArtistBucket {
   'changeCanisterSize' : ActorMethod<[bigint], undefined>,
   'changeCycleAmount' : ActorMethod<[bigint], undefined>,
   'checkCyclesBalance' : ActorMethod<[], undefined>,
-  'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
   'createProfileInfo' : ActorMethod<[[] | [ArtistAccountData]], boolean>,
   'deleteAccount' : ActorMethod<[Principal], undefined>,
-  'deleteContentCanister' : ActorMethod<[UserId, Principal], boolean>,
   'editProfileInfo' : ActorMethod<[ArtistAccountData], boolean>,
-  'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,
-  'getCanisterOfContent' : ActorMethod<[ContentId], [] | [CanisterId]>,
   'getCanisterStatus' : ActorMethod<[], CanisterStatus>,
   'getCurrentCyclesBalance' : ActorMethod<[], bigint>,
-  'getEntriesOfCanisterToContent' : ActorMethod<
-    [],
-    Array<[CanisterId, ContentId]>
-  >,
   'getPrincipalThis' : ActorMethod<[], Principal>,
   'getProfileInfo' : ActorMethod<[UserId], [] | [ArtistAccountData]>,
   'getStatus' : ActorMethod<[[] | [StatusRequest]], [] | [StatusResponse]>,
-  'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferCyclesToThisCanister' : ActorMethod<[], undefined>,
   'transferFreezingThresholdCycles' : ActorMethod<[], undefined>,
 }
-export type CanisterId = Principal;
 export interface CanisterStatus {
   'status' : { 'stopped' : null } |
     { 'stopping' : null } |
@@ -44,18 +34,6 @@ export interface CanisterStatus {
   'cycles' : bigint,
   'settings' : definite_canister_settings,
   'module_hash' : [] | [Uint8Array | number[]],
-}
-export type ContentId = string;
-export interface ContentInit {
-  'title' : string,
-  'duration' : bigint,
-  'thumbnail' : Thumbnail,
-  'userId' : UserId__1,
-  'createdAt' : Timestamp,
-  'size' : bigint,
-  'fileType' : string,
-  'userCanisterId' : Principal,
-  'chunkCount' : bigint,
 }
 export interface PrincipalInfo {
   'createdAt' : Timestamp,
@@ -74,13 +52,8 @@ export interface StatusResponse {
   'cycles' : [] | [bigint],
   'heap_memory_size' : [] | [bigint],
 }
-export interface Thumbnail {
-  'file' : Uint8Array | number[],
-  'fileType' : string,
-}
 export type Timestamp = bigint;
 export type UserId = Principal;
-export type UserId__1 = Principal;
 export interface definite_canister_settings {
   'freezing_threshold' : bigint,
   'controllers' : [] | [Array<Principal>],

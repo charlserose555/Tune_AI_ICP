@@ -2,7 +2,15 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
-export type CanisterId = Principal;
+export interface ArtistAccountData {
+  'userName' : string,
+  'displayName' : string,
+  'createdAt' : Timestamp,
+  'fileType' : [] | [string],
+  'updatedAt' : Timestamp,
+  'userPrincipal' : Principal,
+  'avatar' : [] | [ProfilePhoto],
+}
 export interface CanisterStatus {
   'status' : { 'stopped' : null } |
     { 'stopping' : null } |
@@ -12,10 +20,7 @@ export interface CanisterStatus {
   'settings' : definite_canister_settings,
   'module_hash' : [] | [Uint8Array | number[]],
 }
-export interface PrincipalInfo {
-  'createdAt' : Timestamp,
-  'userPrincipal' : Principal,
-}
+export type ProfilePhoto = Uint8Array | number[];
 export type Timestamp = bigint;
 export type UserId = Principal;
 export interface definite_canister_settings {
@@ -25,28 +30,18 @@ export interface definite_canister_settings {
   'compute_allocation' : bigint,
 }
 export interface _SERVICE {
-  'createAccountCanister' : ActorMethod<[PrincipalInfo], [] | [Principal]>,
   'cyclesBalance' : ActorMethod<[], bigint>,
-  'deleteAccountCanister' : ActorMethod<[UserId, Principal], boolean>,
-  'getArtistList' : ActorMethod<[], Array<[UserId, CanisterId]>>,
+  'editProfileInfo' : ActorMethod<[ArtistAccountData], boolean>,
+  'getArtistList' : ActorMethod<[], Array<[UserId, ArtistAccountData]>>,
   'getCanisterStatus' : ActorMethod<[], CanisterStatus>,
   'getCanisterWtihAvailableMemory' : ActorMethod<[Principal], [] | [bigint]>,
-  'getCanisterbyIdentity' : ActorMethod<[Principal], [] | [Principal]>,
-  'getOwnershipOfCanister' : ActorMethod<[Principal], [] | [UserId]>,
+  'getProfileInfo' : ActorMethod<[UserId], [] | [ArtistAccountData]>,
   'getTotalAccounts' : ActorMethod<[], bigint>,
   'installCode' : ActorMethod<
     [Principal, Uint8Array | number[], Uint8Array | number[]],
     undefined
   >,
-  'transferCyclesToAccountCanister' : ActorMethod<
-    [Principal, bigint],
-    undefined
-  >,
   'transferCyclesToCanister' : ActorMethod<[Principal, bigint], undefined>,
-  'transferOwnershipAccountCanister' : ActorMethod<
-    [Principal, Principal],
-    undefined
-  >,
   'updateCanisterSize' : ActorMethod<[bigint], undefined>,
   'updateCycleAmount' : ActorMethod<[bigint], undefined>,
 }

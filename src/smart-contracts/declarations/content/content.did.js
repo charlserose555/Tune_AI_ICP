@@ -13,7 +13,6 @@ export const idlFactory = ({ IDL }) => {
     'createdAt' : Timestamp,
     'size' : IDL.Nat,
     'fileType' : IDL.Text,
-    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
   });
   const ContentId = IDL.Text;
@@ -28,7 +27,6 @@ export const idlFactory = ({ IDL }) => {
     'contentCanisterId' : IDL.Principal,
     'fileType' : IDL.Text,
     'playCount' : IDL.Nat,
-    'userCanisterId' : IDL.Principal,
     'chunkCount' : IDL.Nat,
     'uploadedAt' : Timestamp,
   });
@@ -61,6 +59,33 @@ export const idlFactory = ({ IDL }) => {
     'cycles' : IDL.Opt(IDL.Nat),
     'heap_memory_size' : IDL.Opt(IDL.Nat),
   });
+  const HttpRequest = IDL.Record({
+    'url' : IDL.Text,
+    'method' : IDL.Text,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+  });
+  const HttpResponse = IDL.Record({
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    'status_code' : IDL.Nat16,
+  });
+  const StreamingCallbackToken = IDL.Record({
+    'key' : IDL.Text,
+    'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
+    'index' : IDL.Nat,
+    'content_encoding' : IDL.Text,
+  });
+  const StreamingCallbackToken__1 = IDL.Record({
+    'key' : IDL.Text,
+    'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
+    'index' : IDL.Nat,
+    'content_encoding' : IDL.Text,
+  });
+  const StreamingCallbackResponse = IDL.Record({
+    'token' : IDL.Opt(StreamingCallbackToken__1),
+    'body' : IDL.Vec(IDL.Nat8),
+  });
   const ArtistContentBucket = IDL.Service({
     'changeCanisterSize' : IDL.Func([IDL.Nat], [], ['oneway']),
     'changeCycleAmount' : IDL.Func([IDL.Nat], [], ['oneway']),
@@ -89,12 +114,18 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(StatusResponse)],
         ['query'],
       ),
+    'http_request' : IDL.Func([HttpRequest], [HttpResponse], ['query']),
     'putContentChunk' : IDL.Func(
         [ContentId, IDL.Nat, IDL.Vec(IDL.Nat8)],
         [IDL.Nat],
         [],
       ),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
+    'streamingCallback' : IDL.Func(
+        [StreamingCallbackToken],
+        [StreamingCallbackResponse],
+        ['query'],
+      ),
     'transferCyclesToThisCanister' : IDL.Func([], [], []),
     'transferFreezingThresholdCycles' : IDL.Func([], [], []),
   });
