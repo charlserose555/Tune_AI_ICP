@@ -14,6 +14,7 @@ export const idlFactory = ({ IDL }) => {
     'size' : IDL.Nat,
     'fileType' : IDL.Text,
     'chunkCount' : IDL.Nat,
+    'isReleased' : IDL.Bool,
   });
   const ContentId = IDL.Text;
   const CanisterId = IDL.Principal;
@@ -29,6 +30,7 @@ export const idlFactory = ({ IDL }) => {
     'fileType' : IDL.Text,
     'playCount' : IDL.Nat,
     'chunkCount' : IDL.Nat,
+    'isReleased' : IDL.Bool,
     'uploadedAt' : Timestamp,
   });
   const UserId__1 = IDL.Principal;
@@ -54,10 +56,11 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'cyclesBalance' : IDL.Func([], [IDL.Nat], ['query']),
+    'deleteContentById' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'deleteContentCanister' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllContentCanisters' : IDL.Func([], [IDL.Vec(CanisterId)], ['query']),
     'getAllContentInfo' : IDL.Func(
-        [],
+        [IDL.Bool],
         [IDL.Vec(IDL.Tuple(ContentId, ContentData))],
         ['query'],
       ),
@@ -89,6 +92,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'registerContentInfo' : IDL.Func([ContentData], [IDL.Opt(ContentId)], []),
+    'releaseTrack' : IDL.Func([ContentId, IDL.Bool], [], ['oneway']),
     'removeContent' : IDL.Func([ContentId, IDL.Nat], [], []),
     'transferCyclesToThisCanister' : IDL.Func([], [], []),
   });

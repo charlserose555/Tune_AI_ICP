@@ -7,11 +7,11 @@ import { dispatch, useSelector } from "../../store";
 
 function PopularTracks() {
     const [ songList, setSongList] = useState([]); 
-    const { getSongListAPI } = useContext(APIContext);
+    const { getAllReleasedTracks } = useContext(APIContext);
     const { songListUpdated } = useSelector((state) => state.auth);
 
     const getSongList = async () => {
-      let result = await getSongListAPI();
+      let result = await getAllReleasedTracks();
       if(result != null && result.length > 0) {
         result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
   
@@ -29,7 +29,7 @@ function PopularTracks() {
 
     return (<>
     <div className="flex flex-row justify-start items-end">
-        <p className="text-24 font-normal leading-30 font-plus">Popular Tracks</p>
+        <p className="text-24 font-normal leading-30 font-plus">New Releases</p>
         <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
     </div>
     <div className="flex flex-row justify-start items-end pt-[20px] mb-[120px]">
@@ -44,10 +44,10 @@ function PopularTracks() {
                     </p>
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
-                      thumbnail
+                      Thumbnail
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center"> 
-                      title
+                      Title
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row">

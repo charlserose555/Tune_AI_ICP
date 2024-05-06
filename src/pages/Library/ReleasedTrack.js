@@ -57,14 +57,15 @@ function ReleasedTrack() {
                   <th scope="col" className="px-4 pb-5 text-center">
                       CreatedAt
                   </th>
-                  <th scope="col" className="px-4 pb-5 text-center">                    
+                  <th scope="col" className="px-4 pb-5 text-center">       
+                      Action             
                   </th>
               </tr>
           </thead>
           <tbody>
               {mySongList.map((item, index) => { 
                 return ((
-                  <TrackItem songItem={item} getMySongList = {getMySongList} play={play} index={index} key={index}/>
+                  <TrackItem songItem={item} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>

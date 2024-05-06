@@ -125,12 +125,19 @@
     opacity: 0;
     transition: .2s all ease-out;
 }
-.fill-btn {
+.fill-btn-primary {
     transition: .5s all ease;
 }
-.fill-btn:hover {
+.fill-btn-primary:hover {
     box-shadow: 0px 5px 10px 0px rgba(6, 116, 252, 0.45) !important;
     background-color: rgb(6, 96, 217);
+}
+.fill-btn-second {
+    transition: .5s all ease;
+}
+.fill-btn-second:hover {
+    box-shadow: 0px 5px 10px 0px rgba(253, 54, 59, 0.45) !important;
+    background-color: rgb(253, 54, 59);
 }
 .outline-btn {
     transition: .5s all ease;

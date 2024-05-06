@@ -273,10 +273,12 @@ export const APIProvider = ({ children }) => {
 
         let result = await contentManagerActor.getAllContentInfoByUserId(Principal.fromText(user.principal));
 
+        console.log("result", result)
+
         return result;
     }
 
-    const getSongListAPI = async () => {
+    const getAllReleasedTracks = async () => {
 
         const authClient = await AuthClient.create();        
         
@@ -289,8 +291,6 @@ export const APIProvider = ({ children }) => {
             await agent.fetchRootKey();
         }
 
-        console.log("identity", identity.getPrincipal().toText())
-
         if (agent == null) 
             return null;
 
@@ -299,7 +299,7 @@ export const APIProvider = ({ children }) => {
             canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
         });
 
-        let result = await contentManagerActor.getAllContentInfo();
+        let result = await contentManagerActor.getAllContentInfo(true);
 
         return result;           
 
@@ -327,6 +327,28 @@ export const APIProvider = ({ children }) => {
         return result;
     }
 
+    const releaseTrackItem = async (contentId, release = true) => {
+        const authClient = await AuthClient.create();        
+        
+        const identity = authClient.getIdentity();
+        
+        const agent = new HttpAgent({ identity, 
+            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
+            
+        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+            await agent.fetchRootKey();
+        }
+        
+        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
+            agent,
+            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+        });
+
+        let result = await contentManagerActor.releaseTrack(contentId, release);
+
+        return result;
+    }
+
     // const value = useMemo(
     //     () => ({
     //         getProfileInfo,
@@ -345,9 +367,10 @@ export const APIProvider = ({ children }) => {
                 editProfile,
                 createContentInfo,
                 getSongListByIdentity,
-                getSongListAPI,
+                getAllReleasedTracks,
                 processAndUploadChunk,
-                increasePlayCount
+                increasePlayCount,
+                releaseTrackItem
             }}
         >
             {children}

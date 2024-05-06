@@ -58,7 +58,7 @@ function FavouriteTrack() {
               </tr>
           </thead>
           <tbody>
-              {favouriteList.map((item, index) => { 
+              {/* {favouriteList.map((item, index) => { 
                 return ((
                 <tr style={{color: "white"}} className="group font-normal border-b bg-transparent border-gray-700 cursor-pointer group hover:bg-primary-800 transition-all duration-200 ease-in-out dark" key={index}>
                   <td className="text-center relative flex justify-center w-full items-center">
@@ -77,7 +77,7 @@ function FavouriteTrack() {
                   <td className="px-4 py-3 text-center" onClick={() => changeFavourite(index)}> {item?.isFavourite? (<Icon.FullStarIcon/>) : (<Icon.StarIcon/>)} </td>
                   <td className="px-4 py-3 text-center"><Icon.OptionIcon/></td>
                 </tr>
-              )) } )}
+              )) } )} */}
             </tbody>
           </table>
         </div>

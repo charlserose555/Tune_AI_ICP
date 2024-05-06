@@ -6,8 +6,10 @@ import { Principal } from '@dfinity/principal';
 import audioPlay from "../../utils/AudioPlay";
 import { useDispatch } from "../../store";
 import { hideAudioPlay } from "../../store/reducers/player";
+import loading from "../../utils/Loading.js";
+import { UpdateSongList } from "../../store/reducers/auth";
 
-function TrackItem({songItem, getMySongList, index, play}) {
+function TrackItem({songItem, index, play}) {
     const [ contentId, setContentId] = useState(''); 
     const [ title, setTitle] = useState(''); 
     const [ duration, setDuration] = useState(0); 
@@ -15,7 +17,7 @@ function TrackItem({songItem, getMySongList, index, play}) {
     const [ createdAt, setCreatedAt] = useState(0);
     const [ contentCanisterId, setContentCanisterId] = useState("");
     const dispatch = useDispatch();
-    const { increasePlayCount } = useContext(APIContext);
+    const { releaseTrackItem } = useContext(APIContext);
 
     const [thumbnailUrl, setThumbnailUrl] = useState('');
 
@@ -42,6 +44,16 @@ function TrackItem({songItem, getMySongList, index, play}) {
       // }
 
       // console.log("playUrl", playUrl);
+    }
+
+    const releaseTrack = async (release) => {
+      loading();
+      
+      await releaseTrackItem(contentId, release);
+
+      dispatch(UpdateSongList());
+
+      loading(false);
     }
 
     useEffect(() => {
@@ -73,7 +85,12 @@ function TrackItem({songItem, getMySongList, index, play}) {
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{createdAt}</td>
-        <td className="px-4 py-3 text-center"><Icon.OptionIcon/></td>
+        <td className="px-4 py-3 text-center">{!songItem[1].isReleased? <a className="cursor-pointer fill-btn-primary text-14 py-2 px-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" 
+          onClick={() => releaseTrack(true)} style={{textAlign: 'center', cursor: 'pointer'}}>
+            <p>Release</p>
+          </a> : 
+          <a className="cursor-pointer fill-btn-second text-14 py-2 px-2 font-medium bg-coral-600 rounded-8 flex flex-row justify-center gap-45 items-center" 
+          onClick={() => releaseTrack(false)}>Down</a>}</td>
       </tr>
     </>)
 }

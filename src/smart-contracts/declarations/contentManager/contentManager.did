@@ -26,6 +26,7 @@ type ContentInit =
    createdAt: Timestamp;
    duration: nat;
    fileType: text;
+   isReleased: bool;
    size: nat;
    thumbnail: Thumbnail;
    title: text;
@@ -40,6 +41,7 @@ type ContentData =
    createdAt: Timestamp;
    duration: nat;
    fileType: text;
+   isReleased: bool;
    playCount: nat;
    size: nat;
    thumbnail: Thumbnail;
@@ -57,12 +59,13 @@ service : {
                                          principal;
                                        });
   cyclesBalance: () -> (nat) query;
+  deleteContentById: (text) -> (bool);
   deleteContentCanister: (principal) -> (bool);
   getAllContentCanisters: () -> (vec CanisterId) query;
-  getAllContentInfo: () -> (vec record {
-                                  ContentId;
-                                  ContentData;
-                                }) query;
+  getAllContentInfo: (bool) -> (vec record {
+                                      ContentId;
+                                      ContentData;
+                                    }) query;
   getAllContentInfoByUserId: (UserId__1) ->
    (vec record {
           ContentId;
@@ -79,6 +82,7 @@ service : {
   increasePlayCount: (ContentId) -> () oneway;
   installCode: (principal, blob, blob) -> ();
   registerContentInfo: (ContentData) -> (opt ContentId);
+  releaseTrack: (ContentId, bool) -> () oneway;
   removeContent: (ContentId, nat) -> ();
   transferCyclesToThisCanister: () -> ();
 }

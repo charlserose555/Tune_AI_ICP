@@ -76,6 +76,7 @@ function UploadSongModal() {
                     fileType: audioInfo.type,
                     size: audioInfo.size,
                     duration: parseInt(audioInfo.duration, 10),
+                    isReleased: false,
                     thumbnail: {
                         fileType : matches[1],
                         file : encodeArrayBuffer(bsf)
@@ -223,7 +224,7 @@ function UploadSongModal() {
                         <div className="flex flex-row justify-between items-center w-full gap-[30px] w-[231px] pt-2">
                             <a className="outline-btn text-12 px-4 py-2 font-medium rounded-8 w-full cursor-pointer" 
                                 style={{border: '2px solid white', textAlign: 'center'}} onClick={() => close()}>Cancel</a>
-                            <a className="fill-btn text-12 px-4 py-2 text-white font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" onClick={() => uploadSong()}
+                            <a className="fill-btn-primary text-12 px-4 py-2 text-white font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" onClick={() => uploadSong()}
                                 style={{textAlign: 'center', cursor: 'pointer'}}>
                                 <p className='text-white font-medium'>Upload</p>
                                 <img className="" src="/demo/assets/arrow-add.svg"/>

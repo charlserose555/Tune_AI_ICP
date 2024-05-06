@@ -70,6 +70,7 @@ type ContentInit =
    createdAt: Timestamp;
    duration: nat;
    fileType: text;
+   isReleased: bool;
    size: nat;
    thumbnail: Thumbnail;
    title: text;
@@ -84,6 +85,7 @@ type ContentData =
    createdAt: Timestamp;
    duration: nat;
    fileType: text;
+   isReleased: bool;
    playCount: nat;
    size: nat;
    thumbnail: Thumbnail;
