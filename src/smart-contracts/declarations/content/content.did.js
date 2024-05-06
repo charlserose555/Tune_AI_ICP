@@ -14,6 +14,7 @@ export const idlFactory = ({ IDL }) => {
     'size' : IDL.Nat,
     'fileType' : IDL.Text,
     'chunkCount' : IDL.Nat,
+    'isReleased' : IDL.Bool,
   });
   const ContentId = IDL.Text;
   const ContentData = IDL.Record({
@@ -28,6 +29,7 @@ export const idlFactory = ({ IDL }) => {
     'fileType' : IDL.Text,
     'playCount' : IDL.Nat,
     'chunkCount' : IDL.Nat,
+    'isReleased' : IDL.Bool,
     'uploadedAt' : Timestamp,
   });
   const definite_canister_settings = IDL.Record({

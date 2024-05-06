@@ -63,7 +63,7 @@ function Login() {
                         </div>
                     </div>
                     <div className="flex flex-col justify-center items-center w-full p-[10px] gap-[5px]">
-                        <a className="fill-btn text-12 px-4 py-2 text-white font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" 
+                        <a className="fill-btn-primary text-12 px-4 py-2 text-white font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" 
                             style={{textAlign: 'center', width: '231px',  cursor: 'pointer'}}
                             onClick={() => history.push("/app/home")}>To access
                             <img src="/demo/assets/arrow-right.svg"/>

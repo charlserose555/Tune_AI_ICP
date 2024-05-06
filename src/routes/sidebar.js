@@ -25,16 +25,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/genres",
-    icon: "GenresIcon",
-    name: "Genres",
-    role: "user",
-    component: Genres,
-  },
-  {
     path: "/library",
     icon: "LibarayIcon",
-    name: "My Library",
+    name: "My Tracks",
     auth: true,
     role: "user",
     component: Library,

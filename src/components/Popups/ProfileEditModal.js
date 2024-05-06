@@ -138,7 +138,7 @@ function ProfileEditModal() {
                         <div className="flex flex-row justify-between items-center w-full gap-[30px] w-[231px] pt-2">
                             <a className="outline-btn text-12 px-4 py-2 font-medium rounded-8 w-full cursor-pointer" 
                                 style={{border: '2px solid white', textAlign: 'center'}} onClick={() => dispatch(ShowModal(""))}>Cancel</a>
-                            <a className="fill-btn text-12 px-4 py-2 text-white font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" onClick={() => saveProfile()}
+                            <a className="fill-btn-primary text-12 px-4 py-2 text-white font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" onClick={() => saveProfile()}
                                 style={{textAlign: 'center', cursor: 'pointer'}}>
                                 <img className="" src="/demo/assets/save.svg"/>
                                 <p className='text-white font-medium'>Save</p>

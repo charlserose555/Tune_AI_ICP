@@ -35,7 +35,7 @@ function SidebarContent() {
                     <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
                     {route.name == "Home" && <Icon.HomeIcon/>}
                     {route.name == "Genres" && <Icon.GenresIcon/>}
-                    {route.name == "My Library" && <Icon.LibraryIcon/>}
+                    {route.name == "My Tracks" && <Icon.LibraryIcon/>}
                     {route.name == "Manage" && <Icon.ManageIcon/>}
                     <span className="leading-20">{route.name}</span>
                 </NavLink>
@@ -51,7 +51,7 @@ function SidebarContent() {
             <div className="flex flex-col p-4 bg-primary-900 rounded-4 gap-4">
               <p className="text-16 font-semibold leading-20">You can receive part of the royalties of a song, just by listening it</p>
               <p className="text-14 font-light leading-18">All the royalties will be distributed using our own TunedCoin token</p>
-              <a className="fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" style={{textAlign: 'center', cursor: 'pointer'}}>Connect Wallet
+              <a className="fill-btn-primary text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 w-full flex flex-row justify-center gap-45 items-center" style={{textAlign: 'center', cursor: 'pointer'}}>Connect Wallet
                 <img className="" src="/demo/assets/arrow-right.svg"/>
               </a>
             </div>

@@ -39,7 +39,7 @@ function UpgradeContent() {
               formats={["wasm"]}
           />
 
-          <a className="cursor-pointer fill-btn text-14 px-4 py-2 mt-4 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => updateContentCanister()} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
+          <a className="cursor-pointer fill-btn-primary text-14 px-4 py-2 mt-4 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => updateContentCanister()} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
             <p>Upload</p>
             <img className="" src="/demo/assets/arrow-add.svg"/>
           </a>

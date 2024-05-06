@@ -44,7 +44,7 @@ function Library() {
     <>
       <div className="flex flex-col pt-16 font-plus pl-6 pr-6 text-white relative">
         <div className="absolute flex flex-row justify-start items-end z-index-1">
-            <p className="text-24 font-normal leading-30 font-plus">My Library</p>
+            <p className="text-24 font-normal leading-30 font-plus">My Tracks</p>
             <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
         </div>
         <div className="relative pt-[58px]">
@@ -53,7 +53,7 @@ function Library() {
                 <div className="flex flex-row w-full pr-2" style={{maxWidth:"240px"}}>
                   <input type="text" placeholder="Search.." className="bg-primary-700 opacity-100 py-2 pl-4 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent w-full" style={{height: '40px'}}></input>
                 </div>
-                <a className="cursor-pointer fill-btn text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => uploadSong()} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
+                <a className="cursor-pointer fill-btn-primary text-14 px-4 py-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" onClick={() => uploadSong()} style={{textAlign: 'center', cursor: 'pointer', width:'120px'}}>
                   <p>Upload</p>
                   <img className="" src="/demo/assets/arrow-add.svg"/>
                 </a>

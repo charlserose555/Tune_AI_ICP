@@ -15,6 +15,7 @@ export interface ContentData {
   'fileType' : string,
   'playCount' : bigint,
   'chunkCount' : bigint,
+  'isReleased' : boolean,
   'uploadedAt' : Timestamp,
 }
 export type ContentId = string;
@@ -27,6 +28,7 @@ export interface ContentInit {
   'size' : bigint,
   'fileType' : string,
   'chunkCount' : bigint,
+  'isReleased' : boolean,
 }
 export interface StatusRequest {
   'memory_size' : boolean,
@@ -53,9 +55,10 @@ export interface _SERVICE {
   'checkCyclesBalance' : ActorMethod<[], undefined>,
   'createContent' : ActorMethod<[ContentInit], [] | [[ContentId, Principal]]>,
   'cyclesBalance' : ActorMethod<[], bigint>,
+  'deleteContentById' : ActorMethod<[string], boolean>,
   'deleteContentCanister' : ActorMethod<[Principal], boolean>,
   'getAllContentCanisters' : ActorMethod<[], Array<CanisterId>>,
-  'getAllContentInfo' : ActorMethod<[], Array<[ContentId, ContentData]>>,
+  'getAllContentInfo' : ActorMethod<[boolean], Array<[ContentId, ContentData]>>,
   'getAllContentInfoByUserId' : ActorMethod<
     [UserId__1],
     Array<[ContentId, ContentData]>
@@ -73,6 +76,7 @@ export interface _SERVICE {
     undefined
   >,
   'registerContentInfo' : ActorMethod<[ContentData], [] | [ContentId]>,
+  'releaseTrack' : ActorMethod<[ContentId, boolean], undefined>,
   'removeContent' : ActorMethod<[ContentId, bigint], undefined>,
   'transferCyclesToThisCanister' : ActorMethod<[], undefined>,
 }

@@ -57,6 +57,7 @@ export interface ContentData {
   'fileType' : string,
   'playCount' : bigint,
   'chunkCount' : bigint,
+  'isReleased' : boolean,
   'uploadedAt' : Timestamp,
 }
 export type ContentId = string;
@@ -69,6 +70,7 @@ export interface ContentInit {
   'size' : bigint,
   'fileType' : string,
   'chunkCount' : bigint,
+  'isReleased' : boolean,
 }
 export interface HttpRequest {
   'url' : string,
