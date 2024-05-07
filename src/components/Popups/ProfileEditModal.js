@@ -29,7 +29,7 @@ function ProfileEditModal() {
 
     const saveProfile = async () => {
         try{
-            if(!displayname && !username && !avatar) {
+            if(!displayname || !username || !avatar) {
                 alert("warning", "Please input profile info")
             } else {            
                 loading();

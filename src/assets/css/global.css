@@ -196,6 +196,14 @@ input[type="checkbox"].form-checkbox:checked + svg {
     align-items: center;
 }
 
+.modal-content {
+    background: transparent;
+    border-radius: 8px;
+    max-height: 90%; 
+    overflow-y: auto; /* Enables vertical scrolling if content overflows */
+    position: relative; /* Required for positioning close button or other elements inside */
+  }
+
 .line-clamp-ellipsis-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
