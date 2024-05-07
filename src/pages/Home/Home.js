@@ -9,7 +9,7 @@ function Home() {
   return (
     <>
       <div className="flex flex-col pt-16 font-plus pl-6 pr-6 text-white relative overflow-x-auto">
-          <GenresSlide/>
+          {/* <GenresSlide/> */}
           <PopularTracks/>
       </div>
     </>

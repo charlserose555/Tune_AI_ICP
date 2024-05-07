@@ -23,7 +23,7 @@ export default function GenresSlide() {
   return (
     <div className="font-plus flex flex-col text-white relative">
       <div className="absolute flex flex-row justify-start items-end z-index-1">
-        <p className="text-24 font-normal leading-30 font-plus">Popular Genres</p>
+        <p className="text-24 font-normal leading-30 font-plus">Popular Tracks</p>
         <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
       </div>
       <div ref={containerRef}  className="flex flex-row relative overflow-x-auto z-index-100 mx-[10px]">

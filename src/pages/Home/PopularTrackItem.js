@@ -60,13 +60,9 @@ function PopularTrackItem({songItem, getSongList, index, play}) {
           <img className="opacity-0 group-hover:opacity-100 absolute top-4 right-0 z-30" style={{width: "50px", height:"50px"}} src="/demo/assets/list_player.svg"onClick={() => playAudio()}/>
           <span className="opacity:100 group-hover:opacity-0 absolute top-8 right-4">{index + 1}</span>
         </td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle">
-          <div className="flex justify-center w-full items-center flex-row">
-            <img className="rounded-2 w-[60px] h-[60px]" src={thumbnailUrl}/>
-          </div>
-        </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle ">
-          <div className="flex justify-center items-center w-full flex-row">
+          <div className="flex justify-center items-center w-full flex-row gap-4">
+            <img className="rounded-2 w-[60px] h-[60px]" src={thumbnailUrl}/>
             <p className="pl-2">{title}</p>
           </div>
         </td>

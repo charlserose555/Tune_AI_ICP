@@ -43,7 +43,7 @@ function SidebarContent() {
           </ul>
         </div>
         
-        <div className="pt-6 text-white flex flex-row justify-center px-3 w-full gap-1 block md:hidden">
+        <div className="pt-6 text-white flex flex-row justify-center items-end px-3 w-full h-full gap-1 block md:hidden">
           <AuthComponent width={'247px'} height={'284px'}/>
         </div>
 

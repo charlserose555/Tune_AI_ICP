@@ -27,7 +27,6 @@ export const APIProvider = ({ children }) => {
     // const [isSessionExpired, setIsSessionExpired] = useState(false);
 
     useEffect(() => {
-        console.log("userCaniserID", user.canisterId)
         setPrincipal(user.principal);
     }, [user.principal])
 
