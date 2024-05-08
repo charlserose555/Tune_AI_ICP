@@ -43,9 +43,6 @@ function PopularTracks() {
                       # 
                     </p>
                   </th>
-                  <th scope="col" className="px-4 pb-5 text-center">
-                      Thumbnail
-                  </th>
                   <th scope="col" className="px-4 pb-5 text-center"> 
                       Title
                   </th>

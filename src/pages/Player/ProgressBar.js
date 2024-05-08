@@ -4,6 +4,7 @@ const ProgressBar = ({
     progressBarRef,
     audioRef,
     timeProgress,
+    bufferedProgress,
     duration,
   }) => {
     const handleProgressChange = () => {
@@ -35,6 +36,13 @@ const ProgressBar = ({
           ref={progressBarRef}
           defaultValue="0"
           onChange={handleProgressChange}
+          style={{
+            background: `linear-gradient(to right, #ACCFFF 0%, 
+              #ACCFFF
+              ${bufferedProgress}%, #FEFEFE
+              ${bufferedProgress}%, #FEFEFE
+              100%)`,
+          }}
         />
         <span className="time font-bold w-[50px]">{formatTime(duration)}</span>
       </div>

@@ -1,6 +1,6 @@
 import React, { useContext, Suspense, useEffect, lazy } from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
-import {sidebar} from "../../routes";
+import routes from "../../routes";
 
 import Sidebar from "../Sidebar";
 import Historybar from "../History/Historybar";
@@ -45,7 +45,7 @@ function Layout() {
           <LoadingOverlay/>
           <Suspense fallback={<PageLoader />}>
             <Switch>
-              {sidebar.map((route, i) => {
+              {routes.map((route, i) => {
                 return route.component ? (
                   !isLoggedIn && route.auth ? (
                     <Route
@@ -56,7 +56,6 @@ function Layout() {
                   ) : (
                     <Route
                       key={i}
-                      exact={true}
                       path={`/app${route.path}`}
                       render={(props) => <route.component {...props} />}
                     />

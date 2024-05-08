@@ -25,7 +25,7 @@ function PlayPane() {
     return (<>
     <div className="flex flex-row justify-start items-end pt-[20px] mb-[120px]">
       <div className="w-full">
-        <audio controlsList="nodownload" className="basic-audio-player" controls>
+        <audio controlsList="nodownload" className="basic-audio-player" controls autoPlay>
           {/* <source src={"http://127.0.0.1:4943/?canisterId=eybox-vuaaa-aaaaa-qaa6a-cai&contentId=57"} type="audio/mpeg" /> */}
           {/* <source src={"https://localhost:8080/audio/example.mp3"} type="audio/mpeg" /> */}
         </audio>

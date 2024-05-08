@@ -148,3 +148,11 @@ export const isAdmin = (principal) => {
 
   return manager.includes(principal);
 }
+
+export const getSuffleNumber = (min, max, currentValue) => {
+  let randomNumber;
+  do {
+    randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  } while (randomNumber === currentValue);
+  return randomNumber;
+}

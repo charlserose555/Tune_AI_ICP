@@ -4,7 +4,7 @@ import TrackItem from "./TrackItem";
 import { useSelector } from "../../store";
 import audioPlay from "../../utils/AudioPlay";
 
-function ReleasedTrack() {
+function MyTracks() {
     const [ mySongList, setMySongList] = useState([]); 
     const { getSongListByIdentity } = useContext(APIContext);
     const { songListUpdated } = useSelector((state) => state.auth);
@@ -34,12 +34,12 @@ function ReleasedTrack() {
             <thead className="border-b dark:border-gray-700 text-sm text-gray-700 bg-transparent dark:bg-primary" style={{color: "white"}}>
               <tr>
                   <th scope="col" className="px-4 pb-5 text-center relative">
-                    <p className="top-1 right-4 absolute">
+                    <p className="top-1 left-6 absolute">
                       # 
                     </p>
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
-                      Thumbnail
+                      <p className="pl-4">Thumbnail</p>
                   </th>
                   <th scope="col" className="px-4 pb-5 text-center">
                       Title
@@ -75,4 +75,4 @@ function ReleasedTrack() {
     </>)
 }
 
-export default ReleasedTrack;
+export default MyTracks;

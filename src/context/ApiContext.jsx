@@ -13,7 +13,6 @@ import { useHistory } from 'react-router-dom';
 import { Logout, SetIdentity } from "../store/reducers/auth";
 
 import { Principal } from '@dfinity/principal'; 
-import { auth } from "../routes/index.js";
 import { encodeArrayBuffer} from '../utils/format.js';
 
 export const APIContext = React.createContext();
@@ -27,7 +26,6 @@ export const APIProvider = ({ children }) => {
     // const [isSessionExpired, setIsSessionExpired] = useState(false);
 
     useEffect(() => {
-        console.log("userCaniserID", user.canisterId)
         setPrincipal(user.principal);
     }, [user.principal])
 

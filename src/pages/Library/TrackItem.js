@@ -69,22 +69,19 @@ function TrackItem({songItem, index, play}) {
     return (<>
      <tr style={{color: "white"}} className="group font-normal border-b bg-transparent border-gray-700 cursor-pointer group hover:bg-primary-800 transition-all duration-200 ease-in-out dark" >
         <td className="text-center relative flex justify-center w-full items-center">
-          <img className="opacity-0 group-hover:opacity-100 absolute top-4 right-0 z-30" style={{width: "50px", height:"50px"}} src="/demo/assets/list_player.svg"onClick={() => playAudio()}/>
-          <span className="opacity:100 group-hover:opacity-0 absolute top-8 right-4">{index + 1}</span>
+          <img className="opacity-0 group-hover:opacity-100 absolute top-4 left-2 z-30" style={{width: "50px", height:"50px"}} src="/demo/assets/list_player.svg"onClick={() => playAudio()}/>
+          <span className="opacity:100 group-hover:opacity-0 absolute top-8 left-6">{index + 1}</span>
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle">
-          <div className="flex justify-center w-full items-center flex-row">
+          <div className="flex justify-center w-full items-center flex-row pl-4">
             <img className="rounded-2 w-[60px] h-[60px]" src={thumbnailUrl}/>
           </div>
         </td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle ">
-          <div className="flex justify-center items-center w-full flex-row">
-            <p className="pl-2">{title}</p>
-          </div>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500 align-middle ">{title}
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(duration))}</td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{createdAt}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{createdAt}</div></td>
         <td className="px-4 py-3 text-center">{!songItem[1].isReleased? <a className="cursor-pointer fill-btn-primary text-14 py-2 px-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" 
           onClick={() => releaseTrack(true)} style={{textAlign: 'center', cursor: 'pointer'}}>
             <p>Release</p>

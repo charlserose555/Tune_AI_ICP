@@ -26,24 +26,27 @@ function SidebarContent() {
               (route.icon? 
               ((!route.auth || isLoggedIn) && (route.role == "user" || (route.role == "admin" && user.role == "admin")) && 
               <li className="navli relative rounded-2 text-white hover:bg-primary-700 active:bg-primary-700" key={route.name}>
-              <NavLink
-                exact
-                to={`/app${route.path}`}
+                <NavLink
+                  exact
+                  to={`${route.path}`}
+                  isActive={(match, location) =>
+                    location.pathname === `${route.path}` || location.pathname.startsWith(`${route.path}`)
+                  }
                   className="parent-navlink inline-flex gap-45 rounded-2 py-45 px-4 items-center w-full"
                   activeClassName="parent-navlink-active bg-primary-700">
-                  <Route path={`/app${route.path}`} exact={route.exact}/>
-                    <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
-                    {route.name == "Home" && <Icon.HomeIcon/>}
-                    {route.name == "Genres" && <Icon.GenresIcon/>}
-                    {route.name == "My Tracks" && <Icon.LibraryIcon/>}
-                    {route.name == "Manage" && <Icon.ManageIcon/>}
-                    <span className="leading-20">{route.name}</span>
+                    <Route path={`${route.path}`}/>
+                      <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
+                      {route.name == "Home" && <Icon.HomeIcon/>}
+                      {route.name == "Genres" && <Icon.GenresIcon/>}
+                      {route.name == "Library" && <Icon.LibraryIcon/>}
+                      {route.name == "Manage" && <Icon.ManageIcon/>}
+                      <span className="leading-20">{route.name}</span>
                 </NavLink>
               </li>) : ("")))}
           </ul>
         </div>
         
-        <div className="pt-6 text-white flex flex-row justify-center px-3 w-full gap-1 block md:hidden">
+        <div className="pt-6 text-white flex flex-row justify-center items-end px-3 w-full h-full gap-1 block md:hidden">
           <AuthComponent width={'247px'} height={'284px'}/>
         </div>
 

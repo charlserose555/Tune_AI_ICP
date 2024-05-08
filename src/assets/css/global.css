@@ -288,12 +288,19 @@ input[type="range"] {
     border: none;
     background-color: #0060D9;
     cursor: pointer;
+    visibility: hidden;
     position: relative;
   }
   
   /* dragging thumb - chrome and safari */
   input[type="range"]:active::-webkit-slider-thumb {
     transform: scale(1.2);
+    visibility: visible;
+  }
+
+  input[type="range"]:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    visibility: visible;
   }
   
   /* slider thumb - firefox */
