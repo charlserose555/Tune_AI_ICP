@@ -136,7 +136,6 @@ export default function AudioPlayer() {
 
     const handleNext = (isManual) => {
         setIsLoaded(false)
-        console.log("isManual", isManual)
 
         setDuration(0);
 
@@ -258,8 +257,6 @@ export default function AudioPlayer() {
     }, [player])
 
     useEffect(() => {
-        console.log("SDFASFdasfasfasf")
-
         if (audioRef.current) {
           audioRef.current.volume = volume / 100;
           audioRef.current.muted = muteVolume;
