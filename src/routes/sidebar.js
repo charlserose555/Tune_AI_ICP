@@ -5,52 +5,49 @@
  * If you're looking to actual Router routes, go to
  * `routes/index.js`
  */
-import { lazy } from "react";
-
-const Home = lazy(() => import("../pages/Home/Home"));
-const Genres = lazy(() => import("../pages/Genres/Genres"));
-const Profile = lazy(() => import("../pages/Profile/Profile"));
-const Page404 = lazy(() => import("../pages/404"));
-const Blank = lazy(() => import("../pages/Blank"));
-const GenresDetail = lazy(() => import("../pages/Home/GenresDetail"));
-const Library = lazy(() => import("../pages/Library/Library"));
-const Manage = lazy(() => import("../pages/Manage/Manage"));
 
 const routes = [
   {
-    path: "/home",
+    path: "/app/home",
     icon: "./home.svg",
     name: "Home",
     role: "user",
-    component: Home,
   },
   {
-    path: "/library",
-    icon: "LibarayIcon",
-    name: "My Tracks",
-    auth: true,
+    path: "/app/library",
+    icon: "./home.svg",
+    name: "Library",
     role: "user",
-    component: Library,
+    auth: true, 
   },
-  {
-    path: "/manage",
-    icon: "ManageIcon",
-    name: "Manage",
-    auth: true,
-    role: "admin",
-    component: Manage,
-  },
-  {
-    path: "/profile",
-    auth: true,
-    role: "user",
-    component: Profile,
-  },
-  {
-    path: "/genres/:id",
-    role: "user",
-    component: GenresDetail,
-  }
+  // {
+  //   icon: "CasinoIcon",
+  //   name: "Library",
+  //   path: "/app/library",
+  //   routes: [
+  //     // submenu
+  //     {
+  //       path: "/app/casino/all-games",
+  //       name: "All Games",
+  //     },
+  //     {
+  //       path: "/app/casino/livecasino",
+  //       name: "Live Casino",
+  //     },
+  //     {
+  //       path: "/app/casino/poker",
+  //       name: "Poker",
+  //     },
+  //     {
+  //       path: "/app/casino/video-slots",
+  //       name: "Video Slots",
+  //     },
+  //     {
+  //       path: "/app/casino/table-games",
+  //       name: "Table Games",
+  //     },
+  //   ],
+  // },
 ];
 
 export default routes;

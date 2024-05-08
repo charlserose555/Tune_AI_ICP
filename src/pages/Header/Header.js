@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "../../store";
 import { Logout, SetBalances, UpdateBalances } from "../../store/reducers/auth";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { ShowModal } from "../../store/reducers/menu";
 
 function Header() {
   const history = useHistory();
@@ -85,7 +86,7 @@ function Header() {
                 <div className="py-2 px-45 gap-[10px]">
                   <Menu.Item>
                     {({ active }) => (
-                      <div onClick={() => history.push("/app/profile")} className={`menu-item flex justify-row items-center flex start px-45 mb-[10px] gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
+                      <div onClick={() => dispatch(ShowModal("editProfile"))} className={`menu-item flex justify-row items-center flex start px-45 mb-[10px] gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
                         <ProfileIcon/>
                         <a
                           className="block py-2 font-plus font-bold text-14 leading-[19px]"

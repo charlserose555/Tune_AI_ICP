@@ -4,12 +4,18 @@ import { BsMusicNoteBeamed } from 'react-icons/bs';
 const DisplayTrack = ({
   currentTrack,
   audioRef,
+  volume,
+  muteVolume,
   setDuration,
   progressBarRef,
   handleNext
 }) => {
   const onLoadedMetadata = () => {
     const seconds = audioRef.current.duration;
+
+    audioRef.current.volume = volume / 100;
+
+    audioRef.current.muted = muteVolume;
 
     setDuration(parseInt(seconds, 10));
 
@@ -26,15 +32,14 @@ const DisplayTrack = ({
   }, [])
 
   return (
-    <div>
-      <audio
-        controlsList="nodownload"
-        ref={audioRef}
-        onLoadedMetadata={onLoadedMetadata}
-        onEnded={handleNext}>
-        <source src={currentTrack?.src} type="audio/mpeg" />
-      </audio>
-    </div>
+    <audio
+      controlsList="nodownload"
+      autoPlay
+      ref={audioRef}
+      onLoadedMetadata={onLoadedMetadata}
+      onEnded={handleNext}>
+      <source src={currentTrack?.src} type="audio/mpeg" />
+    </audio>
   );
 };
 export default DisplayTrack;

@@ -297,6 +297,11 @@ input[type="range"] {
     transform: scale(1.2);
     visibility: visible;
   }
+
+  input[type="range"]:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    visibility: visible;
+  }
   
   /* slider thumb - firefox */
   input[type="range"]::-moz-range-thumb {
