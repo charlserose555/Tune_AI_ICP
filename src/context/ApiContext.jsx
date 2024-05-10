@@ -6,7 +6,7 @@ import {idlFactory as ManagerIDL} from '../smart-contracts/declarations/manager/
 import {idlFactory as AccountIDL} from '../smart-contracts/declarations/account/account.did.js';
 import {idlFactory as ContentIDL} from '../smart-contracts/declarations/content/content.did.js';
 import {idlFactory as ContentManagerIDL} from '../smart-contracts/declarations/contentManager/contentManager.did.js';
-import { useMemo } from "react";
+import axios from "../utils/Axios"
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from 'react-router-dom';
 
@@ -50,6 +50,8 @@ export const APIProvider = ({ children }) => {
             if(process.env.REACT_APP_DFX_NETWORK != "ic") {
                 await agent.fetchRootKey();
             }
+
+            console.log("principal", principal)
 
             if(!init && principal != identity.getPrincipal().toText()) {
                 isSessionExpired = true;
@@ -331,7 +333,8 @@ export const APIProvider = ({ children }) => {
         const identity = authClient.getIdentity();
         
         const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
+            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC
+        });
             
         if(process.env.REACT_APP_DFX_NETWORK != "ic") {
             await agent.fetchRootKey();
@@ -346,6 +349,28 @@ export const APIProvider = ({ children }) => {
 
         return result;
     }
+
+    const isExistUserInfo = async (displayname) => {
+        const data = await axios.post("api/v/users/existUserInfo", {
+            displayname
+        });
+
+        return data;
+    }
+
+    // const register = async (
+    //     userPincipal,
+    //     displayName,
+    //     userName, 
+    // ) => {
+    //     const data = await axios.post("api/v/users/signup", {
+    //         rReferral: code,
+    //         email,
+    //         username,
+    //         password,
+    //     });
+    //     return data;
+    // };
 
     // const value = useMemo(
     //     () => ({
@@ -368,7 +393,8 @@ export const APIProvider = ({ children }) => {
                 getAllReleasedTracks,
                 processAndUploadChunk,
                 increasePlayCount,
-                releaseTrackItem
+                releaseTrackItem,
+                isExistUserInfo
             }}
         >
             {children}

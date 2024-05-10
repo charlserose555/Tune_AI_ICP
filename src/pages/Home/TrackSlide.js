@@ -1,132 +1,132 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "../../store";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import GenresCard from "../Genres/GenresCard";
+import TrackCard from "../Track/TrackCard";
 
-export default function GenresSlide() {
+export default function TrackSlide() {
   const dispatch = useDispatch();
-  const containerRef = useRef(null);
+  const slideRef = useRef(null);
   const history = useHistory();
 
   const handleScrollLeft = () => {
-    containerRef.current.scrollBy(
+    slideRef.current.scrollBy(
       { left: -200, behavior: 'smooth' }
     )
   }
 
   const handleScrollRight = () => {
-    containerRef.current.scrollBy(
+    slideRef.current.scrollBy(
       { left: 200, behavior: 'smooth' }
     )
   }
-
+  
   return (
     <div className="font-plus flex flex-col text-white relative">
       <div className="absolute flex flex-row justify-start items-end z-index-1">
         <p className="text-24 font-normal leading-30 font-plus">Popular Tracks</p>
         <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
       </div>
-      <div ref={containerRef}  className="flex flex-row relative overflow-x-auto z-index-100 mx-[10px]">
+      <div ref={slideRef}  className="flex flex-row relative overflow-x-auto z-index-100 mx-[10px]">
         <ul className="flex w-full justify-start items-start space-x-4 stories pt-[58px] pb-[10px]"
         >
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-              <GenresCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
+              <TrackCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
+            <TrackCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
+            <TrackCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
+            <TrackCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
+            <TrackCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-              <GenresCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
+              <TrackCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
+            <TrackCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
+            <TrackCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
+            <TrackCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
+            <TrackCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-              <GenresCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
+              <TrackCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
+            <TrackCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
+            <TrackCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
+            <TrackCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
+            <TrackCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-              <GenresCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
+              <TrackCard url={'url("/demo/assets/classic_rock.png")'} name={'Classic rock'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
+            <TrackCard url={'url("/demo/assets/zazz.png")'} name={'Zazz'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
+            <TrackCard url={'url("/demo/assets/dubstep.png")'} name={'DubStep'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
+            <TrackCard url={'url("/demo/assets/rhythm.png")'} name={'Rhythm and Blues o R&B'}/> 
             </div>
           </li>
           <li>
             <div className={`flex flex-none flex-col text-white items-center cursor-pointer justify-between space-y-1 rounded-sm hover:text-darkblue-700`}>
-            <GenresCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
+            <TrackCard url={'url("/demo/assets/techno.png")'} name={'Techno'}/> 
             </div>
           </li>
         </ul>          

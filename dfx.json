@@ -4,7 +4,8 @@
         "frontend": {  
         "entrypoint": "build/index.html"  
     },  
-        "source": ["build"],  
+        "source": ["build", 
+                    "src/assets"],  
         "type": "assets"  
     }},  
     "output_env_file": ".env"  

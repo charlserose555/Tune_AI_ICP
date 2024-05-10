@@ -21,7 +21,7 @@ axiosServices.interceptors.request.use(
 );
 
 axiosServices.interceptors.response.use(
-    (response) => response,
+    (response) => response.data,
     (error) => {
         const { response } = error;
         if (response && response.status === 400) {

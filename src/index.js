@@ -14,20 +14,21 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import AppLoader from "./components/Loader/AppLoader.js";
 import { store, persister, useSelector, dispatch } from "./store";
+import Application from "./App.js";
 
-const Application = Loadable.Map({
-  loader: {
-    ui: () => import("./App.js"),
-    data: () =>
-      new Promise((r) => setTimeout(r, 2100)),
-  },
-  loading: AppLoader,
-  render(loaded, props) {
-    let Dashboard = loaded.ui.default;
-    let data = loaded.data;
-    return <Dashboard {...props} data={data} />;
-  },
-});
+// const Application = Loadable.Map({
+//   loader: {
+//     ui: () => import("./App.js"),
+//     data: () =>
+//       new Promise((r) => setTimeout(r, 0)),
+//   },
+//   loading: AppLoader,
+//   render(loaded, props) {
+//     let Dashboard = loaded.ui.default;
+//     let data = loaded.data;
+//     return <Dashboard {...props} data={data} />;
+//   },
+// });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

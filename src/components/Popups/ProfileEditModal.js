@@ -21,7 +21,7 @@ function ProfileEditModal() {
     const [fileType, setFileType] = useState("");
     const [createdAt, setCreatedAt] = useState("");
     const {user} = useSelector((state) => (state.auth));
-    const { editProfile } = useContext(APIContext);
+    const { editProfile, isExistUserInfo } = useContext(APIContext);
 
     const handleAvatar = async (image) => {   
         setAvatar(image);
@@ -62,8 +62,12 @@ function ProfileEditModal() {
                     fileType: [fileType]
                 }
     
-                console.log(profileInfo)
+                console.log(profileInfo);
+
+                const isExistProfile = await isExistUserInfo(displayname);
     
+                console.log("isExistProfile", isExistProfile);
+
                 const result = await editProfile(profileInfo);
     
                 loading(false);
