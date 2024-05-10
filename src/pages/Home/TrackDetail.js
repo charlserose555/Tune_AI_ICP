@@ -2,22 +2,22 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useDispatch, useSelector } from "../../store";
-import StarredList from "../Song/StarredList";
+import PopularTracks from "./PopularTracks";
 import { useParams } from "react-router-dom";
-import GenresDetailBanner from "./GenresDetailBanner";
+import TrackDetailBanner from "./TrackDetailBanner";
 
-function GenresDetail() {
+function TrackDetail() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { id, demo } = useParams();
 
   return (
     <>
-      <GenresDetailBanner/>
+      <TrackDetailBanner/>
 
-      <StarredList/>
+      <PopularTracks/>
     </>
   );
 }
 
-export default GenresDetail;
+export default TrackDetail;

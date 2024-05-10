@@ -8,11 +8,11 @@
 import { lazy } from "react";
 
 const Home = lazy(() => import("../pages/Home/Home"));
-const Genres = lazy(() => import("../pages/Genres/Genres"));
+const Genres = lazy(() => import("../pages/Track/Tracks"));
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
-const GenresDetail = lazy(() => import("../pages/Home/GenresDetail"));
+const TrackDetail = lazy(() => import("../pages/Home/TrackDetail"));
 const Library = lazy(() => import("../pages/Library/Library"));
 const Manage = lazy(() => import("../pages/Manage/Manage"));
 
@@ -39,18 +39,17 @@ const routes = [
     auth: true,
     role: "admin",
     component: Manage,
+  },  
+  {
+    path: "/artist/id=:id",
+    role: "user",
+    component: Profile,
   },
-//   {
-//     path: "/profile",
-//     auth: true,
-//     role: "user",
-//     component: Profile,
-//   },
-//   {
-//     path: "/genres/:id",
-//     role: "user",
-//     component: GenresDetail,
-//   }
+  {
+    path: "/track/id=:id",
+    role: "user",
+    component: TrackDetail,
+  }
 ];
 
 export default routes;

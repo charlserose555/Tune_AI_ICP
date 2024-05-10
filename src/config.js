@@ -1,8 +1,7 @@
 export const BASE_URL =
     process.env.REACT_APP_API_URL || "https://bcb.club";
-export const BASE_SOCKET_URL = process.env.REACT_APP_SOCKET_API_URL || "https://bcb.club";
+// export const BASE_SOCKET_URL = process.env.REACT_APP_SOCKET_API_URL || "https://bcb.club";
 export const BASE_PATH = "";
-export const HOME_PATH = "/sports";
 
 const config = {
     fontFamily: 'Roboto',

@@ -787,10 +787,6 @@ select {
   left: 1.25rem;
 }
 
-.left-6 {
-  left: 1.5rem;
-}
-
 .left-9 {
   left: 2.25rem;
 }
@@ -827,10 +823,6 @@ select {
   top: 0.75rem;
 }
 
-.top-4 {
-  top: 1rem;
-}
-
 .top-5 {
   top: 1.25rem;
 }
@@ -839,12 +831,12 @@ select {
   top: 1.5rem;
 }
 
-.top-8 {
-  top: 2rem;
-}
-
 .top-\[185px\] {
   top: 185px;
+}
+
+.z-0 {
+  z-index: 0;
 }
 
 .z-10 {
@@ -1944,6 +1936,11 @@ select {
   padding-right: 10px;
 }
 
+.px-\[20px\] {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -2081,6 +2078,10 @@ select {
 
 .text-center {
   text-align: center;
+}
+
+.text-start {
+  text-align: start;
 }
 
 .align-middle {
@@ -2228,8 +2229,8 @@ select {
   line-height: 30px;
 }
 
-.leading-\[50px\] {
-  line-height: 50px;
+.leading-\[40px\] {
+  line-height: 40px;
 }
 
 .tracking-wide {

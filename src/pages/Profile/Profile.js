@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { useDispatch, useSelector } from "../../store";
 import ProfileBanner from "./ProfileBanner";
-import StarredList from "../Song/StarredList";
+import ArtistTrackList from "../Song/ArtistTrackList";
 
 function Profile() {
   return (
     <>
       <ProfileBanner/>
 
-      <StarredList/>
+      <ArtistTrackList/>
     </>
   );
 }

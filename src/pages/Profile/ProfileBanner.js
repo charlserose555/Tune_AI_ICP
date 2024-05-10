@@ -37,12 +37,20 @@ export default function ProfileBanner() {
                 aria-hidden="true"
               />
             <div className="flex flex-col gap-[10px]">
-              <h1 className="font-plus-bold font-normal text-[24px] md:text-[40px] text-white leading-[50px]">{user.displayname}</h1>
-              <h5 className="font-plus font-light text-md text-white leading-[17px]">{user.username}</h5>
+              <h1 className="font-plus-bold font-normal text-[24px] md:text-[40px] text-white leading-[40px]">{user.displayname}</h1>
+              <p className="font-plus text-11 text-white">{user.username}</p>
+              <a className="outline-btn text-11 font-medium rounded-[20px]" 
+                style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}>Follow</a>
             </div>
           </div>
 
-          <Menu as="div" className="relative inline-block text-left">
+          {/* <div className="group" style={{position:"absolute", width:"40px", height:"40px", top:"145px", zIndex:"100", right:"42px", cursor:"pointer", pointerEvents: 'auto'}}>
+                <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option.svg"></img>
+                <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option_hover.svg"></img>
+          </div> */}
+
+
+          {/* <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="group" style={{position:"absolute", width:"40px", height:"40px", top:"145px", zIndex:"100", right:"42px", cursor:"pointer", pointerEvents: 'auto'}}>
                 <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option.svg"></img>
@@ -79,7 +87,7 @@ export default function ProfileBanner() {
                 </Menu.Item>
               </div>
             </Menu.Items>
-          </Menu>
+          </Menu> */}
           <div className="absolute bottom-0 left-0 w-full" style={{ height:"157px", background: "linear-gradient(180deg, rgba(26, 26, 33, 0) 25.67%, #1A1A21 99.15%)"}}>
           </div>
       </div>

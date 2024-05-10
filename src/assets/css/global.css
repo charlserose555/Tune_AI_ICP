@@ -172,7 +172,7 @@ input[type="checkbox"].form-checkbox:checked + svg {
 }
 
 .group:hover .svg-icon path{
-    stroke: #0060D9;
+    fill: #0060D9;
 }
 
 .svg-icon:hover path{

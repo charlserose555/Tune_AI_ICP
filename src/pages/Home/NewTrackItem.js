@@ -9,7 +9,7 @@ import { hideAudioPlay } from "../../store/reducers/player";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-function PopularTrackItem({songItem, getSongList, index, play}) {
+function NewTrackItem({songItem, getSongList, index, play}) {
     const [ contentId, setContentId] = useState(''); 
     const [ title, setTitle] = useState(''); 
     const [ duration, setDuration] = useState(0); 
@@ -119,4 +119,4 @@ function PopularTrackItem({songItem, getSongList, index, play}) {
     </>)
 }
 
-export default PopularTrackItem;
+export default NewTrackItem;

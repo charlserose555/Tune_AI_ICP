@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-export default function GenresCard({url, name}) {
+export default function TrackCard({url, name}) {
     const history = useHistory();
 
     return (
@@ -16,7 +16,7 @@ export default function GenresCard({url, name}) {
             backgroundBlendMode: "multiply",
             }}> 
             <div className="banner-img w-[54px] h-[54px] group rounded-full z-index-10 flex items-center justify-center relative opacity-0 group-hover:opacity-100 duration-300 group-hover:-translate-y-[160px] duration-400"
-                style={{bottom: "-50px", left: "45px"}} onClick={() => history.push("/app/genres/classic_rock")}>
+                style={{bottom: "-50px", left: "45px"}} onClick={() => history.push("/app/track/id=classic_rock")}>
                 <div className="extend-play absolute bg-darkblue-500 bg-opacity-80 w-full h-full opacity-0 hover:shadow-bottom_1 rounded-full w-[54px] h-[54px] ">
                 <img src="/demo/assets/expand_play.svg" className="rounded-full"/>
                 </div>

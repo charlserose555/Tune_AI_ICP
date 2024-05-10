@@ -6,7 +6,7 @@ import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useParams } from "react-router-dom";
 
-export default function GenresDetailBanner() {
+export default function TrackDetailBanner() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id, demo } = useParams();

@@ -9,13 +9,12 @@ import { hideAudioPlay } from "../../store/reducers/player";
 import loading from "../../utils/Loading.js";
 import { UpdateSongList } from "../../store/reducers/auth";
 
-function TrackItem({songItem, index, play}) {
+function ArtistTrackItem({songItem, index, play}) {
     const [ contentId, setContentId] = useState(''); 
     const [ title, setTitle] = useState(''); 
     const [ duration, setDuration] = useState(0); 
     const [ playCount, setPlayCount] = useState(0);
     const [ createdAt, setCreatedAt] = useState(0);
-    const [ contentCanisterId, setContentCanisterId] = useState("");
     const dispatch = useDispatch();
     const { releaseTrackItem } = useContext(APIContext);
 
@@ -32,18 +31,10 @@ function TrackItem({songItem, index, play}) {
       setThumbnailUrl(thumbnailUrl);    
     }
 
-    const playAudio = async () => {
-      let playUrl = "";
-      
+    const playAudio = async () => {     
       dispatch(hideAudioPlay());
       
       play(index)
-      
-      // if (process.env.DFX_NETWORK !== "ic") {
-      //   playUrl = "http://127.0.0.1:4943/?canisterId=" + contentCanisterId + "&contentId=" + contentId;       
-      // }
-
-      // console.log("playUrl", playUrl);
     }
 
     const releaseTrack = async (release) => {
@@ -62,7 +53,6 @@ function TrackItem({songItem, index, play}) {
       setDuration(songItem[1].duration);
       setPlayCount(songItem[1].playCount);
       setCreatedAt(formatDate(Number(songItem[1].createdAt) / 1000));
-      setContentCanisterId(Principal.from(songItem[1].contentCanisterId).toText())
       setThumbnail();
     }, [songItem])
 
@@ -78,19 +68,18 @@ function TrackItem({songItem, index, play}) {
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{createdAt}</div></td>
-        <td className="px-4 py-3 text-center">{!songItem[1].isReleased? <a className="cursor-pointer fill-btn-primary text-14 py-2 px-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" 
-          onClick={() => releaseTrack(true)} style={{textAlign: 'center', cursor: 'pointer'}}>
-            <p>Release</p>
-          </a> : 
-          <a className="cursor-pointer fill-btn-second text-14 py-2 px-2 font-medium bg-coral-600 rounded-8 flex flex-row justify-center gap-45 items-center" 
-          onClick={() => releaseTrack(false)}>Down</a>}</td>
         <td className="px-4 py-3 text-center items-center">
           <div className="flex justify-center items-center" onClick={() => playAudio()}>
             <Icon.ItemPlayIcon/>
+          </div>
+        </td>
+        <td className="px-4 py-3 text-center items-center">
+          <div className="flex justify-center items-center">
+            <Icon.FavoriteIcon/>
           </div>
         </td>
       </tr>
     </>)
 }
 
-export default TrackItem;
+export default ArtistTrackItem;

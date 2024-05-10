@@ -23,9 +23,9 @@ function AuthComponent({width, height}) {
     let authClient = null;
 
     useEffect(() => {      
-        if(location.pathname.includes('genres/')) {
+        if(location.pathname.includes('track/')) {
             setPortraitUrl('url("/demo/assets/portrait_3.png")');
-        } else if(location.pathname.includes('genres') || location.pathname.includes('profile')) {
+        } else if(location.pathname.includes('track') || location.pathname.includes('profile')) {
             setPortraitUrl('url("/demo/assets/portrait_2.png")');    
         } else if(location.pathname.includes('home')) {
             setPortraitUrl('url("/demo/assets/portrait_1.png")'); 
