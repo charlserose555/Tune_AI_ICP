@@ -10,5 +10,13 @@
         "Content-Type": "application/json"
       },
       "ignore": false
+    },
+    {
+      "match": ".well-known/ic-domains",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      },
+      "ignore": false
     }
   ]
