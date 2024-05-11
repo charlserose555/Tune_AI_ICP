@@ -17,7 +17,7 @@ const initialUser = {
     username: '',
     role : '',
     avatar: '',
-    fileType: '',
+    fileType: 'jpeg',
     createdAt: 0,
     isInitialized: false,
 };

@@ -94,16 +94,6 @@ function UploadSongModal() {
 
                     console.log("contentCanisterId", contentCanisterId.toText())
 
-                    // let chunk = 1;
-                    // for (let byteStart = 0; byteStart < audioInfo.size; byteStart += MAX_CHUNK_SIZE, chunk++ ) {
-                    //     putChunkPromises.push(
-                    //         processAndUploadChunk(audioInfo.data, byteStart, contentId, contentCanisterId, chunk, audioInfo.size)
-                    //     );
-                    // }
-
-
-                    // const putResult = await Promise.all(putChunkPromises);
-
                     const putResult = await processAndUploadChunk(audioInfo, contentCanisterId, contentId)
 
                     const t1 = performance.now();

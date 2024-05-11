@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '../config';
 import { store } from '../store';
 import { Logout } from '../store/reducers/auth';
-import alert from '../store/reducers/alert';
+import alert from "../utils/Alert";
 import toast from 'react-hot-toast';
 
 const axiosServices = axios.create();
@@ -24,14 +24,17 @@ axiosServices.interceptors.response.use(
     (response) => response.data,
     (error) => {
         const { response } = error;
+
+        console.log("error", response.data)
+
         if (response && response.status === 400) {
-            toast.error(response.data, 'error');
+            alert("danger", response.data)
         } else if (response && response.status === 401) {
             store.dispatch(Logout({}));
         } else if (response && response.status === 413) {
-            toast.error(response.data, 'error');
+            alert("danger", response.data)
         } else if (response && response.status === 429) {
-            toast.error(response.data, 'error');
+            alert("danger", response.data)
         } else {
             console.log(response);
         }

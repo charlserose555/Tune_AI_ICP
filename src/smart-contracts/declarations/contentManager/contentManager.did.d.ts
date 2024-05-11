@@ -16,7 +16,7 @@ export interface ContentData {
   'playCount' : bigint,
   'chunkCount' : bigint,
   'isReleased' : boolean,
-  'uploadedAt' : Timestamp,
+  'createdAt' : Timestamp,
 }
 export type ContentId = string;
 export interface ContentInit {

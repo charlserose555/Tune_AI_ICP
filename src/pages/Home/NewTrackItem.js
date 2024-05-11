@@ -8,19 +8,21 @@ import { useDispatch } from "../../store";
 import { hideAudioPlay } from "../../store/reducers/player";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useSelector } from "../../store";
 
 function NewTrackItem({songItem, getSongList, index, play}) {
-    const [ contentId, setContentId] = useState(''); 
-    const [ title, setTitle] = useState(''); 
-    const [ duration, setDuration] = useState(0); 
-    const [ playCount, setPlayCount] = useState(0);
-    const [ artistName, setArtistName ] = useState('');
-    const [ createdAt, setCreatedAt] = useState(0);
-    const [ contentCanisterId, setContentCanisterId] = useState("");
-    const { getProfileInfo, increasePlayCount } = useContext(APIContext);
-    const dispatch = useDispatch();
-    const history = useHistory();
-
+  const [ contentId, setContentId] = useState(''); 
+  const [ title, setTitle] = useState(''); 
+  const [ duration, setDuration] = useState(0); 
+  const [ playCount, setPlayCount] = useState(0);
+  const [ artistName, setArtistName ] = useState('');
+  const [ createdAt, setCreatedAt] = useState(0);
+  const [ contentCanisterId, setContentCanisterId] = useState("");
+  const { getProfileInfo, increasePlayCount } = useContext(APIContext);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {user} = useSelector((state) => (state.auth));
+  
     const [thumbnailUrl, setThumbnailUrl] = useState('');
 
     const setThumbnail = async () => {
@@ -35,9 +37,9 @@ function NewTrackItem({songItem, getSongList, index, play}) {
     }
 
     const getArtist = async () => {
-      getProfileInfo(songItem[1].userId).then(artistInfo => {
-        setArtistName(artistInfo[0].displayName)
-      })
+      // getProfileInfo(songItem[1].userId).then(artistInfo => {
+      //   setArtistName(artistInfo[0].displayName)
+      // })
     }
 
     const playAudio = async () => {
@@ -46,6 +48,15 @@ function NewTrackItem({songItem, getSongList, index, play}) {
       dispatch(hideAudioPlay());
       
       play(index)
+    }
+
+    const followArtist = async () => {
+      // if(!user.isInitialized) {
+      //   alert("warning", "Please login first");
+      //   return;
+      // }
+
+      // history.push('artist/id=' + artistName);
     }
 
     useEffect(() => {
@@ -101,7 +112,7 @@ function NewTrackItem({songItem, getSongList, index, play}) {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800" onClick={() => history.push('artist/id=' + artistName)}>
+                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800" onClick={() => followArtist()}>
                           <Icon.FollowIcon/>
                           <a
                             className="block py-2 font-plus font-bold text-14 leading-[19px]"

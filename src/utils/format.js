@@ -42,6 +42,14 @@ export const base64ToBlob = (base64, contentType = '', sliceSize = 512) => {
     return blob;
 }
 
+export const base64ToStreamBlob = (base64) => {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return new Blob([bytes], { type: 'application/octet-stream' });
+}
 
 export const convertToDataURL = (blob) => {
     return new Promise((resolve, reject) => {
@@ -51,6 +59,23 @@ export const convertToDataURL = (blob) => {
         reader.readAsDataURL(blob);
     });
 }
+
+export const convertImageToBase64 = async (imageUrl) => {
+  try {
+    const response = await fetch(imageUrl, { mode: 'no-cors' });
+    const blob = await response.blob();
+    const base64 = await new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(blob);
+      fileReader.onload = () => resolve(fileReader.result);
+      fileReader.onerror = (error) => reject(error);
+    });
+
+    return base64;
+  } catch (error) {
+    console.error('Error converting image to base64:', error);
+  }
+};
 
 export const encodeArrayBuffer = (file) => {
     return Array.from(new Uint8Array(file));

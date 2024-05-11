@@ -25,7 +25,7 @@ export const APIProvider = ({ children }) => {
     const [principal, setPrincipal] = useState(''); 
     // const [isSessionExpired, setIsSessionExpired] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {        
         setPrincipal(user.principal);
     }, [user.principal])
 
@@ -70,50 +70,35 @@ export const APIProvider = ({ children }) => {
         }
     }
 
-    const login = async () => {
-        let {agent, identity} = await initAgent(true);
-        
-        if (agent == null) 
-            return null;
-
-        let accountData = {
-            createdAt: Number(Date.now() * 1000),
-            userPrincipal: identity.getPrincipal(),            
-        }
-
-        let managerActor = Actor.createActor(ManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
-        });
-        
-        let bucket = await managerActor.createAccountCanister(accountData);        
-        
-        console.log("bucket", bucket[0]);
-
-        return bucket[0];
-    };
-
     const getProfileInfo = async (userPrincipal = null) => {
-        let {agent, identity} = await initAgent(true);
+        // let {agent, identity} = await initAgent(true);
         
-        if (agent == null) 
-            return null;
+        // if (agent == null) 
+        //     return null;
 
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            agent.fetchRootKey();
-        }
+        // if(process.env.REACT_APP_DFX_NETWORK != "ic") {
+        //     agent.fetchRootKey();
+        // }
 
-        let accountActor = Actor.createActor(AccountIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
-        });
+        // let accountActor = Actor.createActor(AccountIDL, {
+        //     agent,
+        //     canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
+        // });
 
-        let profileInfo = await accountActor.getProfileInfo(userPrincipal ? userPrincipal : identity.getPrincipal());
+        // let profileInfo = await accountActor.getProfileInfo(userPrincipal ? userPrincipal : identity.getPrincipal());
+
+        let profileInfo;
 
         return profileInfo;
     }
 
-    const editProfile = async (profileInfo) => {   
+    const signIn = async (userPrincipal = null) => {
+        const result = await axios.post("api/v/users/signin", {userPrincipal : userPrincipal});
+
+        return result;
+    }
+
+    const uploadProfile = async (profileInfo, userInfo) => {   
         let { agent } = await initAgent();
         
         if (agent == null) 
@@ -124,9 +109,14 @@ export const APIProvider = ({ children }) => {
             canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
         });
         
-        console.log("profileInfo", profileInfo)
+        console.log("profileInfo", userInfo);
 
-        let result = await accountActor.editProfileInfo(profileInfo);
+        let result = await Promise.all([accountActor.editProfileInfo(profileInfo), 
+            axios.post("api/v/users/uploadProfile", {
+            ...userInfo})
+        ]);
+
+        console.log(result);
 
         return result;
     }
@@ -145,6 +135,10 @@ export const APIProvider = ({ children }) => {
         let result = await contentManagerActor.createContent(contentInfo);
 
         return result;
+    }
+
+    const uploadTrackInfo = async (trackInfo) => {
+        
     }
 
     // const upgradeContentCanister = async (contentInfo) => {
@@ -350,13 +344,23 @@ export const APIProvider = ({ children }) => {
         return result;
     }
 
-    const isExistUserInfo = async (displayname) => {
-        const data = await axios.post("api/v/users/existUserInfo", {
-            displayname
+    const checkDisplayName = async (displayname, userPrincipal) => {
+        const data = await axios.post("api/v/users/checkDisplayName", {
+            displayname : displayname,
+            userPrincipal : userPrincipal
         });
 
         return data;
     }
+    
+    const uploadFile = async (data) => {
+        const res = await axios.post("api/v/files/", data, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+        return res;
+    };
 
     // const register = async (
     //     userPincipal,
@@ -385,16 +389,17 @@ export const APIProvider = ({ children }) => {
     return (
         <APIContext.Provider
             value={{
-                login,
+                signIn,
                 getProfileInfo,
-                editProfile,
+                uploadProfile,
                 createContentInfo,
                 getSongListByIdentity,
                 getAllReleasedTracks,
                 processAndUploadChunk,
                 increasePlayCount,
                 releaseTrackItem,
-                isExistUserInfo
+                checkDisplayName,
+                uploadFile
             }}
         >
             {children}

@@ -10,7 +10,7 @@
     "@headlessui/react": "^1.7.18",
     "@ic-reactor/react": "^1.5.3",
     "@material-tailwind/react": "^2.1.9",
-    "@nfid/embed": "^0.10.1-alpha.6",
+    "@nfid/embed": "^0.10.3",
     "@peculiar/webcrypto": "^1.4.6",
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.17.0",

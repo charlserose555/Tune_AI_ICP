@@ -30,10 +30,7 @@ function Library() {
 
     dispatch(ShowModal("uploadSong"))
   }
-  const TabContent = memo(({ children }) => (
-    <div>{children}</div>
-  ), (prevProps, nextProps) => prevProps.value2 === nextProps.value2);
-
+  
   useEffect(() => {
     setActiveTab('tracks');
     history.push("/app/library/tracks");
