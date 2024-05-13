@@ -5,25 +5,26 @@ import { useSelector } from "../../store";
 import audioPlay from "../../utils/AudioPlay";
 
 function MyTracks() {
-    const [ mySongList, setMySongList] = useState([]); 
-    const { getSongListByIdentity } = useContext(APIContext);
-    const { songListUpdated } = useSelector((state) => state.auth);
+    const [ myTrackList, setMyTrackList] = useState([]); 
+    const { getTracksByArtist } = useContext(APIContext);
+    const { songListUpdated, user } = useSelector((state) => state.auth);
 
-    const getMySongList = async () => {
-      let result = await getSongListByIdentity();
+    const getmyTrackList = async () => {
+      let result = await getTracksByArtist(user.principal);
+      
       if(result != null && result.length > 0) {
-        result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
+        result.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
   
-        setMySongList(result)
+        setMyTrackList(result)
       }
     }
 
     useEffect(() => {
-      getMySongList();
+      getmyTrackList();
     }, [songListUpdated])
 
     const play = (index) => {
-      audioPlay(mySongList, index);
+      audioPlay(myTrackList, index);
     }
 
     return (<>
@@ -60,9 +61,9 @@ function MyTracks() {
               </tr>
           </thead>
           <tbody>
-              {mySongList.map((item, index) => { 
+              {myTrackList.map((item, index) => { 
                 return ((
-                  <TrackItem songItem={item} play={play} index={index} key={index}/>
+                  <TrackItem trackItem={item} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>

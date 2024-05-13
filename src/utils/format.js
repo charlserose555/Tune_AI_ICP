@@ -62,12 +62,22 @@ export const convertToDataURL = (blob) => {
 
 export const convertImageToBase64 = async (imageUrl) => {
   try {
-    const response = await fetch(imageUrl, { mode: 'no-cors' });
+    if(!imageUrl)
+      return null
+
+    const response = await fetch(imageUrl);
+
     const blob = await response.blob();
+
+    if(blob.size == 0)
+      return null
+
     const base64 = await new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(blob);
-      fileReader.onload = () => resolve(fileReader.result);
+      fileReader.onload = () => {
+        resolve(fileReader.result)
+      } ;
       fileReader.onerror = (error) => reject(error);
     });
 
@@ -180,4 +190,12 @@ export const getSuffleNumber = (min, max, currentValue) => {
     randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
   } while (randomNumber === currentValue);
   return randomNumber;
+}
+
+export const encodeToBase64 = (data) => {
+  return btoa(data);
+}
+
+export const decodeFromBase64 = (base64Data) => {
+  return atob(base64Data);
 }

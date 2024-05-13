@@ -13,7 +13,7 @@ function PopularTracks() {
     const getSongList = async () => {
       let result = await getAllReleasedTracks();
       if(result != null && result.length > 0) {
-        result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
+        result.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
   
         setSongList(result)
       }

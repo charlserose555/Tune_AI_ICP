@@ -30,7 +30,6 @@ function ProfileEditModal() {
 
     const setAvatarDataFromUrl = async () => {
         const data = await convertImageToBase64(user.avatar);
-
         setAvatarData(data);
     }
 
@@ -57,12 +56,12 @@ function ProfileEditModal() {
                     avatarImage += '='.repeat(4 - (avatarImage.length % 4));
                 }
                 
-                const imageBlob = base64ToBlob(avatarImage, fileType);
+                await checkDisplayName(displayname, user.principal);
+                
+                const imageBlob = base64ToBlob(avatarImage, matches[1]);
                 
                 const formData = new FormData();
                 formData.append('file', imageBlob, "avatar.png");
-               
-                await checkDisplayName(displayname, user.principal);
                 
                 const uploadData = await uploadFile(formData);
                 

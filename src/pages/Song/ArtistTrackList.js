@@ -4,26 +4,27 @@ import { useSelector } from "../../store";
 import audioPlay from "../../utils/AudioPlay";
 import ArtistTrackItem from "./ArtistTrackItem";
 import { useParams } from 'react-router-dom';
+import { decodeFromBase64 } from "../../utils/format";
 
 function ArtistTrackList() {
   const { id } = useParams();
   const [ trackList, setTrackList] = useState([]); 
-  const { getSongListByIdentity } = useContext(APIContext);
+  const { getReleasedTracksByArtist } = useContext(APIContext);
   const { songListUpdated } = useSelector((state) => state.auth);
 
-  const getArtistTracks = async () => {
-    let result = await getSongListByIdentity();
+  const getArtistTracks = async (artist) => {
+    let result = await getReleasedTracksByArtist(artist, true);
     if(result != null && result.length > 0) {
-      result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
+      result.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
 
       setTrackList(result)
     }
   }
 
     useEffect(() => {
-      console.log(id);
+      console.log("decodeFromBase64(id)", decodeFromBase64(id))
 
-      getArtistTracks();
+      getArtistTracks(decodeFromBase64(id));
     }, [id])
 
   const play = (index) => {
@@ -31,7 +32,7 @@ function ArtistTrackList() {
   }
 
   return (<>
-  <div className="px-6 pt-[70px] gap-[40px] pb-[120px]">
+  <div className="px-6 pt-[70px] gap-[40px] pb-[120px] font-plus">
     <div className="flex flex-col gap-[24px]">
       <div className="flex flex-row justify-start items-end">
           <p className="text-24 font-normal leading-30 font-plus">Tracks</p>
@@ -68,7 +69,7 @@ function ArtistTrackList() {
           <tbody>
               {trackList.map((item, index) => { 
                 return ((
-                  <ArtistTrackItem songItem={item} play={play} index={index} key={index}/>
+                  <ArtistTrackItem trackItem={item} play={play} index={index} key={index}/>
               )) } )}
           </tbody>
         </table>

@@ -6,25 +6,25 @@ import PopularTrackItem from "./NewTrackItem";
 import { dispatch, useSelector } from "../../store";
 
 function NewTracks() {
-    const [ songList, setSongList] = useState([]); 
+    const [ trackList, setTrackList] = useState([]); 
     const { getAllReleasedTracks } = useContext(APIContext);
     const { songListUpdated } = useSelector((state) => state.auth);
 
-    const getSongList = async () => {
+    const getTracks = async () => {
       let result = await getAllReleasedTracks();
       if(result != null && result.length > 0) {
-        result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt));
+        result.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
   
-        setSongList(result)
+        setTrackList(result)
       }
     }
 
     useEffect(() => {
-      getSongList();
+      getTracks();
     }, [songListUpdated])
 
     const play = (index) => {
-      audioPlay(songList, index);
+      audioPlay(trackList, index);
     }
 
     return (<>
@@ -68,9 +68,9 @@ function NewTracks() {
               </tr>
           </thead>
           <tbody>
-              {songList.map((item, index) => { 
+              {trackList.map((item, index) => { 
                 return ((
-                  <PopularTrackItem songItem={item} getSongList = {getSongList} play={play} index={index} key={index}/>
+                  <PopularTrackItem trackItem={item} getTracks = {getTracks} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>

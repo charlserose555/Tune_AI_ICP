@@ -12,12 +12,14 @@ import { useSelector } from "../../store";
 import { BASE_URL } from '../../config';
 import loading from "../../utils/Loading";
 import alert from "../../utils/Alert";
+import { UpdateSongList } from "../../store/reducers/auth";
 
-function ArtistTrackItem({trackItem, getTracks, index, play}) {
+function FavouriteTrackItem({trackItem, getTracks, index, play}) {
     const dispatch = useDispatch();
     const history = useHistory();
     const {user} = useSelector((state) => (state.auth));
-    const { addToFavouriteAPI } = useContext(APIContext);
+    const { removeFromFavouriteAPI } = useContext(APIContext);
+
 
     const playAudio = async () => {
       let playUrl = "";
@@ -27,7 +29,7 @@ function ArtistTrackItem({trackItem, getTracks, index, play}) {
       play(index)
     }
 
-    const addToFavourite = async () => {
+    const removeFromFavourite = async () => {
       if(!user.isInitialized) {
         alert("warning", "Please login first");
         return;
@@ -35,12 +37,23 @@ function ArtistTrackItem({trackItem, getTracks, index, play}) {
 
       loading();
 
-      const data = await addToFavouriteAPI(user.principal, trackItem.contentId);
+      const data = await removeFromFavouriteAPI(user.principal, trackItem.contentId);
 
       alert("info", data.msg);
 
+      dispatch(UpdateSongList());
+
       loading(false);
     } 
+
+    const followArtist = async () => {
+      if(!user.isInitialized) {
+        alert("warning", "Please login first");
+        return;
+      }
+
+      history.push('../artist/id=' + encodeToBase64(trackItem.artist));
+    }
 
     return (<>
      <tr style={{color: "white"}} className="z-0 font-normal border-b bg-transparent border-gray-700 cursor-pointer hover:bg-primary-800 transition-all duration-200 ease-in-out dark" >
@@ -72,12 +85,24 @@ function ArtistTrackItem({trackItem, getTracks, index, play}) {
                   <div className="py-2 px-45 flex flex-col gap-[10px]">
                     <Menu.Item>
                       {({ active }) => (
-                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800" onClick={() => addToFavourite()}>
+                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800" onClick={() => removeFromFavourite()}>
                           <Icon.FavoriteIcon/>
                           <a
                             className="block py-2 font-plus font-bold text-14 leading-[19px]"
                           >
-                            Add To Favorites
+                            Remove from Favorites
+                          </a>
+                        </div>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800" onClick={() => followArtist()}>
+                          <Icon.FollowIcon/>
+                          <a
+                            className="block py-2 font-plus font-bold text-14 leading-[19px]"
+                          >
+                            Follow Artist
                           </a>
                         </div>
                       )}
@@ -90,4 +115,4 @@ function ArtistTrackItem({trackItem, getTracks, index, play}) {
     </>)
 }
 
-export default ArtistTrackItem;
+export default FavouriteTrackItem;

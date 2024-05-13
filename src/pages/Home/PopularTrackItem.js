@@ -17,7 +17,7 @@ function PopularTrackItem({songItem, getSongList, index, play}) {
     const [ artistName, setArtistName ] = useState('');
     const [ createdAt, setCreatedAt] = useState(0);
     const [ contentCanisterId, setContentCanisterId] = useState("");
-    const { getProfileInfo, increasePlayCount } = useContext(APIContext);
+    const { getProfileInfo } = useContext(APIContext);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -94,7 +94,7 @@ function PopularTrackItem({songItem, getSongList, index, play}) {
                           <a
                             className="block py-2 font-plus font-bold text-14 leading-[19px]"
                           >
-                            Add Favorite
+                            Add To Favorites
                           </a>
                         </div>
                       )}

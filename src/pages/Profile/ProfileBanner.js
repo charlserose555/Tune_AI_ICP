@@ -43,51 +43,6 @@ export default function ProfileBanner() {
                 style={{border: '2px solid white', textAlign: 'center', cursor: 'pointer'}}>Follow</a>
             </div>
           </div>
-
-          {/* <div className="group" style={{position:"absolute", width:"40px", height:"40px", top:"145px", zIndex:"100", right:"42px", cursor:"pointer", pointerEvents: 'auto'}}>
-                <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option.svg"></img>
-                <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option_hover.svg"></img>
-          </div> */}
-
-
-          {/* <Menu as="div" className="relative inline-block text-left">
-            <div>
-              <Menu.Button className="group" style={{position:"absolute", width:"40px", height:"40px", top:"145px", zIndex:"100", right:"42px", cursor:"pointer", pointerEvents: 'auto'}}>
-                <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option.svg"></img>
-                <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full" src="/demo/assets/profile_banner_option_hover.svg"></img>
-              </Menu.Button>
-            </div>
-            <Menu.Items 
-              style={{position:"absolute", top:"185px", right:"42px", zIndex: "100"}}
-              className="mt-1 w-64 origin-top-right bg-secondary-700 divide-y bg-opacity-95 divide-gray-100 rounded-lg text-white shadow-bottom_1 transition-all duration-200 ease-in-out" >
-              <div className="py-2 px-45 gap-[10px]">
-                <Menu.Item>
-                  {({ active }) => (
-                    <div onClick={() => dispatch(ShowModal("editProfile"))} className={`menu-item flex justify-row items-center flex start px-45 mb-[10px] gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
-                      <EditProfileIcon/>
-                      <a
-                        className="block py-2 font-plus font-bold text-14 leading-[19px]"
-                      >
-                        Edit profile
-                      </a>
-                    </div>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <div className={`menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800`}>
-                      <SubscriptionIcon/>
-                      <a
-                        className="block py-2 font-plus font-bold text-14 leading-[19px]"
-                      >
-                        subscription
-                      </a>
-                    </div>
-                  )}
-                </Menu.Item>
-              </div>
-            </Menu.Items>
-          </Menu> */}
           <div className="absolute bottom-0 left-0 w-full" style={{ height:"157px", background: "linear-gradient(180deg, rgba(26, 26, 33, 0) 25.67%, #1A1A21 99.15%)"}}>
           </div>
       </div>

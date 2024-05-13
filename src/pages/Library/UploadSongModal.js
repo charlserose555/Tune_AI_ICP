@@ -12,11 +12,13 @@ import { Principal } from '@dfinity/principal';
 import { UpdateSongList } from "../../store/reducers/auth";
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min.js';
 import { Logout } from '../../store/reducers/auth';
+import { CanisterStatus } from '@dfinity/agent';
+import { BASE_URL } from '../../config';
 
 function UploadSongModal() {
     const {user} = useSelector((state) => (state.auth));
     const MAX_CHUNK_SIZE = 1024 * 500; // 500kb
-    const { createContentInfo, processAndUploadChunk } = useContext(APIContext);
+    const { createContentInfo, processAndUploadChunk, uploadFile, uploadTrackInfo } = useContext(APIContext);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -43,12 +45,10 @@ function UploadSongModal() {
                 alert("warning", "Please input song title")
             } else {                
                 if(getBinaryFileSizeFromBase64(thumbnail) > 512000) {
-                    loading(false);
                     alert('info', "Thumbnail size shouldn't be bigger than 500Kb");
                     return;
                 }  
                 if(audioInfo.size > 10550000) {
-                    loading(false);
                     alert('info', "Audio file size shouldn't be bigger than 10MB");
                     return;
                 }    
@@ -62,12 +62,13 @@ function UploadSongModal() {
                     thumbnailImage += '='.repeat(4 - (thumbnailImage.length % 4));
                 }
                
-                const imageBlob = base64ToBlob(thumbnailImage, thumbnailType);
+                
+                const imageBlob = base64ToBlob(thumbnailImage, matches[1]);
                 
                 let bsf = await imageBlob.arrayBuffer();
                 
-                loading(true);
-    
+                loading();
+                
                 let songFileInfo = {
                     userId: Principal.from(user.principal),
                     title: title,
@@ -83,18 +84,42 @@ function UploadSongModal() {
                     }
                 }
 
-                const result = await createContentInfo(songFileInfo);
+                console.log("songFileInfo", songFileInfo)
 
-                if(result[0] != null) {
-                    const contentCanisterId = result[0][1];
-                    const contentId = result[0][0];    
-                    const putChunkPromises = [];
+                const formData = new FormData();
+                formData.append('file', imageBlob, "thumbnail.png");
+                
+                let result = await Promise.all([createContentInfo(songFileInfo), uploadFile(formData)])
+                
+                console.log("result", result);
+
+                if(result[0][0] != null) {
+                    const contentCanisterId = result[0][0][1];
+                    const contentId = result[0][0][0];    
 
                     const t0 = performance.now();
 
-                    console.log("contentCanisterId", contentCanisterId.toText())
+                    let trackInfo = {
+                        contentId: contentId,
+                        canisterId: Principal.from(contentCanisterId).toText(),
+                        title: title,
+                        duration: parseInt(audioInfo.duration, 10),
+                        fileType: audioInfo.type,
+                        size: audioInfo.size,
+                        artist: user.principal,
+                        thumbnail: result[1].uri,
+                        createdAt : Number(Date.now() * 1000),    
+                        playCount : 0,
+                        saved: 0,
+                        chunkCount: Number(Math.ceil(audioInfo.size / MAX_CHUNK_SIZE)),
+                        isReleased: false
+                    }
 
-                    const putResult = await processAndUploadChunk(audioInfo, contentCanisterId, contentId)
+                    console.log("trackInfo", trackInfo);
+
+                    const putResult = await Promise.all([processAndUploadChunk(audioInfo, contentCanisterId, contentId), uploadTrackInfo(trackInfo)])
+
+                    console.log("contentCanisterId", contentCanisterId.toText())
 
                     const t1 = performance.now();
                     console.log("Upload took " + (t1 - t0) / 1000 + " seconds.")

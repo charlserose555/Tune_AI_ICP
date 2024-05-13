@@ -6,11 +6,11 @@ import { useSelector } from "../../store";
 
 function PlayPane() {
     const [ mySongList, setMySongList] = useState([]); 
-    const { getSongListByIdentity } = useContext(APIContext);
+    const { getTracksByArtist } = useContext(APIContext);
     const {songUploaded} = useSelector((state) => state.auth);
 
     // const getMySongList = async () => {
-    //   let result = await getSongListByIdentity();
+    //   let result = await getTracksByArtist();
     //   if(result != null && result.length > 0) {
     //     result.sort((a, b) => Number(b[1].createdAt) - Number(a[1].createdAt)); 
 

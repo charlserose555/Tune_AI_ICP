@@ -9,38 +9,16 @@ import { hideAudioPlay } from "../../store/reducers/player";
 import { Menu } from '@headlessui/react';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from "../../store";
+import { BASE_URL } from '../../config';
+import loading from "../../utils/Loading";
+import alert from "../../utils/Alert";
+import { encodeToBase64 } from "../../utils/format";
 
-function NewTrackItem({songItem, getSongList, index, play}) {
-  const [ contentId, setContentId] = useState(''); 
-  const [ title, setTitle] = useState(''); 
-  const [ duration, setDuration] = useState(0); 
-  const [ playCount, setPlayCount] = useState(0);
-  const [ artistName, setArtistName ] = useState('');
-  const [ createdAt, setCreatedAt] = useState(0);
-  const [ contentCanisterId, setContentCanisterId] = useState("");
-  const { getProfileInfo, increasePlayCount } = useContext(APIContext);
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const {user} = useSelector((state) => (state.auth));
-  
-    const [thumbnailUrl, setThumbnailUrl] = useState('');
-
-    const setThumbnail = async () => {
-      const chunks = [];
-      chunks.push(new Uint8Array(songItem[1].thumbnail.file).buffer);
-  
-      const blob = new Blob(chunks, {type : songItem[1].thumbnail.fileType ? songItem[1].thumbnail.fileType : "image/jpeg"});
-
-      const thumbnailUrl = await convertToDataURL(blob);
-
-      setThumbnailUrl(thumbnailUrl);    
-    }
-
-    const getArtist = async () => {
-      // getProfileInfo(songItem[1].userId).then(artistInfo => {
-      //   setArtistName(artistInfo[0].displayName)
-      // })
-    }
+function NewTrackItem({trackItem, getTracks, index, play}) {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const {user} = useSelector((state) => (state.auth));
+    const { addToFavouriteAPI } = useContext(APIContext);
 
     const playAudio = async () => {
       let playUrl = "";
@@ -50,39 +28,43 @@ function NewTrackItem({songItem, getSongList, index, play}) {
       play(index)
     }
 
+    const addToFavourite = async () => {
+      if(!user.isInitialized) {
+        alert("warning", "Please login first");
+        return;
+      }
+
+      loading();
+
+      const data = await addToFavouriteAPI(user.principal, trackItem.contentId);
+
+      alert("info", data.msg);
+
+      loading(false);
+    } 
+
     const followArtist = async () => {
-      // if(!user.isInitialized) {
-      //   alert("warning", "Please login first");
-      //   return;
-      // }
+      if(!user.isInitialized) {
+        alert("warning", "Please login first");
+        return;
+      }
 
-      // history.push('artist/id=' + artistName);
+      history.push('artist/id=' + encodeToBase64(trackItem.artist));
     }
-
-    useEffect(() => {
-      setContentId(songItem[1].contentId);
-      setTitle(songItem[1].title);
-      setDuration(songItem[1].duration);
-      setPlayCount(songItem[1].playCount);
-      setCreatedAt(formatDate(Number(songItem[1].createdAt) / 1000));
-      setContentCanisterId(Principal.from(songItem[1].contentCanisterId).toText())
-      setThumbnail();
-      getArtist();
-    }, [songItem])
 
     return (<>
      <tr style={{color: "white"}} className="z-0 font-normal border-b bg-transparent border-gray-700 cursor-pointer hover:bg-primary-800 transition-all duration-200 ease-in-out dark" >
       <td className="px-4 py-3 text-center group-hover:text-darkblue-500"
          style={{ maxWidth: '200px'}}>
           <div className="flex justify-start items-center flex-row pl-4 gap-[30px]" >
-            <img className="rounded-2 w-[60px] h-[60px]" src={thumbnailUrl}/>
-            <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</p>
+            <img className="rounded-2 w-[60px] h-[60px]" src={`${BASE_URL}/` + trackItem.thumbnail}/>
+            <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{trackItem.title}</p>
           </div>
         </td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{artistName}</td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(playCount)}</td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(duration))}</td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{createdAt}</div></td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.artists.displayname}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.playCount)}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(trackItem.duration))}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{formatDate(Number(trackItem.createdAt) / 1000)}</div></td>
         <td className="px-4 py-3 text-center">
           <div className="flex justify-center items-center" onClick={() => playAudio()}>
             <Icon.ItemPlayIcon/>
@@ -100,12 +82,12 @@ function NewTrackItem({songItem, getSongList, index, play}) {
                   <div className="py-2 px-45 flex flex-col gap-[10px]">
                     <Menu.Item>
                       {({ active }) => (
-                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800">
+                        <div className="menu-item flex justify-row items-center flex start px-45 gap-[10px] rounded-2 cursor-pointer hover:bg-primary-800" onClick={() => addToFavourite()}>
                           <Icon.FavoriteIcon/>
                           <a
                             className="block py-2 font-plus font-bold text-14 leading-[19px]"
                           >
-                            Add Favorite
+                            Add To Favorites
                           </a>
                         </div>
                       )}

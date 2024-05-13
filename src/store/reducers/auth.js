@@ -55,8 +55,6 @@ const auth = createSlice({
             const {userInfo} = action.payload;
 
             state.user = _.merge({}, state.user, userInfo);
-
-            console.log("state.user", state.user);
         },
 
         SetIdentity(state, action) {

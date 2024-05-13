@@ -138,7 +138,10 @@ export const APIProvider = ({ children }) => {
     }
 
     const uploadTrackInfo = async (trackInfo) => {
-        
+        const result = axios.post("api/v/tracks/uploadTracks", {
+            ...trackInfo})
+
+        return result;
     }
 
     // const upgradeContentCanister = async (contentInfo) => {
@@ -157,43 +160,6 @@ export const APIProvider = ({ children }) => {
     //     return result;
     // }
 
-    // const processAndUploadChunk = async (
-    //     blob,
-    //     byteStart,
-    //     contentId,
-    //     contentCanisterId,
-    //     chunk,
-    //     fileSize,
-    // )  => {
-    //     const t0 = performance.now();
-
-    //     let {agent, isSessionExpired} = await initAgent();
-        
-    //     if (agent == null) 
-    //         return null;
-
-    //     if (isSessionExpired) 
-    //         return null;
-
-    //     const blobSlice = blob.slice(
-    //         byteStart,
-    //         Math.min(Number(fileSize), byteStart + MAX_CHUNK_SIZE),
-    //         blob.type
-    //     );
-    //     const bsf = await blobSlice.arrayBuffer();
-    
-    //     let contentActor = Actor.createActor(ContentIDL, {
-    //         agent,
-    //         canisterId: contentCanisterId
-    //     });
-
-    //     let result = await contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
-
-    //     const t1 = performance.now();
-    //     console.log("Upload took " + (t1 - t0) / 1000 + " seconds.")
-
-    //     return result;
-    // }
 
     const processAndUploadChunk = async (
         audioInfo, contentCanisterId, contentId
@@ -254,94 +220,71 @@ export const APIProvider = ({ children }) => {
         return result;        
     }
 
-    const getSongListByIdentity = async () => {
-        let { agent } = await initAgent();
-        
-        if (agent == null) 
-            return null;
-
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+    const getTracksByArtist = async (artist) => {
+        const data = await axios.post("api/v/tracks/getTracks", {
+            filter: {
+                artist: artist
+            }
         });
 
-        let result = await contentManagerActor.getAllContentInfoByUserId(Principal.fromText(user.principal));
+        console.log("data");
 
-        console.log("result", result)
+        return data;
+    }
 
-        return result;
+    const getReleasedTracksByArtist = async (artist) => {
+        const data = await axios.post("api/v/tracks/getTracks", {
+            filter: {
+                artist: artist,
+                isReleased: true
+            }
+        });
+
+        console.log("data");
+
+        return data;
+    }
+
+    const getFavouriteTracksAPI = async (artist) => {
+        const data = await axios.post("api/v/tracks/getFavouriteTracks", {
+            artist : artist,            
+        });
+
+        return data;
     }
 
     const getAllReleasedTracks = async () => {
 
-        const authClient = await AuthClient.create();        
-        
-        const identity = authClient.getIdentity();
-        
-        const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
-
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            await agent.fetchRootKey();
-        }
-
-        if (agent == null) 
-            return null;
-
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+        const data = await axios.post("api/v/tracks/getTracks", {
+            filter: {
+                isReleased: true
+            }
         });
 
-        let result = await contentManagerActor.getAllContentInfo(true);
-
-        return result;           
-
+        return data;
     }
 
-    const increasePlayCount = async (contentId) => {
-        const authClient = await AuthClient.create();        
-        
-        const identity = authClient.getIdentity();
-        
-        const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
-            
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            await agent.fetchRootKey();
-        }
-        
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+    const logPlayHistory = async (contentId) => {
+        const data = await axios.post("api/v/tracks/logPlayHistory", {
+            filter: {
+                contentId: contentId
+            }, 
         });
 
-        let result = await contentManagerActor.increasePlayCount(contentId);
-
-        return result;
+        return data;
     }
 
     const releaseTrackItem = async (contentId, release = true) => {
-        const authClient = await AuthClient.create();        
-        
-        const identity = authClient.getIdentity();
-        
-        const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC
-        });
-            
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            await agent.fetchRootKey();
-        }
-        
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+        const data = await axios.post("api/v/tracks/releaseTrack", {
+            filter: {
+                contentId: contentId
+            }, 
+            update : {
+                isReleased: release
+            }
         });
 
-        let result = await contentManagerActor.releaseTrack(contentId, release);
-
-        return result;
+        return data;
     }
 
     const checkDisplayName = async (displayname, userPrincipal) => {
@@ -362,29 +305,17 @@ export const APIProvider = ({ children }) => {
         return res;
     };
 
-    // const register = async (
-    //     userPincipal,
-    //     displayName,
-    //     userName, 
-    // ) => {
-    //     const data = await axios.post("api/v/users/signup", {
-    //         rReferral: code,
-    //         email,
-    //         username,
-    //         password,
-    //     });
-    //     return data;
-    // };
+    const addToFavouriteAPI = async (artist, contentId) => {
+        const result = await axios.post("api/v/users/addToFavourite", {artist: artist, contentId: contentId, add: true});
 
-    // const value = useMemo(
-    //     () => ({
-    //         getProfileInfo,
-    //         createProfile,
-    //         login,
-    //     }),
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     []
-    //   );
+        return result;
+    }
+
+    const removeFromFavouriteAPI = async (artist, contentId) => {
+        const result = await axios.post("api/v/users/addToFavourite", {artist: artist, contentId: contentId, add: false});
+
+        return result;
+    }
 
     return (
         <APIContext.Provider
@@ -393,13 +324,18 @@ export const APIProvider = ({ children }) => {
                 getProfileInfo,
                 uploadProfile,
                 createContentInfo,
-                getSongListByIdentity,
+                getTracksByArtist,
                 getAllReleasedTracks,
+                getReleasedTracksByArtist,
+                getFavouriteTracksAPI,
                 processAndUploadChunk,
-                increasePlayCount,
+                logPlayHistory,
                 releaseTrackItem,
                 checkDisplayName,
-                uploadFile
+                uploadFile,
+                uploadTrackInfo,
+                addToFavouriteAPI,
+                removeFromFavouriteAPI
             }}
         >
             {children}

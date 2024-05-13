@@ -80,6 +80,8 @@ function AuthComponent({width, height}) {
                     createdAt: Number(profileInfo.createdAt)
                 }
 
+                console.log("userInfo", userInfo)
+
                 dispatch(Login({userInfo : userInfo}));
             }
 
