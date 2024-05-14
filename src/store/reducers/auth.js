@@ -17,7 +17,7 @@ const initialUser = {
     username: '',
     role : '',
     avatar: '',
-    fileType: '',
+    fileType: 'jpeg',
     createdAt: 0,
     isInitialized: false,
 };
@@ -55,8 +55,6 @@ const auth = createSlice({
             const {userInfo} = action.payload;
 
             state.user = _.merge({}, state.user, userInfo);
-
-            console.log("state.user", state.user);
         },
 
         SetIdentity(state, action) {

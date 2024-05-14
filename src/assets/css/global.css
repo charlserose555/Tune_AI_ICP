@@ -145,7 +145,7 @@
 .outline-btn:hover{
     transition: .5s all ease;
     background-color: rgb(33, 32, 42, 0.85);
-    color:rgb(6, 96, 217);
+    color:rgb(0, 96, 217);
 }
 input[type="checkbox"].form-checkbox:checked + svg {
     fill: #0060D9; /* Change the color of the check mark when checked */

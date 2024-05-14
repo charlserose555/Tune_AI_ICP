@@ -9,11 +9,11 @@ import { lazy } from "react";
 
 const Home = lazy(() => import("../pages/Home/Home"));
 const Genres = lazy(() => import("../pages/Track/Tracks"));
-const Profile = lazy(() => import("../pages/Profile/Profile"));
+const Artist = lazy(() => import("../pages/Profile/Artist"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const TrackDetail = lazy(() => import("../pages/Home/TrackDetail"));
-const Library = lazy(() => import("../pages/Library/Library"));
+const Profile = lazy(() => import("../pages/Profile/Profile"));
 const Manage = lazy(() => import("../pages/Manage/Manage"));
 
 const routes = [
@@ -25,12 +25,12 @@ const routes = [
     component: Home,
   },
   {
-    path: "/library",
+    path: "/profile",
     icon: "LibarayIcon",
-    name: "Library",
+    name: "Profile",
     auth: true,
     role: "user",
-    component: Library,
+    component: Profile,
   },
   {
     path: "/manage",
@@ -43,7 +43,7 @@ const routes = [
   {
     path: "/artist/id=:id",
     role: "user",
-    component: Profile,
+    component: Artist,
   },
   {
     path: "/track/id=:id",

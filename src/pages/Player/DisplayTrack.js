@@ -11,6 +11,8 @@ const DisplayTrack = ({
   handleNext
 }) => {
   const onLoadedMetadata = () => {
+    console.log("onLoadedMeta", onloadedmetadata)
+
     const seconds = audioRef.current.duration;
 
     audioRef.current.volume = volume / 100;

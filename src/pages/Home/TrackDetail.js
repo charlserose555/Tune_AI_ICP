@@ -9,7 +9,7 @@ import TrackDetailBanner from "./TrackDetailBanner";
 function TrackDetail() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { id, demo } = useParams();
+  const { id } = useParams();
 
   return (
     <>

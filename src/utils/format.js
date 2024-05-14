@@ -1,3 +1,5 @@
+import path from 'path-browserify';
+
 export const formatDuration = (duration) => {
     const minutes = Math.floor(duration / 60);
     const seconds = Math.floor(duration % 60);
@@ -42,6 +44,14 @@ export const base64ToBlob = (base64, contentType = '', sliceSize = 512) => {
     return blob;
 }
 
+export const base64ToStreamBlob = (base64) => {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return new Blob([bytes], { type: 'application/octet-stream' });
+}
 
 export const convertToDataURL = (blob) => {
     return new Promise((resolve, reject) => {
@@ -51,6 +61,33 @@ export const convertToDataURL = (blob) => {
         reader.readAsDataURL(blob);
     });
 }
+
+export const convertImageToBase64 = async (imageUrl) => {
+  try {
+    if(!imageUrl)
+      return null
+
+    const response = await fetch(imageUrl);
+
+    const blob = await response.blob();
+
+    if(blob.size == 0)
+      return null
+
+    const base64 = await new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(blob);
+      fileReader.onload = () => {
+        resolve(fileReader.result)
+      } ;
+      fileReader.onerror = (error) => reject(error);
+    });
+
+    return base64;
+  } catch (error) {
+    console.error('Error converting image to base64:', error);
+  }
+};
 
 export const encodeArrayBuffer = (file) => {
     return Array.from(new Uint8Array(file));
@@ -155,4 +192,16 @@ export const getSuffleNumber = (min, max, currentValue) => {
     randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
   } while (randomNumber === currentValue);
   return randomNumber;
+}
+
+export const encodeToBase64 = (data) => {
+  return btoa(data);
+}
+
+export const decodeFromBase64 = (base64Data) => {
+  return atob(base64Data);
+}
+
+export const getFileNameWithoutExtension = (filePath) => {
+  return path.basename(filePath, path.extname(filePath));
 }

@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import alert from "../../utils/Alert.js";
 import loading from "../../utils/Loading.js";
+import { BASE_URL } from '../../config';
 
 import { useSelector } from "../../store/index.js";
 import { dispatch } from "../../store/index.js";
@@ -13,7 +14,7 @@ import { convertToDataURL, isAdmin } from '../../utils/format.js';
 
 function AuthComponent({width, height}) {
 
-    const { getProfileInfo, login } = useContext(APIContext);
+    const { getProfileInfo, signIn } = useContext(APIContext);
     const [loggedIn, setLoggedIn] = useState(false);
 
     const {isLoggedIn} = useSelector((state) => state.auth);
@@ -44,23 +45,22 @@ function AuthComponent({width, height}) {
 
             const authClient = await AuthClient.create();
             const identity = authClient.getIdentity();
-
-            alert("success", "The login successful!");
-    
-            console.log("principal", identity.getPrincipal().toText());
-
-            let profileInfo = await getProfileInfo();
             
-            console.log(profileInfo[0]);
+            console.log("principal", identity.getPrincipal().toText());
+            
+            let signResult = await signIn(identity.getPrincipal().toText());
+            alert("success", "The login successful!");
+            
+            let profileInfo = signResult.user;
 
-            if(!profileInfo[0]) {
+            if(!profileInfo) {
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
-                    displaynmae: "",
+                    displayname: "",
                     username: "",
                     avatar: "",
-                    fileType: "",
                     isInitialized: false,
+                    fileType: "jpeg",
                     role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
                     createdAt : Number(Date.now() * 1000)
                 }
@@ -68,46 +68,32 @@ function AuthComponent({width, height}) {
                 dispatch(Login({userInfo : userInfo}));
                 alert("info", "Please create the profile");
                 dispatch(ShowModal("editProfile"))
-            } else {                
-                let avatarUrl = '';
-                if(profileInfo[0].avatar[0]) {
-                    const chunks = [];
-                    chunks.push(new Uint8Array(profileInfo[0].avatar[0]).buffer);
-                
-                    const blob = new Blob(chunks, {type : profileInfo[0].fileType[0] ? profileInfo[0].fileType[0] : "image/jpeg"});
-
-                    const result = await convertToDataURL(blob);
-
-                    avatarUrl = result;    
-                }
-
+            } else {
                 let userInfo = {
                     principal: identity.getPrincipal().toText(),
                     role: isAdmin(identity.getPrincipal().toText())? 'admin' : 'user',
-                    displayname: profileInfo[0].displayName,
-                    username: profileInfo[0].userName,
-                    avatar: avatarUrl,
-                    fileType: profileInfo[0].fileType[0],
+                    displayname: profileInfo.displayname,
+                    username: profileInfo.username,
+                    avatar: `${BASE_URL}/` + profileInfo.avatar,
                     isInitialized: true,
-                    createdAt: Number(profileInfo[0].createdAt)
+                    fileType: "jpeg",
+                    createdAt: Number(profileInfo.createdAt)
                 }
 
-                console.log("userInfo", userInfo);
-                    
+                console.log("userInfo", userInfo)
+
                 dispatch(Login({userInfo : userInfo}));
             }
 
             loading(false);
         } catch (err) {
-            alert("danger", "Failure on creating canister");
-            console.log("err", err)
+            alert("danger", "Failure on log in");
             loading(false);
         }
     }
     
     const loginNFID = async() => {
         authClient = await AuthClient.create();
-
         if (!authClient) throw new Error("AuthClient not initialized");
         
         const APP_NAME = `${process.env.REACT_APP_SIGNIN_MESSAGE}`;
@@ -118,6 +104,7 @@ function AuthComponent({width, height}) {
 
         authClient.login({
             identityProvider,
+            derivationOrigin: "https://4ramb-vaaaa-aaaan-qmi2a-cai.ic0.app",
             onSuccess: () => handleLogin(),
             windowOpenerFeatures: `
             left=${window.screen.width / 2 - 525 / 2},
@@ -135,6 +122,8 @@ function AuthComponent({width, height}) {
         await new Promise((resolve) => {
             authClient.login({
                 identityProvider: "https://identity.ic0.app",
+                maxTimeToLive: 24 * 3_600_000_000_000,
+                derivationOrigin: "https://4ramb-vaaaa-aaaan-qmi2a-cai.ic0.app",
                 onSuccess: resolve,
             });
         });

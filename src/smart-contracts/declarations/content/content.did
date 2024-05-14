@@ -90,7 +90,7 @@ type ContentData =
    size: nat;
    thumbnail: Thumbnail;
    title: text;
-   uploadedAt: Timestamp;
+   createdAt: Timestamp;
    userId: UserId;
  };
 type CanisterStatus = 

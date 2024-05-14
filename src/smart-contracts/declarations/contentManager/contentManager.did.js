@@ -31,7 +31,7 @@ export const idlFactory = ({ IDL }) => {
     'playCount' : IDL.Nat,
     'chunkCount' : IDL.Nat,
     'isReleased' : IDL.Bool,
-    'uploadedAt' : Timestamp,
+    'createdAt' : Timestamp,
   });
   const UserId__1 = IDL.Principal;
   const StatusRequest = IDL.Record({

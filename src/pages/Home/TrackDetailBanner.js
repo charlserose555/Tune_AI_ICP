@@ -1,25 +1,60 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "../../store";
-import { Avatar } from "@windmill/react-ui";
-import { EditProfileIcon, SubscriptionIcon } from "../../icons";
-import { Menu } from '@headlessui/react';
+import React, { useEffect,  useState, useContext } from "react";
+import { useSelector} from "../../store";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useParams } from "react-router-dom";
+import { APIContext } from "../../context/ApiContext";
+import loading from "../../utils/Loading";
+import alert from "../../utils/Alert";
+import audioPlay from "../../utils/AudioPlay";
+import { useDispatch } from "../../store";
+import { hideAudioPlay } from "../../store/reducers/player";
 
 export default function TrackDetailBanner() {
-  const dispatch = useDispatch();
   const history = useHistory();
-  const { id, demo } = useParams();
+  const { id } = useParams();
+  const [trackInfo, setTrackInfo] = useState(null);
+  const { getTrackInfoAPI, addToFavouriteAPI } = useContext(APIContext);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const getTrackInfo = async (id) => {
+    const { data }  = await getTrackInfoAPI(id);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+    setTrackInfo(data[0]);
+  }
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const addToFavourite = async () => {
+    if(!user.isInitialized) {
+      alert("warning", "Please login first");
+      return;
+    }
+
+    loading();
+
+    const data = await addToFavouriteAPI(user.principal, trackInfo.contentId);
+
+    alert("info", data.msg);
+
+    loading(false);
+  } 
+
+  const play = () => {
+    let trackList = [];
+
+    dispatch(hideAudioPlay());
+
+    trackList.push(trackInfo)
+
+    console.log("trackList", trackList)
+
+    audioPlay(trackList, 0);
+  }
+
+  useEffect(() => {
+    getTrackInfo(id)
+  }, [id])
+
+  // const follow
 
   return (
     <div className="font-plus flex flex-col text-white relative">
@@ -36,21 +71,21 @@ export default function TrackDetailBanner() {
         </div>
         <div className="flex flex-row justify-start gap-[33px] items-center absolute top-16 left-9 z-50">
             <div className="flex flex-col gap-[10px]">
-                <h1 className="font-plus font-normal text-24 text-white leading-[30px]">Classic rock</h1>
-                <h5 className="font-plus font-light text-sm text-white leading-[17px]">35M Monthly listeners</h5>
+                <h1 className="font-plus font-normal text-24 text-white leading-[30px]">{trackInfo?.title}</h1>
+                {/* <h5 className="font-plus font-light text-sm text-white leading-[17px]">35M Monthly listeners</h5> */}
             </div>
         </div>
-        <div className="absolute top-[185px] left-12 z-50 banner-img w-[54px] h-[54px] group rounded-full cursor-pointer flex items-center justify-center relative duration-500" >
-            <div className="extend-play absolute bg-darkblue-500 bg-opacity-80 w-full h-full opacity-0 hover:shadow-bottom_1 rounded-full w-[54px] h-[54px] ">
+        <div className="absolute top-[185px] left-12 z-50 banner-img w-[54px] h-[54px] group rounded-full cursor-pointer flex items-center justify-center relative duration-500" onClick={() => play()}>
+            <div className="extend-play absolute bg-darkblue-500 bg-opacity-80 w-full h-full opacity-0 hover:shadow-bottom_1 rounded-full w-[54px] h-[54px]">
                 <img src="/demo/assets/expand_play.svg" className="rounded-full"/>
             </div>
             <img src="/demo/assets/banner_play.svg" className="w-[47px] h-[47px] opacity-100 banner-play absolute w-full h-full rounded-full"/>
         </div>
-        <div className="group" style={{position:"absolute", width:"40px", height:"40px", top:"165px", zIndex:"100", right:"102px", cursor:"pointer", pointerEvents: 'auto'}}>
+        {/* <div className="group" style={{position:"absolute", width:"40px", height:"40px", top:"165px", zIndex:"100", right:"102px", cursor:"pointer", pointerEvents: 'auto'}}>
             <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/share.svg"></img>
             <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full" src="/demo/assets/share_active.svg"></img>
-        </div>
-        <div className="group" style={{position:"absolute", width:"40px", height:"40px", top:"165px", zIndex:"100", right:"42px", cursor:"pointer", pointerEvents: 'auto'}}>
+        </div> */}
+        <div className="group" onClick={() => addToFavourite()} style={{position:"absolute", width:"40px", height:"40px", top:"165px", zIndex:"100", right:"42px", cursor:"pointer", pointerEvents: 'auto'}}>
             <img style={{transition:".3s all ease-out"}} className="opacity-100 group-hover:opacity-0 absolute right-0 top-0 rounded-full" src="/demo/assets/add_star.svg"></img>
             <img style={{transition:".3s all ease-out"}} className="opacity-0 group-hover:opacity-100 absolute right-0 top-0 rounded-full" src="/demo/assets/add_star_active.svg"></img>
         </div>

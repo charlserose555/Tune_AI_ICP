@@ -7,13 +7,12 @@ import {idlFactory as AccountIDL} from '../smart-contracts/declarations/account/
 import {idlFactory as ContentIDL} from '../smart-contracts/declarations/content/content.did.js';
 import {idlFactory as ContentManagerIDL} from '../smart-contracts/declarations/contentManager/contentManager.did.js';
 import axios from "../utils/Axios"
-// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from 'react-router-dom';
-
 import { Logout, SetIdentity } from "../store/reducers/auth";
-
 import { Principal } from '@dfinity/principal'; 
 import { encodeArrayBuffer} from '../utils/format.js';
+import { ShowModal } from "../store/reducers/menu.js";
+import alert from "../utils/Alert.js";
 
 export const APIContext = React.createContext();
 
@@ -25,7 +24,7 @@ export const APIProvider = ({ children }) => {
     const [principal, setPrincipal] = useState(''); 
     // const [isSessionExpired, setIsSessionExpired] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {        
         setPrincipal(user.principal);
     }, [user.principal])
 
@@ -33,6 +32,9 @@ export const APIProvider = ({ children }) => {
         // console.log("history", history)
 
         // history.push("/");
+        alert("info", "Session is expired")
+
+        dispatch(ShowModal(""))
         dispatch(Logout({}))
     }
 
@@ -70,50 +72,35 @@ export const APIProvider = ({ children }) => {
         }
     }
 
-    const login = async () => {
-        let {agent, identity} = await initAgent(true);
-        
-        if (agent == null) 
-            return null;
-
-        let accountData = {
-            createdAt: Number(Date.now() * 1000),
-            userPrincipal: identity.getPrincipal(),            
-        }
-
-        let managerActor = Actor.createActor(ManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
-        });
-        
-        let bucket = await managerActor.createAccountCanister(accountData);        
-        
-        console.log("bucket", bucket[0]);
-
-        return bucket[0];
-    };
-
-    const getProfileInfo = async (userPrincipal = null) => {
-        let {agent, identity} = await initAgent(true);
-        
-        if (agent == null) 
-            return null;
-
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            agent.fetchRootKey();
-        }
-
-        let accountActor = Actor.createActor(AccountIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
+    const getProfileInfoAPI = async (userPrincipal = null) => {
+        const result = await axios.post("api/v/users/getProfile", {
+            filter: {
+                userPrincipal : userPrincipal
+            }
         });
 
-        let profileInfo = await accountActor.getProfileInfo(userPrincipal ? userPrincipal : identity.getPrincipal());
+        console.log("result", result)
 
-        return profileInfo;
+        return result;
     }
 
-    const editProfile = async (profileInfo) => {   
+    const followArtistAPI = async (artist, follow) => {
+        const result = await axios.post("api/v/users/followArtist", {
+            artist: artist,
+            userPrincipal : user.principal,
+            follow: follow   
+        });
+
+        return result;
+    }
+
+    const signIn = async (userPrincipal = null) => {
+        const result = await axios.post("api/v/users/signin", {userPrincipal : userPrincipal});
+
+        return result;
+    }
+
+    const uploadProfile = async (profileInfo, userInfo) => {   
         let { agent } = await initAgent();
         
         if (agent == null) 
@@ -124,9 +111,14 @@ export const APIProvider = ({ children }) => {
             canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
         });
         
-        console.log("profileInfo", profileInfo)
+        console.log("profileInfo", userInfo);
 
-        let result = await accountActor.editProfileInfo(profileInfo);
+        let result = await Promise.all([accountActor.editProfileInfo(profileInfo), 
+            axios.post("api/v/users/uploadProfile", {
+            ...userInfo})
+        ]);
+
+        console.log(result);
 
         return result;
     }
@@ -147,6 +139,13 @@ export const APIProvider = ({ children }) => {
         return result;
     }
 
+    const uploadTrackInfo = async (trackInfo) => {
+        const result = axios.post("api/v/tracks/uploadTracks", {
+            ...trackInfo})
+
+        return result;
+    }
+
     // const upgradeContentCanister = async (contentInfo) => {
     //     let {agent} = await initAgent();
         
@@ -163,43 +162,6 @@ export const APIProvider = ({ children }) => {
     //     return result;
     // }
 
-    // const processAndUploadChunk = async (
-    //     blob,
-    //     byteStart,
-    //     contentId,
-    //     contentCanisterId,
-    //     chunk,
-    //     fileSize,
-    // )  => {
-    //     const t0 = performance.now();
-
-    //     let {agent, isSessionExpired} = await initAgent();
-        
-    //     if (agent == null) 
-    //         return null;
-
-    //     if (isSessionExpired) 
-    //         return null;
-
-    //     const blobSlice = blob.slice(
-    //         byteStart,
-    //         Math.min(Number(fileSize), byteStart + MAX_CHUNK_SIZE),
-    //         blob.type
-    //     );
-    //     const bsf = await blobSlice.arrayBuffer();
-    
-    //     let contentActor = Actor.createActor(ContentIDL, {
-    //         agent,
-    //         canisterId: contentCanisterId
-    //     });
-
-    //     let result = await contentActor.putContentChunk(contentId, chunk, encodeArrayBuffer(bsf));
-
-    //     const t1 = performance.now();
-    //     console.log("Upload took " + (t1 - t0) / 1000 + " seconds.")
-
-    //     return result;
-    // }
 
     const processAndUploadChunk = async (
         audioInfo, contentCanisterId, contentId
@@ -260,141 +222,156 @@ export const APIProvider = ({ children }) => {
         return result;        
     }
 
-    const getSongListByIdentity = async () => {
-        let { agent } = await initAgent();
-        
-        if (agent == null) 
-            return null;
-
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
-        });
-
-        let result = await contentManagerActor.getAllContentInfoByUserId(Principal.fromText(user.principal));
-
-        console.log("result", result)
-
-        return result;
-    }
-
-    const getAllReleasedTracks = async () => {
-
-        const authClient = await AuthClient.create();        
-        
-        const identity = authClient.getIdentity();
-        
-        const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
-
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            await agent.fetchRootKey();
+    const getTracksByArtistAPI = async (artist, searchWord, page, pageSize, sort, sortBy) => {
+        try {
+            const data = await axios.post("api/v/tracks/getTracks", {
+                filter: {
+                    artist: artist
+                },
+                searchWord: searchWord,
+                page : page,
+                pageSize : pageSize,
+                sort : sort,
+                sortBy : sortBy
+            });
+    
+            return data;
+        } catch {            
+            return [];
         }
-
-        if (agent == null) 
-            return null;
-
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
-        });
-
-        let result = await contentManagerActor.getAllContentInfo(true);
-
-        return result;           
-
     }
 
-    const increasePlayCount = async (contentId) => {
-        const authClient = await AuthClient.create();        
-        
-        const identity = authClient.getIdentity();
-        
-        const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC});
-            
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            await agent.fetchRootKey();
-        }
-        
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
+    const getReleasedTracksByArtist = async (artist, searchWord, page, pageSize, sort, sortBy) => {
+        const data = await axios.post("api/v/tracks/getTracks", {
+            filter: {
+                artist: artist,
+                isReleased: true
+            },
+            searchWord: searchWord,
+            page : page,
+            pageSize : pageSize,
+            sort : sort,
+            sortBy : sortBy        
         });
 
-        let result = await contentManagerActor.increasePlayCount(contentId);
+        console.log("data");
 
-        return result;
+        return data;
     }
 
-    const releaseTrackItem = async (contentId, release = true) => {
-        const authClient = await AuthClient.create();        
-        
-        const identity = authClient.getIdentity();
-        
-        const agent = new HttpAgent({ identity, 
-            host : process.env.REACT_APP_DFX_NETWORK != "ic" ? process.env.REACT_APP_PUBLIC_HOST : process.env.REACT_APP_PUBLIC_HOST_IC
-        });
-            
-        if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-            await agent.fetchRootKey();
-        }
-        
-        let contentManagerActor = Actor.createActor(ContentManagerIDL, {
-            agent,
-            canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_CONTENT_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_CONTENT_MANAGER_CANISTER_ID
-        });
-
-        let result = await contentManagerActor.releaseTrack(contentId, release);
-
-        return result;
-    }
-
-    const isExistUserInfo = async (displayname) => {
-        const data = await axios.post("api/v/users/existUserInfo", {
-            displayname
+    const getFavouriteTracksAPI = async (artist, searchWord, page, pageSize, sort, sortBy) => {
+        const data = await axios.post("api/v/tracks/getFavouriteTracks", {
+            artist : artist,    
+            searchWord: searchWord,
+            page : page,
+            pageSize : pageSize,
+            sort : sort,
+            sortBy : sortBy                
         });
 
         return data;
     }
 
-    // const register = async (
-    //     userPincipal,
-    //     displayName,
-    //     userName, 
-    // ) => {
-    //     const data = await axios.post("api/v/users/signup", {
-    //         rReferral: code,
-    //         email,
-    //         username,
-    //         password,
-    //     });
-    //     return data;
-    // };
+    const getAllReleasedTracks = async (searchWord, page, pageSize, sort, sortBy) => {
 
-    // const value = useMemo(
-    //     () => ({
-    //         getProfileInfo,
-    //         createProfile,
-    //         login,
-    //     }),
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     []
-    //   );
+        const data = await axios.post("api/v/tracks/getTracks", {
+            filter: {
+                isReleased: true
+            },
+            searchWord: searchWord,
+            page : page,
+            pageSize : pageSize,
+            sort : sort,
+            sortBy : sortBy
+        });
+
+        return data;
+    }
+
+    const getTrackInfoAPI = async (contentId) => {
+        const data = await axios.post("api/v/tracks/getTrackInfo", {
+            filter: {
+                contentId: contentId
+            },
+        });
+    
+        return data;
+    }
+
+    const logPlayHistory = async (contentId) => {
+        const data = await axios.post("api/v/tracks/logPlayHistory", {
+            filter: {
+                contentId: contentId
+            }, 
+        });
+
+        return data;
+    }
+
+    const releaseTrackItem = async (contentId, release = true) => {
+        const data = await axios.post("api/v/tracks/releaseTrack", {
+            filter: {
+                contentId: contentId
+            }, 
+            update : {
+                isReleased: release
+            }
+        });
+
+        return data;
+    }
+
+    const checkDisplayName = async (displayname, userPrincipal) => {
+        const data = await axios.post("api/v/users/checkDisplayName", {
+            displayname : displayname,
+            userPrincipal : userPrincipal
+        });
+
+        return data;
+    }
+    
+    const uploadFile = async (data) => {
+        const res = await axios.post("api/v/files/", data, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+        return res;
+    };
+
+    const addToFavouriteAPI = async (artist, contentId) => {
+        const result = await axios.post("api/v/users/addToFavourite", {artist: artist, contentId: contentId, add: true});
+
+        return result;
+    }
+
+    const removeFromFavouriteAPI = async (artist, contentId) => {
+        const result = await axios.post("api/v/users/addToFavourite", {artist: artist, contentId: contentId, add: false});
+
+        return result;
+    }
 
     return (
         <APIContext.Provider
             value={{
-                login,
-                getProfileInfo,
-                editProfile,
+                signIn,
+                getProfileInfoAPI,
+                uploadProfile,
                 createContentInfo,
-                getSongListByIdentity,
+                getTracksByArtistAPI,
+                getTrackInfoAPI,
                 getAllReleasedTracks,
+                getReleasedTracksByArtist,
+                getFavouriteTracksAPI,
                 processAndUploadChunk,
-                increasePlayCount,
+                followArtistAPI,
+                logPlayHistory,
                 releaseTrackItem,
-                isExistUserInfo
+                checkDisplayName,
+                uploadFile,
+                uploadTrackInfo,
+                addToFavouriteAPI,
+                removeFromFavouriteAPI
             }}
         >
             {children}

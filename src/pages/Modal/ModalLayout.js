@@ -1,6 +1,6 @@
 import { useSelector } from "../../store";
 import ProfileEditModal from "../../components/Popups/ProfileEditModal";
-import UploadSongModal from "../Library/UploadSongModal";
+import UploadSongModal from "../Profile/UploadSongModal";
 
 const ModalLayout = () => {
     const { modal } = useSelector((state) => state.menu);

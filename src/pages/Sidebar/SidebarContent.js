@@ -38,7 +38,7 @@ function SidebarContent() {
                       <span className="nav-border absolute inset-y-0 left-0 w-1 rounded-tl-2 rounded-bl-2"></span>                    
                       {route.name == "Home" && <Icon.HomeIcon/>}
                       {route.name == "Genres" && <Icon.GenresIcon/>}
-                      {route.name == "Library" && <Icon.LibraryIcon/>}
+                      {route.name == "Profile" && <Icon.ProfileSidebarIcon/>}
                       {route.name == "Manage" && <Icon.ManageIcon/>}
                       <span className="leading-20">{route.name}</span>
                 </NavLink>
@@ -46,7 +46,7 @@ function SidebarContent() {
           </ul>
         </div>
         
-        <div className="pt-6 text-white flex flex-row justify-center items-end px-3 w-full h-full gap-1 block md:hidden">
+        <div className="pt-6 text-white flex flex-row justify-center items-end px-3 w-full h-full gap-1 pb-8">
           <AuthComponent width={'247px'} height={'284px'}/>
         </div>
 

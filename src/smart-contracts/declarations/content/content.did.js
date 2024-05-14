@@ -30,7 +30,7 @@ export const idlFactory = ({ IDL }) => {
     'playCount' : IDL.Nat,
     'chunkCount' : IDL.Nat,
     'isReleased' : IDL.Bool,
-    'uploadedAt' : Timestamp,
+    'createdAt' : Timestamp,
   });
   const definite_canister_settings = IDL.Record({
     'freezing_threshold' : IDL.Nat,

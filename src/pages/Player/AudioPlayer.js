@@ -14,11 +14,12 @@ import { hideAudioPlay } from "../../store/reducers/player";
 import { UpdateSongList } from "../../store/reducers/auth";
 import CircularSpinnerSm from "../../components/Animated/CircularSpinnerSm";
 import CircularSpinnerMd from "../../components/Animated/CircularSpinnerMd";
+import { BASE_URL } from '../../config';
 
 export default function AudioPlayer() {
     const player = useSelector((state) => state.player);
     const { play, tracks, currentIndex } = player;
-    const { getProfileInfo, increasePlayCount } = useContext(APIContext);
+    const { getProfileInfo, logPlayHistory } = useContext(APIContext);
     
     const [repeated, setRepeated] = useState(0);
     const [timeProgress, setTimeProgress] = useState(0);
@@ -26,7 +27,6 @@ export default function AudioPlayer() {
     const [duration, setDuration] = useState(0);
     const [currentTrack, setCurrentTrack] = useState(null);
     const [trackIndex, setTrackIndex] = useState(0);
-    const [artistName, setArtistName] = useState('');
     
     const [isSuffled, setIsSuffled] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -77,23 +77,10 @@ export default function AudioPlayer() {
         playAnimationRef.current = requestAnimationFrame(repeat);
     }, [audioRef, duration, progressBarRef, setTimeProgress, setBufferedProgress]);
 
-    const setCurrentTrackInfo = async (tracks, currentIndex) => {
-        const chunks = [];
+    const setCurrentTrackInfo = async (tracks, currentIndex) => {  
+        const thumbnailUrl = `${BASE_URL}/` + tracks[currentIndex].thumbnail
         
-        chunks.push(new Uint8Array(tracks[currentIndex][1].thumbnail.file).buffer);
-        
-        const blob = new Blob(chunks, {type : tracks[currentIndex][1].thumbnail.fileType ? tracks[currentIndex][1].thumbnail.fileType : "image/jpeg"});
-  
-        const thumbnailUrl = await convertToDataURL(blob);
-        
-        getProfileInfo(tracks[currentIndex][1].userId).then(artistInfo => {
-            setArtistName(artistInfo[0].displayName)
-        })
-
-        // let info = await getProfileInfo(tracks[currentIndex][1].userId);
-        // setArtistName(info[0].displayName);
-
-        increasePlayCount(tracks[currentIndex][1].contentId).then(result => {
+        logPlayHistory(tracks[currentIndex].contentId).then(result => {
             dispatch(UpdateSongList());
         })
 
@@ -101,30 +88,28 @@ export default function AudioPlayer() {
 
         if(process.env.REACT_APP_DFX_NETWORK != "ic") {
             trackInfo = {
-                src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + "&contentId=" + tracks[currentIndex][1].contentId,
+                src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex].canisterId).toText() + "&contentId=" + tracks[currentIndex].contentId,
                 thumbnailUrl : thumbnailUrl,
-                title : tracks[currentIndex][1].title,
-                // artistName : artistInfo[0].displayName,
-                duration : tracks[currentIndex][1].duration  
+                title : tracks[currentIndex].title,
+                cover : tracks[currentIndex].cover,
+                duration : tracks[currentIndex].duration  
             }            
         } else {
             trackInfo = {
-                src : "https://" + Principal.from(tracks[currentIndex][1].contentCanisterId).toText() + ".raw.icp0.io/?&contentId=" + tracks[currentIndex][1].contentId,
+                src : "https://" + Principal.from(tracks[currentIndex].canisterId).toText() + ".raw.icp0.io/?&contentId=" + tracks[currentIndex].contentId,
                 thumbnailUrl : thumbnailUrl,
-                title : tracks[currentIndex][1].title,
-                // artistName : artistInfo[0].displayName,
-                duration : tracks[currentIndex][1].duration  
+                title : tracks[currentIndex].title,
+                cover : tracks[currentIndex].cover,
+                duration : tracks[currentIndex].duration  
             }
         }
 
         console.log("track", trackInfo);
         setCurrentTrack(trackInfo);
 
-        setIsLoaded(true)
-    }
-
-    const setAudioTrackInfo = (tracks, currentIndex) => {
-        setCurrentTrackInfo(tracks, currentIndex);
+        setTimeout(() => {
+            setIsLoaded(true);
+        }, 10)
     }
 
     const setVolumeValue = (value) => {
@@ -134,15 +119,14 @@ export default function AudioPlayer() {
         }
     }
 
-    const handleNext = (isManual) => {
-        setIsLoaded(false)
-
+    const handleNext = (isManual) => {        
         setDuration(0);
-
+        
         setTimeProgress(0);
-
+        
         setBufferedProgress(0)
-
+        
+        setIsLoaded(false)
         if(repeated == 0 && isManual != true) {
             closeAudioPanel();
             return;
@@ -155,6 +139,7 @@ export default function AudioPlayer() {
             const newIndex = getSuffleNumber(0, tracks.length - 1, currentIndex);
             setTrackIndex(newIndex);
             setCurrentTrackInfo(tracks, newIndex);
+            return;
         }
 
         if (trackIndex >= tracks.length - 1) {
@@ -199,13 +184,23 @@ export default function AudioPlayer() {
             setRepeated(0)
         }
         setIsSuffled(prev => !prev);
-    }
+    }    
 
+    useEffect(() => {
+        if(player.play) {
+            setCurrentTrack(null);
+
+            setIsPlaying(false);
+
+            togglePlayPause();
+        }
+    }, [player])
+   
     useEffect(() => {
         if(tracks.length) {
             setTrackIndex(currentIndex)
 
-            setAudioTrackInfo(tracks, currentIndex);  
+            setCurrentTrackInfo(tracks, currentIndex);
         } else {
             setDuration(0);
 
@@ -234,6 +229,7 @@ export default function AudioPlayer() {
         }
     }, [tracks, currentIndex])
 
+       
     useEffect(() => {
         if(audioRef.current) {
             if (isPlaying) {
@@ -246,15 +242,6 @@ export default function AudioPlayer() {
         playAnimationRef.current = requestAnimationFrame(repeat);
     }, [audioRef, isPlaying, repeat]);
 
-    useEffect(() => {
-        if(player.play) {
-            setCurrentTrack(null);
-
-            setIsPlaying(false);
-
-            togglePlayPause();
-        }
-    }, [player])
 
     useEffect(() => {
         if (audioRef.current) {
@@ -280,7 +267,7 @@ export default function AudioPlayer() {
                                 </div>}
                             </div>
                             <div className="flex flex-col hidden xs:block md:hidden w-[70px]">
-                                <p className="text-12 font-medium truncate">{artistName}</p>
+                                <p className="text-12 font-medium truncate">{currentTrack?.cover}</p>
                                 <p className="text-10 font-normal truncate">{currentTrack?.title}</p>
                             </div>
                         </div>
@@ -307,7 +294,7 @@ export default function AudioPlayer() {
                        
                         <div className="flex justify-start items-center w-full">
                             <div className="flex flex-col justify-around items-start hidden lg:block gap-[6px] pr-2">
-                                <p className="text-16 font-bold leading-20">{artistName}</p>
+                                <p className="text-16 font-bold leading-20">{currentTrack?.cover}</p>
                                 <p className="text-14 font-normal leading-18 truncate w-[90px]">{currentTrack?.title}</p>
                             </div>
                             <div className="flex flex-col md:flex-row flex-grow justify-start items-center md:px-3 md:gap-[12px]">

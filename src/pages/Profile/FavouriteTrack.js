@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { APIContext } from "../../context/ApiContext";
-import audioPlay from "../../utils/AudioPlay";
-import PopularTrackItem from "./NewTrackItem";
+import TrackItem from "./TrackItem";
 import { useSelector } from "../../store";
+import audioPlay from "../../utils/AudioPlay";
+import FavouriteTrackItem from "./FavouriteTrackItem";
 import CustomTableSortLabel from "../../components/CustomTableSortLabel";
+import { LibraryIcon } from "../../icons";
 import { Menu } from '@headlessui/react';
 import { IoIosArrowDown } from 'react-icons/io';
 import ReactPaginate from 'react-paginate';
-import { LibraryIcon } from "../../icons";
 
-function NewTracks() {
-    const [ trackList, setTrackList] = useState([]); 
-    const { getAllReleasedTracks } = useContext(APIContext);
-    const { songListUpdated } = useSelector((state) => state.auth);
+function FavouriteTrack() {
+    const [ favouriteTrack, setFavouriteTracks] = useState([]); 
+    const { getFavouriteTracksAPI } = useContext(APIContext);
+    const { songListUpdated, user } = useSelector((state) => state.auth);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
@@ -21,16 +22,19 @@ function NewTracks() {
     const [searchWord, setSearchWord] = useState('');
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const getTracks = async () => {
-      const {data, count} = await getAllReleasedTracks(searchWord, page, pageSize, sort, sortby);
-
+    const getFavouriteTracks = async () => {
+      let {data, count} = await getFavouriteTracksAPI(user.principal, searchWord, page, pageSize, sort, sortby);
+      
       setTotalCount(count)
 
-      if(data != null) {
-        setTrackList(data)
+      if(data != null) { 
+        setFavouriteTracks(data)
       }
 
-      setIsLoaded(true)
+      console.log("count", count);
+      console.log("data", data);
+
+      setIsLoaded(true);
     }
 
     const handlePageChange = (data) => {
@@ -44,18 +48,14 @@ function NewTracks() {
     }
 
     useEffect(() => {
-      getTracks();
+      getFavouriteTracks();
     }, [songListUpdated, searchWord, page, pageSize, sort, sortby])
 
     const play = (index) => {
-      audioPlay(trackList, index);
+      audioPlay(favouriteTrack, index);
     }
 
     return (<>
-    <div className="flex flex-row justify-start items-end">
-        <p className="text-24 font-normal leading-30 font-plus">New Tracks</p>
-        <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
-    </div>
     <div className="flex flex-row justify-start items-end pt-[20px] mb-[150px]">
       <div className="w-full">
         <div className="flex flex-row w-full justify-between gap-[10px]">
@@ -66,7 +66,7 @@ function NewTracks() {
         <div className="overflow-x-auto  x-scrollable-tag mt-4">
           <table className="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-800 min-w-[610px]">
             <thead className="border-b dark:border-gray-700 text-sm text-gray-700 bg-transparent dark:bg-primary" style={{color: "white"}}>
-            <tr>
+              <tr>
                 <th scope="col" className="px-4 pb-5 text-start">
                   <div className="flex justify-start w-full items-start flex-row cursor-pointer" onClick={() => createSortHandler('title')}>
                     <CustomTableSortLabel
@@ -109,17 +109,6 @@ function NewTracks() {
                   </div>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
-                  <div className="flex justify-center w-full items-center flex-row cursor-pointer"  onClick={() => createSortHandler('saved')}>
-                      <CustomTableSortLabel
-                          className="m-2"
-                          active={sortby === 'saved'}
-                          direction={sort ? 'desc' : 'asc'}
-                          >
-                        <img src="/demo/assets/star.svg" className="min-w-[24px] min-h-[24px]"/>
-                      </CustomTableSortLabel> 
-                  </div>
-                </th>
-                <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row cursor-pointer"  onClick={() => createSortHandler('duration')}>
                       <CustomTableSortLabel
                           className="m-2"
@@ -149,14 +138,14 @@ function NewTracks() {
               </tr>
           </thead>
           <tbody>
-              {trackList.map((item, index) => { 
+              {favouriteTrack.map((item, index) => { 
                 return ((
-                  <PopularTrackItem trackItem={item} play={play} index={index} isNew={true} key={index} />
+                  <FavouriteTrackItem trackItem={item} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>
 
-          {trackList.length == 0 && isLoaded ? (<div className="py-8 px-4 rounded-2 w-full justify-center items-center">
+          {favouriteTrack.length == 0 && isLoaded ? (<div className="py-8 px-4 rounded-2 w-full justify-center items-center">
             <div className="flex row justify-center items-center text-18 gap-2">
               <LibraryIcon/>
               Tracks not found</div>
@@ -164,7 +153,7 @@ function NewTracks() {
         </div>
 
         <div className="flex flex-row justify-between w-full" style={{zIndex: "1000"}}>
-          {trackList.length != 0 ? (<div className="flex flex-row justify-between w-full ">
+          {favouriteTrack.length != 0 ? (<div className="flex flex-row justify-between w-full ">
           <div className="mt-6 flex items-center justify-center h-8 ms-0 leading-tight
                   border rounded-lg bg-primary border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white" style={{alignItems: "center", justifyContent:"start"}} >
             <Menu as="div" className="relative inline-block text-left flex">
@@ -248,4 +237,4 @@ function NewTracks() {
     </>)
 }
 
-export default NewTracks;
+export default FavouriteTrack;

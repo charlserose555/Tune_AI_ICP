@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import * as Icon from "../../icons";
 import { APIContext } from "../../context/ApiContext";
 import { formatDuration, convertToDataURL, formatDate} from "../../utils/format";
 import { Principal } from '@dfinity/principal'; 
-import audioPlay from "../../utils/AudioPlay";
 import { useDispatch } from "../../store";
 import { hideAudioPlay } from "../../store/reducers/player";
 import { Menu } from '@headlessui/react';
@@ -17,7 +16,7 @@ function PopularTrackItem({songItem, getSongList, index, play}) {
     const [ artistName, setArtistName ] = useState('');
     const [ createdAt, setCreatedAt] = useState(0);
     const [ contentCanisterId, setContentCanisterId] = useState("");
-    const { getProfileInfo, increasePlayCount } = useContext(APIContext);
+    const { getProfileInfo } = useContext(APIContext);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -94,7 +93,7 @@ function PopularTrackItem({songItem, getSongList, index, play}) {
                           <a
                             className="block py-2 font-plus font-bold text-14 leading-[19px]"
                           >
-                            Add Favorite
+                            Add To Favorites
                           </a>
                         </div>
                       )}

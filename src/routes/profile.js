@@ -8,8 +8,9 @@
 import { lazy } from "react";
 
 
-const myTracks = lazy(() => import("../pages/Library/MyTracks"));
-const favoriteTracks = lazy(() => import("../pages/Library/FavouriteTrack"));
+const myTracks = lazy(() => import("../pages/Profile/MyTracks"));
+const favoriteTracks = lazy(() => import("../pages/Profile/FavouriteTrack"));
+const Upload = lazy(() => import("../pages/Profile/Upload"));
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: "/favorite",
     auth: true,
     component: favoriteTracks,
+  },
+  {
+    path: "/upload",
+    auth: true,
+    component: Upload,
   },
 ];
 
