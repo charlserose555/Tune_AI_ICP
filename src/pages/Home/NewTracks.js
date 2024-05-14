@@ -109,6 +109,17 @@ function NewTracks() {
                   </div>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
+                  <div className="flex justify-center w-full items-center flex-row cursor-pointer"  onClick={() => createSortHandler('saved')}>
+                      <CustomTableSortLabel
+                          className="m-2"
+                          active={sortby === 'saved'}
+                          direction={sort ? 'desc' : 'asc'}
+                          >
+                        <img src="/demo/assets/star.svg" className="min-w-[24px] min-h-[24px]"/>
+                      </CustomTableSortLabel> 
+                  </div>
+                </th>
+                <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row cursor-pointer"  onClick={() => createSortHandler('duration')}>
                       <CustomTableSortLabel
                           className="m-2"

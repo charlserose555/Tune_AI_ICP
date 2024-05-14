@@ -52,9 +52,14 @@ function PopularTracks() {
                     Cover
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
-                <div className="flex justify-center w-full items-center flex-row">
-                    <img src="/demo/assets/eye_hidden.svg" className="min-w-[24px] min-h-[24px]"/>
-                </div>
+                  <div className="flex justify-center w-full items-center flex-row">
+                      <img src="/demo/assets/eye_hidden.svg" className="min-w-[24px] min-h-[24px]"/>
+                  </div>
+                </th>
+                <th scope="col" className="px-4 pb-5 text-center">
+                  <div className="flex justify-center w-full items-center flex-row">
+                      <img src="/demo/assets/star.svg" className="min-w-[24px] min-h-[24px]"/>
+                  </div>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row">
