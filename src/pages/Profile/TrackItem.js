@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import * as Icon from "../../icons";
-import { APIContext } from "../../context/ApiContext";
-import { formatDuration, convertToDataURL, formatDate} from "../../utils/format";
+import * as Icon from "../../icons/index.js";
+import { APIContext } from "../../context/ApiContext.jsx";
+import { formatDuration, convertToDataURL, formatDate} from "../../utils/format.js";
 import { Principal } from '@dfinity/principal'; 
-import audioPlay from "../../utils/AudioPlay";
-import { useDispatch } from "../../store";
-import { hideAudioPlay } from "../../store/reducers/player";
+import audioPlay from "../../utils/AudioPlay.js";
+import { useDispatch } from "../../store/index.js";
+import { hideAudioPlay } from "../../store/reducers/player.js";
 import loading from "../../utils/Loading.js";
-import { UpdateSongList } from "../../store/reducers/auth";
-import { BASE_URL } from '../../config';
+import { UpdateSongList } from "../../store/reducers/auth.js";
+import { BASE_URL } from '../../config.js';
 
 function TrackItem({trackItem, index, play}) {
     const dispatch = useDispatch();
@@ -45,6 +45,7 @@ function TrackItem({trackItem, index, play}) {
             <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{trackItem.title}</p>
           </div>
         </td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.cover}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(trackItem.duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{formatDate(Number(trackItem.createdAt) / 1000)}</div></td>

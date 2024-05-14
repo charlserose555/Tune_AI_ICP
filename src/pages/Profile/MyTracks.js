@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { APIContext } from "../../context/ApiContext";
+import TrackItem from "./TrackItem";
 import audioPlay from "../../utils/AudioPlay";
-import PopularTrackItem from "./NewTrackItem";
-import { useSelector } from "../../store";
+import ReactPaginate from 'react-paginate';
+import { dispatch, useSelector } from "../../store";
+import { ShowModal } from "../../store/reducers/menu";
 import CustomTableSortLabel from "../../components/CustomTableSortLabel";
+import loading from "../../utils/Loading";
 import { Menu } from '@headlessui/react';
 import { IoIosArrowDown } from 'react-icons/io';
-import ReactPaginate from 'react-paginate';
 import { LibraryIcon } from "../../icons";
 
-function NewTracks() {
-    const [ trackList, setTrackList] = useState([]); 
-    const { getAllReleasedTracks } = useContext(APIContext);
-    const { songListUpdated } = useSelector((state) => state.auth);
+function MyTracks() {
+    const [ myTrackList, setMyTrackList] = useState([]); 
+    const { getTracksByArtistAPI } = useContext(APIContext);
+    const { songListUpdated, user } = useSelector((state) => state.auth);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
@@ -21,21 +23,23 @@ function NewTracks() {
     const [searchWord, setSearchWord] = useState('');
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const getTracks = async () => {
-      const {data, count} = await getAllReleasedTracks(searchWord, page, pageSize, sort, sortby);
-
-      setTotalCount(count)
-
-      if(data != null) {
-        setTrackList(data)
-      }
-
-      setIsLoaded(true)
-    }
-
     const handlePageChange = (data) => {
       setPage(data.selected);
     };
+
+    const getMyTracks = async () => {
+      const {data, count} = await getTracksByArtistAPI(user.principal, searchWord, page, pageSize, sort, sortby);
+      
+      setTotalCount(count)
+
+      console.log("data", data)
+
+      if(data != null) {
+        setMyTrackList(data)
+      }
+
+      setIsLoaded(true);
+    }
 
     const createSortHandler = (key) => {
       setSortby(key);
@@ -43,19 +47,24 @@ function NewTracks() {
       setSort(!sort);
     }
 
+    const uploadSong = () => {
+      if(!user.isInitialized) {
+        dispatch(ShowModal("editProfile"))
+        return;
+      }
+  
+      dispatch(ShowModal("uploadSong"))
+    }
+
     useEffect(() => {
-      getTracks();
+      getMyTracks();
     }, [songListUpdated, searchWord, page, pageSize, sort, sortby])
 
     const play = (index) => {
-      audioPlay(trackList, index);
+      audioPlay(myTrackList, index);
     }
 
     return (<>
-    <div className="flex flex-row justify-start items-end">
-        <p className="text-24 font-normal leading-30 font-plus">New Tracks</p>
-        <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
-    </div>
     <div className="flex flex-row justify-start items-end pt-[20px] mb-[150px]">
       <div className="w-full">
         <div className="flex flex-row w-full justify-between gap-[10px]">
@@ -63,38 +72,29 @@ function NewTracks() {
             <input type="text" placeholder="Search.." value={searchWord} onChange={(e) => setSearchWord(e.target.value)} className="bg-primary-700 opacity-100 py-2 pl-4 px-4 rounded-3 text-white font-plus font-normal outline-none border-transparent w-full" style={{height: '40px'}}></input>
           </div>
         </div>
-        <div className="overflow-x-auto  x-scrollable-tag mt-4">
-          <table className="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-800 min-w-[610px]">
-            <thead className="border-b dark:border-gray-700 text-sm text-gray-700 bg-transparent dark:bg-primary" style={{color: "white"}}>
-            <tr>
+
+        <div className="overflow-x-auto x-scrollable-tag mt-4 pt-[20px]">
+          <table className="w-full table-auto text-sm text-left rtl:text-right text-gray-500 text-gray-800 min-w-[610px]">
+            <thead className="border-b border-gray-700 text-sm text-gray-700 bg-transparent bg-primary" style={{color: "white"}}>
+              <tr>
                 <th scope="col" className="px-4 pb-5 text-start">
                   <div className="flex justify-start w-full items-start flex-row cursor-pointer" onClick={() => createSortHandler('title')}>
-                    <CustomTableSortLabel
-                        className="m-2"
-                        active={sortby === 'title'}
-                        direction={sort ? 'desc' : 'asc'}>
-                      Title
-                    </CustomTableSortLabel> 
-                  </div> 
-                </th>
-                <th scope="col" className="px-4 pb-5 text-center">
-                  <div className="flex justify-center w-full items-center flex-row cursor-pointer" onClick={() => createSortHandler('artist')}>
-                    <CustomTableSortLabel
-                        className="m-2"
-                        active={sortby === 'artist'}
-                        direction={sort ? 'desc' : 'asc'}>
-                      Writer
-                    </CustomTableSortLabel> 
+                      <CustomTableSortLabel
+                          className="m-2"
+                          active={sortby === 'title'}
+                          direction={sort ? 'desc' : 'asc'}>
+                        Title
+                      </CustomTableSortLabel> 
                   </div>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
                   <div className="flex justify-center w-full items-center flex-row cursor-pointer" onClick={() => createSortHandler('cover')}>
-                    <CustomTableSortLabel
-                        className="m-2"
-                        active={sortby === 'cover'}
-                        direction={sort ? 'desc' : 'asc'}>
-                      Cover
-                    </CustomTableSortLabel> 
+                      <CustomTableSortLabel
+                          className="m-2"
+                          active={sortby === 'cover'}
+                          direction={sort ? 'desc' : 'asc'}>
+                        Cover
+                      </CustomTableSortLabel> 
                   </div>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
@@ -130,30 +130,30 @@ function NewTracks() {
                   </div>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">       
-                    Play
+                  <div className="flex justify-center w-full items-center flex-row cursor-pointer">
+                    Action
+                  </div>
                 </th>
-                <th scope="col" className="px-4 pb-5 text-center">
-                           
+                <th scope="col" className="px-4 pb-5 text-center">       
+                    Play
                 </th>
               </tr>
           </thead>
           <tbody>
-              {trackList.map((item, index) => { 
+              {myTrackList.map((item, index) => { 
                 return ((
-                  <PopularTrackItem trackItem={item} play={play} index={index} isNew={true} key={index} />
+                  <TrackItem trackItem={item} play={play} index={index} key={index}/>
               )) } )}
             </tbody>
           </table>
-
-          {trackList.length == 0 && isLoaded ? (<div className="py-8 px-4 rounded-2 w-full justify-center items-center">
+          {myTrackList.length == 0 && isLoaded ? (<div className="py-8 px-4 rounded-2 w-full justify-center items-center">
             <div className="flex row justify-center items-center text-18 gap-2">
               <LibraryIcon/>
               Tracks not found</div>
             </div>) : (null)}
         </div>
 
-        <div className="flex flex-row justify-between w-full" style={{zIndex: "1000"}}>
-          {trackList.length != 0 ? (<div className="flex flex-row justify-between w-full ">
+        {myTrackList.length != 0 ? (<div className="flex flex-row justify-between w-full ">
           <div className="mt-6 flex items-center justify-center h-8 ms-0 leading-tight
                   border rounded-lg bg-primary border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white" style={{alignItems: "center", justifyContent:"start"}} >
             <Menu as="div" className="relative inline-block text-left flex">
@@ -231,10 +231,9 @@ function NewTracks() {
               />
             </div>) : ("")}
         </div>) : ("")}
-        </div>
       </div>
     </div>
     </>)
 }
 
-export default NewTracks;
+export default MyTracks;

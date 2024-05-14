@@ -8,7 +8,7 @@ function UpgradeAccount() {
     const { getTracksByArtist } = useContext(APIContext);
 
     return (<>
-    <div className="flex flex-row justify-start items-end pt-[20px] mb-[120px]">
+    <div className="flex flex-row justify-start items-end pt-[20px] mb-[150px]">
       <div className="w-full">
         <div className="overflow-x-auto  x-scrollable-tag mt-4">
         </div>

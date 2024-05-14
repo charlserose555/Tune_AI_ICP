@@ -51,7 +51,7 @@ function ArtistTrackItem({trackItem, getTracks, index, play}) {
             <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{trackItem.title}</p>
           </div>
         </td>
-        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.artists.displayname}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.cover}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(trackItem.duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{formatDate(Number(trackItem.createdAt) / 1000)}</div></td>

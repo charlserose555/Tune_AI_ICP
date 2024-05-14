@@ -91,7 +91,7 @@ function Header() {
                         <a
                           className="block py-2 font-plus font-bold text-14 leading-[19px]"
                         >
-                          Profile
+                          Edit Profile
                         </a>
                       </div>
                     )}

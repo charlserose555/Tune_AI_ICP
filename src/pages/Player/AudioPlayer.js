@@ -91,7 +91,7 @@ export default function AudioPlayer() {
                 src : "http://127.0.0.1:4943/?canisterId=" + Principal.from(tracks[currentIndex].canisterId).toText() + "&contentId=" + tracks[currentIndex].contentId,
                 thumbnailUrl : thumbnailUrl,
                 title : tracks[currentIndex].title,
-                artistName : tracks[currentIndex].artists.displayname,
+                cover : tracks[currentIndex].cover,
                 duration : tracks[currentIndex].duration  
             }            
         } else {
@@ -99,7 +99,7 @@ export default function AudioPlayer() {
                 src : "https://" + Principal.from(tracks[currentIndex].canisterId).toText() + ".raw.icp0.io/?&contentId=" + tracks[currentIndex].contentId,
                 thumbnailUrl : thumbnailUrl,
                 title : tracks[currentIndex].title,
-                artistName : tracks[currentIndex].artists.displayname,
+                cover : tracks[currentIndex].cover,
                 duration : tracks[currentIndex].duration  
             }
         }
@@ -267,7 +267,7 @@ export default function AudioPlayer() {
                                 </div>}
                             </div>
                             <div className="flex flex-col hidden xs:block md:hidden w-[70px]">
-                                <p className="text-12 font-medium truncate">{currentTrack?.artistName}</p>
+                                <p className="text-12 font-medium truncate">{currentTrack?.cover}</p>
                                 <p className="text-10 font-normal truncate">{currentTrack?.title}</p>
                             </div>
                         </div>
@@ -294,7 +294,7 @@ export default function AudioPlayer() {
                        
                         <div className="flex justify-start items-center w-full">
                             <div className="flex flex-col justify-around items-start hidden lg:block gap-[6px] pr-2">
-                                <p className="text-16 font-bold leading-20">{currentTrack?.artistName}</p>
+                                <p className="text-16 font-bold leading-20">{currentTrack?.cover}</p>
                                 <p className="text-14 font-normal leading-18 truncate w-[90px]">{currentTrack?.title}</p>
                             </div>
                             <div className="flex flex-col md:flex-row flex-grow justify-start items-center md:px-3 md:gap-[12px]">

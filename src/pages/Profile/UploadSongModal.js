@@ -1,19 +1,19 @@
 import React, { useState, useContext } from 'react';
-import { DragFileInput } from '../../components/DragDrop/DragFileInput';
-import { ThumbnailInput } from '../../components/DragDrop/ThumbnailInput';
-import { formatDuration, getFileExtension } from '../../utils/format';
-import { useDispatch, useSelector } from '../../store';
-import { ShowModal } from '../../store/reducers/menu';
-import alert from "../../utils/Alert";
-import loading from '../../utils/Loading';
-import { APIContext } from '../../context/ApiContext';
+import { DragFileInput } from '../../components/DragDrop/DragFileInput.js';
+import { ThumbnailInput } from '../../components/DragDrop/ThumbnailInput.js';
+import { formatDuration, getFileExtension } from '../../utils/format.js';
+import { useDispatch, useSelector } from '../../store/index.js';
+import { ShowModal } from '../../store/reducers/menu.js';
+import alert from "../../utils/Alert.js";
+import loading from '../../utils/Loading.js';
+import { APIContext } from '../../context/ApiContext.jsx';
 import { base64ToBlob, encodeArrayBuffer, getBinaryFileSizeFromBase64} from '../../utils/format.js';
 import { Principal } from '@dfinity/principal';
-import { UpdateSongList } from "../../store/reducers/auth";
+import { UpdateSongList } from "../../store/reducers/auth.js";
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min.js';
-import { Logout } from '../../store/reducers/auth';
+import { Logout } from '../../store/reducers/auth.js';
 import { CanisterStatus } from '@dfinity/agent';
-import { BASE_URL } from '../../config';
+import { BASE_URL } from '../../config.js';
 
 function UploadSongModal() {
     const {user} = useSelector((state) => (state.auth));

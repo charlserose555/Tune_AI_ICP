@@ -20,7 +20,6 @@ function FavouriteTrackItem({trackItem, getTracks, index, play}) {
     const {user} = useSelector((state) => (state.auth));
     const { removeFromFavouriteAPI } = useContext(APIContext);
 
-
     const playAudio = async () => {
       let playUrl = "";
       
@@ -52,6 +51,11 @@ function FavouriteTrackItem({trackItem, getTracks, index, play}) {
         return;
       }
 
+      if(user.principal == trackItem.artist) {
+        alert("warning", "Can't follow the yourself");
+        return;
+      }
+      
       history.push('../artist/id=' + encodeToBase64(trackItem.artist));
     }
 
@@ -65,6 +69,7 @@ function FavouriteTrackItem({trackItem, getTracks, index, play}) {
           </div>
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.artists.displayname}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.cover}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(trackItem.duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{formatDate(Number(trackItem.createdAt) / 1000)}</div></td>

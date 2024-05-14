@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "../../store";
 function Home() {
   return (
     <>
-      <div className="flex flex-col pt-16 font-plus pl-6 pr-6 text-white relative overflow-x-auto">
+      <div className="flex flex-col pt-16 font-plus px-10 text-white relative overflow-x-auto">
           <TrackSide/>
           <PopularTracks/>
       </div>

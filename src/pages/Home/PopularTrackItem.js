@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import * as Icon from "../../icons";
 import { APIContext } from "../../context/ApiContext";
 import { formatDuration, convertToDataURL, formatDate} from "../../utils/format";
 import { Principal } from '@dfinity/principal'; 
-import audioPlay from "../../utils/AudioPlay";
 import { useDispatch } from "../../store";
 import { hideAudioPlay } from "../../store/reducers/player";
 import { Menu } from '@headlessui/react';

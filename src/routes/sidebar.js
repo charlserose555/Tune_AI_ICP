@@ -14,40 +14,12 @@ const routes = [
     role: "user",
   },
   {
-    path: "/app/library",
+    path: "/app/profile",
     icon: "./home.svg",
-    name: "Library",
+    name: "Profile",
     role: "user",
     auth: true, 
-  },
-  // {
-  //   icon: "CasinoIcon",
-  //   name: "Library",
-  //   path: "/app/library",
-  //   routes: [
-  //     // submenu
-  //     {
-  //       path: "/app/casino/all-games",
-  //       name: "All Games",
-  //     },
-  //     {
-  //       path: "/app/casino/livecasino",
-  //       name: "Live Casino",
-  //     },
-  //     {
-  //       path: "/app/casino/poker",
-  //       name: "Poker",
-  //     },
-  //     {
-  //       path: "/app/casino/video-slots",
-  //       name: "Video Slots",
-  //     },
-  //     {
-  //       path: "/app/casino/table-games",
-  //       name: "Table Games",
-  //     },
-  //   ],
-  // },
+  }
 ];
 
 export default routes;

@@ -7,13 +7,12 @@ import {idlFactory as AccountIDL} from '../smart-contracts/declarations/account/
 import {idlFactory as ContentIDL} from '../smart-contracts/declarations/content/content.did.js';
 import {idlFactory as ContentManagerIDL} from '../smart-contracts/declarations/contentManager/contentManager.did.js';
 import axios from "../utils/Axios"
-// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from 'react-router-dom';
-
 import { Logout, SetIdentity } from "../store/reducers/auth";
-
 import { Principal } from '@dfinity/principal'; 
 import { encodeArrayBuffer} from '../utils/format.js';
+import { ShowModal } from "../store/reducers/menu.js";
+import alert from "../utils/Alert.js";
 
 export const APIContext = React.createContext();
 
@@ -33,6 +32,9 @@ export const APIProvider = ({ children }) => {
         // console.log("history", history)
 
         // history.push("/");
+        alert("info", "Session is expired")
+
+        dispatch(ShowModal(""))
         dispatch(Logout({}))
     }
 
@@ -70,26 +72,26 @@ export const APIProvider = ({ children }) => {
         }
     }
 
-    const getProfileInfo = async (userPrincipal = null) => {
-        // let {agent, identity} = await initAgent(true);
-        
-        // if (agent == null) 
-        //     return null;
+    const getProfileInfoAPI = async (userPrincipal = null) => {
+        const result = await axios.post("api/v/users/getProfile", {
+            filter: {
+                userPrincipal : userPrincipal
+            }
+        });
 
-        // if(process.env.REACT_APP_DFX_NETWORK != "ic") {
-        //     agent.fetchRootKey();
-        // }
+        console.log("result", result)
 
-        // let accountActor = Actor.createActor(AccountIDL, {
-        //     agent,
-        //     canisterId: process.env.REACT_APP_DFX_NETWORK != "ic"? process.env.REACT_APP_MANAGER_CANISTER_ID : process.env.REACT_APP_IC_MANAGER_CANISTER_ID
-        // });
+        return result;
+    }
 
-        // let profileInfo = await accountActor.getProfileInfo(userPrincipal ? userPrincipal : identity.getPrincipal());
+    const followArtistAPI = async (artist, follow) => {
+        const result = await axios.post("api/v/users/followArtist", {
+            artist: artist,
+            userPrincipal : user.principal,
+            follow: follow   
+        });
 
-        let profileInfo;
-
-        return profileInfo;
+        return result;
     }
 
     const signIn = async (userPrincipal = null) => {
@@ -220,24 +222,36 @@ export const APIProvider = ({ children }) => {
         return result;        
     }
 
-    const getTracksByArtist = async (artist) => {
-        const data = await axios.post("api/v/tracks/getTracks", {
-            filter: {
-                artist: artist
-            }
-        });
-
-        console.log("data");
-
-        return data;
+    const getTracksByArtistAPI = async (artist, searchWord, page, pageSize, sort, sortBy) => {
+        try {
+            const data = await axios.post("api/v/tracks/getTracks", {
+                filter: {
+                    artist: artist
+                },
+                searchWord: searchWord,
+                page : page,
+                pageSize : pageSize,
+                sort : sort,
+                sortBy : sortBy
+            });
+    
+            return data;
+        } catch {            
+            return [];
+        }
     }
 
-    const getReleasedTracksByArtist = async (artist) => {
+    const getReleasedTracksByArtist = async (artist, searchWord, page, pageSize, sort, sortBy) => {
         const data = await axios.post("api/v/tracks/getTracks", {
             filter: {
                 artist: artist,
                 isReleased: true
-            }
+            },
+            searchWord: searchWord,
+            page : page,
+            pageSize : pageSize,
+            sort : sort,
+            sortBy : sortBy        
         });
 
         console.log("data");
@@ -245,22 +259,42 @@ export const APIProvider = ({ children }) => {
         return data;
     }
 
-    const getFavouriteTracksAPI = async (artist) => {
+    const getFavouriteTracksAPI = async (artist, searchWord, page, pageSize, sort, sortBy) => {
         const data = await axios.post("api/v/tracks/getFavouriteTracks", {
-            artist : artist,            
+            artist : artist,    
+            searchWord: searchWord,
+            page : page,
+            pageSize : pageSize,
+            sort : sort,
+            sortBy : sortBy                
         });
 
         return data;
     }
 
-    const getAllReleasedTracks = async () => {
+    const getAllReleasedTracks = async (searchWord, page, pageSize, sort, sortBy) => {
 
         const data = await axios.post("api/v/tracks/getTracks", {
             filter: {
                 isReleased: true
-            }
+            },
+            searchWord: searchWord,
+            page : page,
+            pageSize : pageSize,
+            sort : sort,
+            sortBy : sortBy
         });
 
+        return data;
+    }
+
+    const getTrackInfoAPI = async (contentId) => {
+        const data = await axios.post("api/v/tracks/getTrackInfo", {
+            filter: {
+                contentId: contentId
+            },
+        });
+    
         return data;
     }
 
@@ -321,14 +355,16 @@ export const APIProvider = ({ children }) => {
         <APIContext.Provider
             value={{
                 signIn,
-                getProfileInfo,
+                getProfileInfoAPI,
                 uploadProfile,
                 createContentInfo,
-                getTracksByArtist,
+                getTracksByArtistAPI,
+                getTrackInfoAPI,
                 getAllReleasedTracks,
                 getReleasedTracksByArtist,
                 getFavouriteTracksAPI,
                 processAndUploadChunk,
+                followArtistAPI,
                 logPlayHistory,
                 releaseTrackItem,
                 checkDisplayName,

@@ -67,7 +67,7 @@ function Layout() {
           </Suspense>
         </Main>
       </div>
-      <Historybar/>
+      {/* <Historybar/> */}
 
       <AudioPlayer/>
     </div>

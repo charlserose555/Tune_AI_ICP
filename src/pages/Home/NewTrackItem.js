@@ -14,15 +14,14 @@ import loading from "../../utils/Loading";
 import alert from "../../utils/Alert";
 import { encodeToBase64 } from "../../utils/format";
 
-function NewTrackItem({trackItem, getTracks, index, play}) {
+function NewTrackItem({trackItem, index, play, isNew}) {
     const dispatch = useDispatch();
     const history = useHistory();
     const {user} = useSelector((state) => (state.auth));
     const { addToFavouriteAPI } = useContext(APIContext);
 
     const playAudio = async () => {
-      let playUrl = "";
-      
+     
       dispatch(hideAudioPlay());
       
       play(index)
@@ -49,7 +48,15 @@ function NewTrackItem({trackItem, getTracks, index, play}) {
         return;
       }
 
-      history.push('artist/id=' + encodeToBase64(trackItem.artist));
+      if(user.principal == trackItem.artist) {
+        alert("warning", "Can't follow the yourself");
+        return;
+      }
+
+      if(isNew)
+        history.push('artist/id=' + encodeToBase64(trackItem.artist));
+      else
+        history.push('../artist/id=' + encodeToBase64(trackItem.artist));
     }
 
     return (<>
@@ -62,6 +69,7 @@ function NewTrackItem({trackItem, getTracks, index, play}) {
           </div>
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.artists.displayname}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.cover}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.playCount)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(trackItem.duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{formatDate(Number(trackItem.createdAt) / 1000)}</div></td>

@@ -1,3 +1,5 @@
+import path from 'path-browserify';
+
 export const formatDuration = (duration) => {
     const minutes = Math.floor(duration / 60);
     const seconds = Math.floor(duration % 60);
@@ -198,4 +200,8 @@ export const encodeToBase64 = (data) => {
 
 export const decodeFromBase64 = (base64Data) => {
   return atob(base64Data);
+}
+
+export const getFileNameWithoutExtension = (filePath) => {
+  return path.basename(filePath, path.extname(filePath));
 }

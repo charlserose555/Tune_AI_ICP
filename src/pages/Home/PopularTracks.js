@@ -1,30 +1,32 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
-import * as Icon from "../../icons";
+import React, { useEffect, useState, useContext } from "react";
 import { APIContext } from "../../context/ApiContext";
 import audioPlay from "../../utils/AudioPlay";
-import PopularTrackItem from "./NewTrackItem";
-import { dispatch, useSelector } from "../../store";
+import { useSelector } from "../../store";
+import NewTrackItem from "./NewTrackItem";
 
 function PopularTracks() {
-    const [ songList, setSongList] = useState([]); 
+    const [ trackList, setTrackList] = useState([]); 
     const { getAllReleasedTracks } = useContext(APIContext);
     const { songListUpdated } = useSelector((state) => state.auth);
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(16);
+    const [sort, setSort] = useState(true);
+    const [sortby, setSortby] = useState('playCount');
+    const [searchWord, setSearchWord] = useState('');
 
-    const getSongList = async () => {
-      let result = await getAllReleasedTracks();
-      if(result != null && result.length > 0) {
-        result.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
-  
-        setSongList(result)
+    const getTrackList = async () => {
+      const {data, count} = await getAllReleasedTracks(searchWord, page, pageSize, sort, sortby);
+      if(data != null) {
+        setTrackList(data)
       }
     }
-
+    
     useEffect(() => {
-      getSongList();
+      getTrackList();
     }, [songListUpdated])
 
     const play = (index) => {
-      audioPlay(songList, index);
+      audioPlay(trackList, index);
     }
 
     return (<>
@@ -32,7 +34,7 @@ function PopularTracks() {
         <p className="text-24 font-normal leading-30 font-plus">Popular Tracks</p>
         <img className="px-3" src="/demo/assets/right_arrow.svg"></img>
     </div>
-    <div className="flex flex-row justify-start items-end pt-[20px] mb-[120px] font-plus px-[20px]">
+    <div className="flex flex-row justify-start items-end pt-[20px] mb-[150px] font-plus px-[20px]">
       <div className="w-full">
         <div className="overflow-x-auto  x-scrollable-tag mt-4">
           <table className="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-800 min-w-[610px]">
@@ -44,7 +46,10 @@ function PopularTracks() {
                   </p>
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
-                    Artist
+                    Writer
+                </th>
+                <th scope="col" className="px-4 pb-5 text-center">
+                    Cover
                 </th>
                 <th scope="col" className="px-4 pb-5 text-center">
                 <div className="flex justify-center w-full items-center flex-row">
@@ -68,9 +73,9 @@ function PopularTracks() {
               </tr>
           </thead>
           <tbody>
-              {songList.map((item, index) => { 
+              {trackList.map((item, index) => { 
                 return ((
-                  <PopularTrackItem songItem={item} getSongList = {getSongList} play={play} index={index} key={index}/>
+                  <NewTrackItem trackItem={item} play={play} index={index} isNew={false} key={index} />
               )) } )}
             </tbody>
           </table>
