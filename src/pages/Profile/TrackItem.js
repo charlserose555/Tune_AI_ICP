@@ -47,6 +47,7 @@ function TrackItem({trackItem, index, play}) {
         </td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{trackItem.cover}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.playCount)}</td>
+        <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{Number(trackItem.saved)}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500">{formatDuration(Number(trackItem.duration))}</td>
         <td className="px-4 py-3 text-center group-hover:text-darkblue-500"><div className="min-w-[100px]">{formatDate(Number(trackItem.createdAt) / 1000)}</div></td>
         <td className="px-4 py-3 text-center">{!trackItem.isReleased? <a className="cursor-pointer fill-btn-primary text-14 py-2 px-2 font-medium bg-darkblue-600 rounded-8 flex flex-row justify-center gap-45 items-center" 

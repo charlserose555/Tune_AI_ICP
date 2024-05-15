@@ -2033,6 +2033,10 @@ select {
   padding-bottom: 1.25rem;
 }
 
+.pb-8 {
+  padding-bottom: 2rem;
+}
+
 .pb-\[10px\] {
   padding-bottom: 10px;
 }
@@ -2169,10 +2173,6 @@ select {
   font-size: 18px;
 }
 
-.text-20 {
-  font-size: 24px;
-}
-
 .text-24 {
   font-size: 24px;
 }
@@ -2192,6 +2192,10 @@ select {
 
 .text-\[16px\] {
   font-size: 16px;
+}
+
+.text-\[18px\] {
+  font-size: 18px;
 }
 
 .text-\[24px\] {
@@ -2870,6 +2874,11 @@ select {
   color: rgb(26 86 219 / var(--tw-text-opacity));
 }
 
+.hover\:text-darkblue-400:hover {
+  --tw-text-opacity: 1;
+  color: rgb(61 131 247 / var(--tw-text-opacity));
+}
+
 .hover\:text-darkblue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(0 79 208 / var(--tw-text-opacity));
@@ -2903,16 +2912,6 @@ select {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.hover\:text-darkblue-300:hover {
-  --tw-text-opacity: 1;
-  color: rgb(121 168 255 / var(--tw-text-opacity));
-}
-
-.hover\:text-darkblue-400:hover {
-  --tw-text-opacity: 1;
-  color: rgb(61 131 247 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {
